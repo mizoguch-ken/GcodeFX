@@ -1,0 +1,927 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.33 wizard for JavaCC 7.0.2 and jtb 1.4.12
+ */options{
+  static = false;
+  UNICODE_INPUT=true;}PARSER_BEGIN(GcodeParser)package ken.mizoguch.gcodeparser;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GcodeParser {
+
+  final public static String VERSION = "2017.09.12";
+
+  final private List<String> bytecodes = new ArrayList<String>();
+  final private List<ParseException> parseErrors = new ArrayList<ParseException>();
+
+  public List<String> getBytecodes() {
+    return bytecodes;  }
+
+  public boolean isErrors() {
+    return !parseErrors.isEmpty();
+  }
+
+  public List<ParseException> getParseErrors() {
+    return parseErrors;  }
+
+  private void addBytecode(int kind) {
+    bytecodes.add(Integer.toString(kind));  }
+
+  private void addBytecode(int kind, String image) {
+    bytecodes.add(Integer.toString(kind) + "\t" + image);  }
+
+  private void addBytecode(int kind, int image) {
+    bytecodes.add(Integer.toString(kind) + "\t" + Integer.toString(image));  }
+
+  private void recoverParse(ParseException ex, int recoveryPoint) {
+    parseErrors.add(ex);
+    Token t;
+    do {
+      t = getNextToken();
+    } while((t.kind != EOF) && (t.kind != recoveryPoint));  }
+}PARSER_END(GcodeParser)SKIP : /* SKIP */
+{
+    "\u0000" /* NULL */
+  | "\u0001" /* SOH */
+  | "\u0002" /* STX */
+  | "\u0003" /* ETX */
+  | "\u0004" /* EOT */
+  | "\u0005" /* ENQ */
+  | "\u0006" /* ACK */
+  | "\u0007" /* BEL */
+  | "\u0008" /* BS */
+  | "\t" /* HT */
+/*  | "\n" /* LF */
+  | "\u000b" /* VT */
+  | "\f" /* FF */
+  | "\r" /* CR */
+  | "\u000e" /* SO */
+  | "\u000f" /* SI */
+  | "\u0010" /* DLE */
+  | "\u0011" /* DC1 */
+  | "\u0012" /* DC2 */
+  | "\u0013" /* DC3 */
+  | "\u0014" /* DC4 */
+  | "\u0015" /* NAK */
+  | "\u0016" /* SYN */
+  | "\u0017" /* ETB */
+  | "\u0018" /* CAN */
+  | "\u0019" /* EM */
+  | "\u001a" /* SUB */
+  | "\u001b" /* ESC */
+  | "\u001c" /* FS */
+  | "\u001d" /* GS */
+  | "\u001e" /* RS */
+  | "\u001f" /* US */
+  | " "
+  | "\""
+  | "%"
+  | "!"
+  | "$"
+  | "'"
+  | "\\"
+  | "^"
+  | "`"
+  | "{"
+  | "|"
+  | "}"
+  | "~"
+}
+
+SPECIAL_TOKEN : /* SPECIAL_TOKEN */
+{
+    < BLOCK_SKIP : "BLOCK_SKIP" >
+  | < SIGN_PLUS : "SIGN_PLUS" >
+  | < SIGN_MINUS : "SIGN_MINUS" >
+  | < VARIABLE_STRING_ARRAY : "VARIABLE_STRING" >
+  | < NAME : "NAME" >
+}
+
+TOKEN : /* CODE TOKEN */
+{
+    < A : "A" >
+  | < B : "B" >
+  | < C : "C" >
+  | < D : "D" >
+  | < E : "E" >
+  | < F : "F" >
+  | < G : "G" >
+  | < H : "H" >
+  | < I : "I" >
+  | < J : "J" >
+  | < K : "K" >
+  | < L : "L" >
+  | < M : "M" >
+  | < N : "N" >
+  | < O : "O" >
+  | < P : "P" >
+  | < Q : "Q" >
+  | < R : "R" >
+  | < S : "S" >
+  | < T : "T" >
+  | < U : "U" >
+  | < V : "V" >
+  | < W : "W" >
+  | < X : "X" >
+  | < Y : "Y" >
+  | < Z : "Z" >
+}
+
+TOKEN : /* FUNCTION TOKEN */
+{
+    < GOTO : "GOTO" >
+  | < IF : "IF" >
+  | < THEN : "THEN" >
+  | < WHILE :"WHILE" >
+  | < DO : "DO" >
+  | < END : "END" >
+  | < SETVN : "SETVN" > : STATE_SETVN
+  
+  | < AND : "AND" >
+  | < OR : "OR" >
+  | < XOR : "XOR" >
+  | < MOD : "MOD" >
+  | < EQ : "EQ" >
+  | < NE : "NE" >
+  | < LT : "LT" >
+  | < LE : "LE" >
+  | < GT : "GT" >
+  | < GE : "GE" >
+  
+  | < SIN : "SIN" >
+  | < COS : "COS" >
+  | < TAN : "TAN" >
+  | < ASIN : "ASIN" >
+  | < ACOS : "ACOS" >
+  | < ATAN : ("ATN" | "ATAN") >
+  | < SQRT : ("SQR" | "SQRT") >
+  | < ABS : "ABS" >
+  | < BIN : "BIN" >
+  | < BCD : "BCD" >
+  | < ROUND : ("RND" | "ROUND") >
+  | < FIX : "FIX" >
+  | < FUP : "FUP" >
+  | < LN : "LN" >
+  | < EXP : "EXP" >
+  | < POW : "POW" >
+  | < ADP : "ADP" >
+  | < ATAN2 : ("ATN2" | "ATAN2") >
+  
+  | < POPEN : "POPEN" >
+  | < PCLOS : "PCLOS" >
+  | < BPRNT : "BPRNT" > : STATE_PRINT
+  | < DPRNT : "DPRNT" > : STATE_PRINT
+}
+
+TOKEN : /* SINBOL TOEKN */
+{
+    < EOB : "\n" > : DEFAULT
+  | < SHARP : "#" > : STATE_VARIABLE
+  | < #AMPERSAND : "&" >
+  | < OPEN_PARENTHESES : "(" > : STATE_COMMENT
+  | < CLOSE_PARENTHESES : ")" >
+  | < ASTERISK : "*" >
+  | < PLUS : "+" >
+  | < COMMA : "," >
+  | < MINUS : "-" >
+  | < #DOT : "." >
+  | < SLASH : "/" >
+  | < #DIGIT : ( ["0"-"9"] ) >
+  | < COLON : ":" >
+  | < SEMICOLON : ";" > : STATE_LINECOMMENT
+  | < LESS_THAN : "<" > : STATE_FILENAME
+  | < EQUALS : "=" >
+  | < GREATER_THAN : ">" >
+  | < #QUESTION : "?" >
+  | < AT : "@" > : STATE_VARIABLE
+  | < #CHARACTER : ( ["A"-"Z"] ) >
+  | < OPENING_BRACKET : "[" >
+  | < CLOSING_BRACKET : "]" >
+  | < #UNDERSCORE : "_" >
+  | < #CHARACTER_LOWER : ( ["a"-"z"] ) >
+}
+
+TOKEN : /* NUMBER TOKEN */
+{
+    < NUMBER : ( < DIGIT > )+ >
+  | < FLOAT : ( < DIGIT > )+ < DOT > ( < DIGIT > )* | < DOT > ( < DIGIT > )+ >
+}
+
+< STATE_COMMENT > TOKEN : /* COMMENT TOKEN */
+{
+    < COMMENT :
+      (
+          < COMMENT_SPACE > | < COMMENT_DOUBLE_QUOTES > | < SHARP > | < COMMENT_DOLLAR >
+        | < AMPERSAND > | < COMMENT_SINGLE_QUOTE >
+        | < ASTERISK > | < PLUS > | < COMMA > | < MINUS > | < DOT >
+        | < SLASH > | < DIGIT > | < COLON > | < SEMICOLON > | < COMMENT_LESS_THAN >
+        | < EQUALS > | < COMMENT_GREATER_THAN > | < QUESTION > | < AT > | < CHARACTER >
+        | < OPENING_BRACKET > | < CLOSING_BRACKET > | < UNDERSCORE >
+        | < CHARACTER_LOWER >
+      )+
+    >
+  | < COMMENT_CLOSE_PARENTHESES : ")" > : DEFAULT
+  | < #COMMENT_SPACE : " " >
+  | < #COMMENT_DOUBLE_QUOTES : "\"" >
+  | < #COMMENT_DOLLAR : "$" >
+  | < #COMMENT_SINGLE_QUOTE : "'" >
+  | < #COMMENT_LESS_THAN : "<" >
+  | < #COMMENT_GREATER_THAN : ">" >
+}
+
+< STATE_LINECOMMENT > TOKEN : /* LINE-COMMENT TOKEN */
+{
+    < LINECOMMENT : (~["\n"])* > : DEFAULT
+}
+
+< STATE_VARIABLE > TOKEN : /* VARIAVLE TOKEN */
+{
+    < VARIABLE_NUMBER : < NUMBER > > : DEFAULT
+  | < VARIABLE_FLOAT : < FLOAT > > : DEFAULT
+  | < VARIABLE_STRING :
+      ( < UNDERSCORE > | < CHARACTER > )
+      (
+          < AMPERSAND >
+        | < ASTERISK > | < PLUS > | < MINUS > | < DOT >
+        | < SLASH > | < DIGIT > | < LESS_THAN >
+        | < EQUALS > | < GREATER_THAN > | < QUESTION > | < CHARACTER >
+        | < UNDERSCORE >
+        | < CHARACTER_LOWER >
+      )+
+    > : DEFAULT
+  | < VARIABLE_SHARP : < SHARP > >
+  | < VARIABLE_AT : < AT > >
+  | < VARIABLE_OPENING_BRACKET : < OPENING_BRACKET > > : DEFAULT
+  | < VARIABLE_CLOSING_BRACKET : < CLOSING_BRACKET > > : DEFAULT
+}
+
+< STATE_SETVN > TOKEN : /* SETVN TOEKN */
+{
+    < SETVN_NUMBER : < NUMBER > >
+  | < SETVN_OPENING_BRACKET : < OPENING_BRACKET > > : STATE_SETVN_VARIABLE
+  | < SETVN_CLOSING_BRACKET : < CLOSING_BRACKET > > : DEFAULT
+  | < SETVN_COMMA : < COMMA > > : STATE_SETVN_VARIABLE
+}
+
+< STATE_SETVN_VARIABLE > TOKEN : /* SETVN_VARIAVLE TOKEN */
+{
+    < SETVN_VARIABLE :
+      ( < UNDERSCORE > | < CHARACTER > )
+      (
+          < AMPERSAND >
+        | < ASTERISK > | < PLUS > | < MINUS > | < DOT >
+        | < SLASH > | < DIGIT > | < LESS_THAN >
+        | < EQUALS > | < GREATER_THAN > | < QUESTION > | < AT > | < CHARACTER >
+        | < UNDERSCORE >
+        | < CHARACTER_LOWER >
+      )*
+    > : STATE_SETVN
+}
+
+< STATE_PRINT > TOKEN : /* PRINT TOEKN */
+{
+  < PRINT_OPENING_BRACKET : < OPENING_BRACKET > > : STATE_PRINT_MESSAGE
+  | < PRINT_CLOSING_BRACKET : < CLOSING_BRACKET > > : DEFAULT
+}
+
+< STATE_PRINT_MESSAGE > TOKEN : /* PRINT_MESSAGE TOKEN */
+{
+    < PRINT_MESSAGE :
+      (
+          < AMPERSAND >
+        | < ASTERISK > | < PLUS > | < MINUS >
+        | < SLASH > | < DIGIT >
+        | < QUESTION > | < AT > | < CHARACTER >
+        | < UNDERSCORE >
+        | < SHARP > <NUMBER> < OPENING_BRACKET > < NUMBER > < CLOSING_BRACKET >
+      )*
+    > : STATE_PRINT
+}
+
+< STATE_FILENAME > TOKEN : /* FILENAME TOKEN */
+{
+    < FILENAME :
+      (
+          < PLUS > | < MINUS > | < DOT >
+        | < DIGIT >
+        | < CHARACTER >
+        | < UNDERSCORE >
+        | < CHARACTER_LOWER >
+      )+
+    >
+  | < FILENAME_GREATER_THAN : ">" > : DEFAULT
+}
+
+void Start() :
+{}{
+  Program() < EOF >}
+
+void Program() :
+{ String block; int linenumber = 0; }
+{
+  (
+    try {
+      block = Block()
+      { addBytecode(EOB, linenumber++ + "$$" + block); }
+    } catch (ParseException ex) {
+      recoverParse(ex, EOB);
+    }
+  )*
+}
+
+String Block() :
+{ String statement, statements = ""; }
+{    (
+      statement = Statements()
+      { statements += statement; }
+    )+ ( < EOB > | < EOF > )
+    { return statements; }
+  | < EOB >
+    { return statements; }
+}
+
+String Statements() :
+{ String statement; }
+{
+    LOOKAHEAD(3) statement = ProgramNumberStatement()
+    { return statement; }
+  | statement = BlockSkipStatement()
+    { return statement; }
+  | statement = WordStatement()
+    { return statement; }
+  | statement = GotoStatement()
+    { return statement; }
+  | statement = IfStatement()
+    { return statement; }
+  | statement = WhileStatement()
+    { return statement; }
+  | statement = DoStatement()
+    { return statement; }
+  | statement = EndStatement()
+    { return statement; }
+  | statement = VariableAssignStatement()
+    { return statement; }
+  | statement = SetvnStatement()
+    { return statement; }
+  | statement = CommentStatement()
+    { return statement; }
+  | statement = LineCommentStatement()
+    { return statement; }
+  | statement = PopenStatement()
+    { return statement; }
+  | statement = PclosStatement()
+    { return statement; }
+  | statement = BprntStatement()
+    { return statement; }
+  | statement = DprntStatement()
+    { return statement; }
+  | statement = FilenameStatement()
+    { return statement; }
+}
+
+String ProgramNumberStatement() :
+{ Token tkn; }
+{
+    < O > tkn = < NUMBER >
+    { addBytecode(O, tkn.image); }
+    { return ("O" + tkn.image); }
+  | < COLON > tkn = < NUMBER >
+    { addBytecode(O, tkn.image); }
+    { return (":" + tkn.image); }
+}
+
+String BlockSkipStatement() :
+{ Token tkn; }
+{    LOOKAHEAD(2) < SLASH > tkn = < NUMBER >
+    { addBytecode(BLOCK_SKIP, tkn.image); }
+    { return ("/" + tkn.image); }
+  | < SLASH >
+    { addBytecode(BLOCK_SKIP, 0); }
+    { return "/"; }
+}
+
+String WordStatement() :
+{ Token tkn; String expression; }
+{
+    < A > expression = Expression()
+    { addBytecode(A); }
+    { return ("A" + expression); }
+  | < B > expression = Expression()
+    { addBytecode(B); }
+    { return ("B" + expression); }
+  | < C > expression = Expression()
+    { addBytecode(C); }
+    { return ("C" + expression); }
+  | < D > expression = Expression()
+    { addBytecode(D); }
+    { return ("D" + expression); }
+  | < E > expression = Expression()
+    { addBytecode(E); }
+    { return ("E" + expression); }
+  | < F > expression = Expression()
+    { addBytecode(F); }
+    { return ("F" + expression); }
+  | < G > expression = Expression()
+    { addBytecode(G); }
+    { return ("G" + expression); }
+  | < H > expression = Expression()
+    { addBytecode(H); }
+    { return ("H" + expression); }
+  | < I > expression = Expression()
+    { addBytecode(I); }
+    { return ("I" + expression); }
+  | < J > expression = Expression()
+    { addBytecode(J); }
+    { return ("J" + expression); }
+  | < K > expression = Expression()
+    { addBytecode(K); }
+    { return ("K" + expression); }
+  | < L > expression = Expression()
+    { addBytecode(L); }
+    { return ("L" + expression); }
+  | < M > expression = Expression()
+    { addBytecode(M); }
+    { return ("M" + expression); }
+  | < N > tkn = < NUMBER >
+    { addBytecode(N, tkn.image); }
+    { return ("N" + tkn.image); }
+  | < O > expression = Expression()
+    { addBytecode(O); }
+    { return ("O" + expression); }
+  | < P > expression = Expression()
+    { addBytecode(P); }
+    { return ("P" + expression); }
+  | < Q > expression = Expression()
+    { addBytecode(Q); }
+    { return ("Q" + expression); }
+  | < R > expression = Expression()
+    { addBytecode(R); }
+    { return ("R" + expression); }
+  | < S > expression = Expression()
+    { addBytecode(S); }
+    { return ("S" + expression); }
+  | < T > expression = Expression()
+    { addBytecode(T); }
+    { return ("T" + expression); }
+  | < U > expression = Expression()
+    { addBytecode(U); }
+    { return ("U" + expression); }
+  | < V > expression = Expression()
+    { addBytecode(V); }
+    { return ("V" + expression); }
+  | < W > expression = Expression()
+    { addBytecode(W); }
+    { return ("W" + expression); }
+  | < X > expression = Expression()
+    { addBytecode(X); }
+    { return ("X" + expression); }
+  | < Y > expression = Expression()
+    { addBytecode(Y); }
+    { return ("Y" + expression); }
+  | < Z > expression = Expression()
+    { addBytecode(Z); }
+    { return ("Z" + expression); }
+}
+
+String GotoStatement() :
+{ String expression; }
+{
+  < GOTO > expression = Expression()
+  { addBytecode(GOTO); }
+  { return ("GOTO" + expression); }
+}
+
+String IfStatement() :
+{ String expression, statement; }
+{
+  < IF > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(IF); }
+  (
+      < THEN > statement = VariableAssignStatement()
+      { return ("IF" + "[" + expression + "]" + "THEN" + statement); }
+    | statement = GotoStatement()
+      { return ("IF" + "[" + expression + "]" + statement); }
+  )
+}
+
+String WhileStatement() :
+{ Token tkn; String expression; }
+{
+  < WHILE > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET > < DO > tkn = < NUMBER >
+  { addBytecode(WHILE, tkn.image); }
+  { return ("WHILE" + "[" + expression + "]" + "DO" + tkn.image); }
+}
+
+String DoStatement() :
+{ Token tkn; }
+{
+  < DO > tkn = < NUMBER >
+  { addBytecode(DO, tkn.image); }
+  { return ("DO" + tkn.image); }
+}
+
+String EndStatement() :
+{ Token tkn; }
+{
+  < END > tkn = < NUMBER >
+  { addBytecode(END, tkn.image); }
+  { return ("END" + tkn.image); }
+}
+
+String VariableAssignStatement() :
+{ String[] expression = new String[2]; }
+{
+  expression[0] = Expression() < EQUALS > expression[1] = Expression()
+  { addBytecode(EQUALS); }
+  { return (expression[0] + "=" + expression[1]); }
+}
+
+String SetvnStatement() :
+{ Token[] tkn = new Token[2]; String variables; }
+{
+  < SETVN > tkn[0] = < SETVN_NUMBER > < SETVN_OPENING_BRACKET > tkn[1] = < SETVN_VARIABLE >
+  { addBytecode(SETVN_VARIABLE, tkn[1].image); }
+  { variables = tkn[1].image; }
+  (
+    < SETVN_COMMA > tkn[1] = < SETVN_VARIABLE >
+    { addBytecode(SETVN_VARIABLE, tkn[1].image); }
+    { variables += "," + tkn[1].image; }
+  )* < SETVN_CLOSING_BRACKET >
+  { addBytecode(SETVN, tkn[0].image); }
+  { return ("SETVN" + tkn[0].image + "[" + variables + "]"); }
+}
+
+String CommentStatement() :
+{ Token tkn; }
+{
+    LOOKAHEAD(2) < OPEN_PARENTHESES > tkn = < COMMENT > < COMMENT_CLOSE_PARENTHESES >
+    { addBytecode(COMMENT, tkn.image); }
+    { return ("(" + tkn.image + ")"); }
+  | < OPEN_PARENTHESES > < COMMENT_CLOSE_PARENTHESES >
+    { addBytecode(COMMENT); }
+    { return ("(" + ")"); }
+}
+
+String LineCommentStatement() :
+{ Token tkn; }
+{
+    LOOKAHEAD(2) < SEMICOLON > tkn = < LINECOMMENT >
+    { addBytecode(LINECOMMENT, tkn.image); }
+    { return (";" + tkn.image); }
+  | < SEMICOLON >
+    { addBytecode(LINECOMMENT); }
+    { return (";"); }
+}
+
+String PopenStatement() :
+{}
+{
+  < POPEN >
+  { addBytecode(POPEN); }
+  { return ("POPEN"); }
+}
+
+String PclosStatement() :
+{}
+{
+  < PCLOS >
+  { addBytecode(PCLOS); }
+  { return ("PCLOS"); }
+}
+
+String BprntStatement() :
+{ Token tkn; }
+{
+  < BPRNT > < PRINT_OPENING_BRACKET > tkn = < PRINT_MESSAGE > < PRINT_CLOSING_BRACKET >
+  { addBytecode(BPRNT, tkn.image); }
+  { return ("BPRNT" + "[" + tkn.image + "]"); }
+}
+
+String DprntStatement() :
+{ Token tkn; }
+{
+  < DPRNT > < PRINT_OPENING_BRACKET > tkn = < PRINT_MESSAGE > < PRINT_CLOSING_BRACKET >
+  { addBytecode(DPRNT, tkn.image); }
+  { return ("DPRNT" + "[" + tkn.image + "]"); }
+}
+
+String FilenameStatement() :
+{ Token tkn; }
+{
+  < LESS_THAN > tkn = < FILENAME > < FILENAME_GREATER_THAN >
+  { addBytecode(FILENAME, tkn.image); }
+  { return ("<" + tkn + ">"); }
+}
+
+String Expression() :
+{ String expression, relationalExpression; }
+{
+  relationalExpression = RelationalExpression()
+  { expression = relationalExpression; }
+  (
+      < AND > relationalExpression = RelationalExpression()
+      { addBytecode(AND); }
+      { expression += "AND" + relationalExpression; }
+    | < OR > relationalExpression = RelationalExpression()
+      { addBytecode(OR); }
+      { expression += "OR" + relationalExpression; }
+    | < XOR > relationalExpression = RelationalExpression()
+      { addBytecode(XOR); }
+      { expression += "XOR" + relationalExpression; }
+    | < MOD > relationalExpression = RelationalExpression()
+      { addBytecode(MOD); }
+      { expression += "MOD" + relationalExpression; }
+  )*
+  { return expression; }
+}
+
+String RelationalExpression() :
+{ String expression, addingExpression; }
+{
+  addingExpression = AddingExpression()
+  { expression = addingExpression; }
+  (
+      < EQ > addingExpression = AddingExpression()
+      { addBytecode(EQ); }
+      { expression += "EQ" + addingExpression; }
+    | < NE > addingExpression = AddingExpression()
+      { addBytecode(NE); }
+      { expression += "NE" + addingExpression; }
+    | < LT > addingExpression = AddingExpression()
+      { addBytecode(LT); }
+      { expression += "LT" + addingExpression; }
+    | < LE > addingExpression = AddingExpression()
+      { addBytecode(LE); }
+      { expression += "LE" + addingExpression; }
+    | < GT > addingExpression = AddingExpression()
+      { addBytecode(GT); }
+      { expression += "GT" + addingExpression; }
+    | < GE > addingExpression = AddingExpression()
+      { addBytecode(GE); }
+      { expression += "GE" + addingExpression; }
+  )*
+  { return expression; }
+}
+
+String AddingExpression() :
+{ String expression, multiplyingExpression; }
+{
+  multiplyingExpression = MultiplyingExpression()
+  { expression = multiplyingExpression; }
+  (
+    LOOKAHEAD(2) (        < PLUS > multiplyingExpression = MultiplyingExpression()
+        { addBytecode(PLUS); }
+        { expression += "+" + multiplyingExpression; }
+      | < MINUS > multiplyingExpression = MultiplyingExpression()
+        { addBytecode(MINUS); }
+        { expression += "-" + multiplyingExpression; }
+    )
+  )*
+  { return expression; }
+}
+
+String MultiplyingExpression() :
+{ String expression, signExpression; }
+{
+  signExpression = SignExpression()
+  { expression = signExpression; }
+  (
+    LOOKAHEAD(2) (
+        < SLASH > signExpression = SignExpression()
+        { addBytecode(SLASH); }
+        { expression += "/" + signExpression; }
+      | < ASTERISK > signExpression = SignExpression()
+        { addBytecode(ASTERISK); }
+        { expression += "*" + signExpression; }
+    )
+  )*
+  { return expression; }
+}
+
+String SignExpression() :
+{ String functions; }
+{
+    functions = Functions()
+    { return functions; }
+  | < PLUS > functions = Functions()
+    { addBytecode(SIGN_PLUS); }
+    { return ("+" + functions); }
+  | < MINUS > functions = Functions()
+    { addBytecode(SIGN_MINUS); }
+    { return ("-" + functions); }
+}
+
+String Functions() :
+{ Token tkn; String expression; }
+{
+    tkn = < NUMBER >
+    { addBytecode(NUMBER, tkn.image); }
+    { return tkn.image; }
+  | tkn = < FLOAT >
+    { addBytecode(FLOAT, tkn.image); }
+    { return tkn.image; }
+  | tkn = < VARIABLE_NUMBER >
+    { addBytecode(VARIABLE_NUMBER, tkn.image); }
+    { return tkn.image; }
+  | tkn = < VARIABLE_FLOAT >
+    { addBytecode(VARIABLE_FLOAT, tkn.image); }
+    { return tkn.image; }
+  | LOOKAHEAD(2) tkn = < VARIABLE_STRING > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+    { addBytecode(VARIABLE_STRING_ARRAY, tkn.image); }
+    { return (tkn.image + "[" + expression + "]"); }
+  | tkn = < VARIABLE_STRING >
+    { addBytecode(VARIABLE_STRING, tkn.image); }
+    { return tkn.image; }
+  | < SHARP > expression = Functions()
+    { addBytecode(SHARP); }
+    { return ("#" + expression); }
+  | < AT > expression = Functions()
+    { addBytecode(AT); }
+    { return ("@" + expression); }
+  | < VARIABLE_SHARP > expression = Functions()
+    { addBytecode(VARIABLE_SHARP); }
+    { return ("#" + expression); }
+  | < VARIABLE_AT > expression = Functions()
+    { addBytecode(VARIABLE_AT); }
+    { return ("@" + expression); }
+  | < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+    { return ("[" + expression + "]"); }
+  | < VARIABLE_OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+    { return ("[" + expression + "]"); }
+  | expression = SinFunction()
+    { return expression; }
+  | expression = CosFunction()
+    { return expression; }
+  | expression = TanFunction()
+    { return expression; }
+  | expression = AsinFunction()
+    { return expression; }
+  | expression = AcosFunction()
+    { return expression; }
+  | expression = AtanFunction()
+    { return expression; }
+  | expression = SqrtFunction()
+    { return expression; }
+  | expression = AbsFunction()
+    { return expression; }
+  | expression = BinFunction()
+    { return expression; }
+  | expression = BcdFunction()
+    { return expression; }
+  | expression = RoundFunction()
+    { return expression; }
+  | expression = FixFunction()
+    { return expression; }
+  | expression = FupFunction()
+    { return expression; }
+  | expression = LnFunction()
+    { return expression; }
+  | expression = ExpFunction()
+    { return expression; }
+  | expression = PowFunction()
+    { return expression; }
+  | expression = AdpFunction()
+    { return expression; }
+}
+
+String SinFunction() :
+{ String expression; }
+{
+  < SIN > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(SIN); }
+  { return ("SIN" + "[" + expression + "]"); }
+}
+
+String CosFunction() :
+{ String expression; }
+{
+  < COS > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(COS); }
+  { return ("COS" + "[" + expression + "]"); }
+}
+
+String TanFunction() :
+{ String expression; }
+{
+  < TAN > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(TAN); }
+  { return ("TAN" + "[" + expression + "]"); }
+}
+
+String AsinFunction() :
+{ String expression; }
+{
+  < ASIN > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(ASIN); }
+  { return ("ASIN" + "[" + expression + "]"); }
+}
+
+String AcosFunction() :
+{ String expression; }
+{
+  < ACOS > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(ACOS); }
+  { return ("ACOS" + "[" + expression + "]"); }
+}
+
+String AtanFunction() :
+{ String[] expression = new String[2]; }
+{
+    LOOKAHEAD(5) ( < ATAN > | < ATAN2 > ) < OPENING_BRACKET > expression[0] = Expression() < CLOSING_BRACKET > < SLASH > < OPENING_BRACKET > expression[1] = Expression() < CLOSING_BRACKET >
+    { addBytecode(ATAN2); }
+    { return ("ATAN" + "[" + expression[0] + "]" + "/" + "[" + expression[1] + "]"); }
+  | LOOKAHEAD(4) ( < ATAN > | < ATAN2 > ) < OPENING_BRACKET > expression[0] = Expression() < COMMA > expression[1] = Expression() < CLOSING_BRACKET >
+    { addBytecode(ATAN2); }
+    { return ("ATAN" + "[" + expression[0] + "," + expression[1] + "]"); }
+  | < ATAN > < OPENING_BRACKET > expression[0] = Expression() < CLOSING_BRACKET > 
+    { addBytecode(ATAN); }
+    { return ("ATAN" + "[" + expression[0] + "]"); }
+}
+
+String SqrtFunction() :
+{ String expression; }
+{
+  < SQRT > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(SQRT); }
+  { return ("SQRT" + "[" + expression + "]"); }
+}
+
+String AbsFunction() :
+{ String expression; }
+{
+  < ABS > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(ABS); }
+  { return ("ABS" + "[" + expression + "]"); }
+}
+
+String BinFunction() :
+{ String expression; }
+{
+  < BIN > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(BIN); }
+  { return ("BIN" + "[" + expression + "]"); }
+}
+
+String BcdFunction() :
+{ String expression; }
+{
+  < BCD > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(BCD); }
+  { return ("BCD" + "[" + expression + "]"); }
+}
+
+String RoundFunction() :
+{ String expression; }
+{
+  < ROUND > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(ROUND); }
+  { return ("ROUND" + "[" + expression + "]"); }
+}
+
+String FixFunction() :
+{ String expression; }
+{
+  < FIX > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(FIX); }
+  { return ("FIX" + "[" + expression + "]"); }
+}
+
+String FupFunction() :
+{ String expression; }
+{
+  < FUP > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(FUP); }
+  { return ("FUP" + "[" + expression + "]"); }
+}
+
+String LnFunction() :
+{ String expression; }
+{
+  < LN > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(LN); }
+  { return ("LN" + "[" + expression + "]"); }
+}
+
+String ExpFunction() :
+{ String expression; }
+{
+  < EXP > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(EXP); }
+  { return ("EXP" + "[" + expression + "]"); }
+}
+
+String PowFunction() :
+{ String expression; }
+{
+  < POW > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(POW); }
+  { return ("POW" + "[" + expression + "]"); }
+}
+
+String AdpFunction() :
+{ String expression; }
+{
+  < ADP > < OPENING_BRACKET > expression = Expression() < CLOSING_BRACKET >
+  { addBytecode(ADP); }
+  { return ("ADP" + "[" + expression + "]"); }
+}

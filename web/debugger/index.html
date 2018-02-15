@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta charset="utf-8">
+	<title>Debugger</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style type="text/css">
+		html, body {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+		}
+
+		body {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: Arial, Helvetica, sans-serif, Tahoma, Verdana, sans-serif;
+			font-size: 12px;
+		}
+
+		.split {
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			box-sizing: border-box;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		.content {
+			border: 1px solid #C0C0C0;
+			box-shadow: inset 0 1px 2px #e4e4e4;
+			background-color: #fff;
+		}
+
+		.gutter {
+			background-color: transparent;
+			background-repeat: no-repeat;
+			background-position: 50%;
+		}
+
+		.gutter.gutter-horizontal {
+			cursor: col-resize;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+		}
+
+		.gutter.gutter-vertical {
+			cursor: row-resize;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAYAAABSIVz6AAAKQWlDQ1BJQ0MgUHJvZmlsZQAASA2dlndUU9kWh8+9N73QEiIgJfQaegkg0jtIFQRRiUmAUAKGhCZ2RAVGFBEpVmRUwAFHhyJjRRQLg4Ji1wnyEFDGwVFEReXdjGsJ7601896a/cdZ39nnt9fZZ+9917oAUPyCBMJ0WAGANKFYFO7rwVwSE8vE9wIYEAEOWAHA4WZmBEf4RALU/L09mZmoSMaz9u4ugGS72yy/UCZz1v9/kSI3QyQGAApF1TY8fiYX5QKUU7PFGTL/BMr0lSkyhjEyFqEJoqwi48SvbPan5iu7yZiXJuShGlnOGbw0noy7UN6aJeGjjAShXJgl4GejfAdlvVRJmgDl9yjT0/icTAAwFJlfzOcmoWyJMkUUGe6J8gIACJTEObxyDov5OWieAHimZ+SKBIlJYqYR15hp5ejIZvrxs1P5YjErlMNN4Yh4TM/0tAyOMBeAr2+WRQElWW2ZaJHtrRzt7VnW5mj5v9nfHn5T/T3IevtV8Sbsz55BjJ5Z32zsrC+9FgD2JFqbHbO+lVUAtG0GQOXhrE/vIADyBQC03pzzHoZsXpLE4gwnC4vs7GxzAZ9rLivoN/ufgm/Kv4Y595nL7vtWO6YXP4EjSRUzZUXlpqemS0TMzAwOl89k/fcQ/+PAOWnNycMsnJ/AF/GF6FVR6JQJhIlou4U8gViQLmQKhH/V4X8YNicHGX6daxRodV8AfYU5ULhJB8hvPQBDIwMkbj96An3rWxAxCsi+vGitka9zjzJ6/uf6Hwtcim7hTEEiU+b2DI9kciWiLBmj34RswQISkAd0oAo0gS4wAixgDRyAM3AD3iAAhIBIEAOWAy5IAmlABLJBPtgACkEx2AF2g2pwANSBetAEToI2cAZcBFfADXALDIBHQAqGwUswAd6BaQiC8BAVokGqkBakD5lC1hAbWgh5Q0FQOBQDxUOJkBCSQPnQJqgYKoOqoUNQPfQjdBq6CF2D+qAH0CA0Bv0BfYQRmALTYQ3YALaA2bA7HAhHwsvgRHgVnAcXwNvhSrgWPg63whfhG/AALIVfwpMIQMgIA9FGWAgb8URCkFgkAREha5EipAKpRZqQDqQbuY1IkXHkAwaHoWGYGBbGGeOHWYzhYlZh1mJKMNWYY5hWTBfmNmYQM4H5gqVi1bGmWCesP3YJNhGbjS3EVmCPYFuwl7ED2GHsOxwOx8AZ4hxwfrgYXDJuNa4Etw/XjLuA68MN4SbxeLwq3hTvgg/Bc/BifCG+Cn8cfx7fjx/GvyeQCVoEa4IPIZYgJGwkVBAaCOcI/YQRwjRRgahPdCKGEHnEXGIpsY7YQbxJHCZOkxRJhiQXUiQpmbSBVElqIl0mPSa9IZPJOmRHchhZQF5PriSfIF8lD5I/UJQoJhRPShxFQtlOOUq5QHlAeUOlUg2obtRYqpi6nVpPvUR9Sn0vR5Mzl/OX48mtk6uRa5Xrl3slT5TXl3eXXy6fJ18hf0r+pvy4AlHBQMFTgaOwVqFG4bTCPYVJRZqilWKIYppiiWKD4jXFUSW8koGStxJPqUDpsNIlpSEaQtOledK4tE20Otpl2jAdRzek+9OT6cX0H+i99AllJWVb5SjlHOUa5bPKUgbCMGD4M1IZpYyTjLuMj/M05rnP48/bNq9pXv+8KZX5Km4qfJUilWaVAZWPqkxVb9UU1Z2qbapP1DBqJmphatlq+9Uuq43Pp893ns+dXzT/5PyH6rC6iXq4+mr1w+o96pMamhq+GhkaVRqXNMY1GZpumsma5ZrnNMe0aFoLtQRa5VrntV4wlZnuzFRmJbOLOaGtru2nLdE+pN2rPa1jqLNYZ6NOs84TXZIuWzdBt1y3U3dCT0svWC9fr1HvoT5Rn62fpL9Hv1t/ysDQINpgi0GbwaihiqG/YZ5ho+FjI6qRq9Eqo1qjO8Y4Y7ZxivE+41smsImdSZJJjclNU9jU3lRgus+0zwxr5mgmNKs1u8eisNxZWaxG1qA5wzzIfKN5m/krCz2LWIudFt0WXyztLFMt6ywfWSlZBVhttOqw+sPaxJprXWN9x4Zq42Ozzqbd5rWtqS3fdr/tfTuaXbDdFrtOu8/2DvYi+yb7MQc9h3iHvQ732HR2KLuEfdUR6+jhuM7xjOMHJ3snsdNJp9+dWc4pzg3OowsMF/AX1C0YctFx4bgccpEuZC6MX3hwodRV25XjWuv6zE3Xjed2xG3E3dg92f24+ysPSw+RR4vHlKeT5xrPC16Il69XkVevt5L3Yu9q76c+Oj6JPo0+E752vqt9L/hh/QL9dvrd89fw5/rX+08EOASsCegKpARGBFYHPgsyCRIFdQTDwQHBu4IfL9JfJFzUFgJC/EN2hTwJNQxdFfpzGC4sNKwm7Hm4VXh+eHcELWJFREPEu0iPyNLIR4uNFksWd0bJR8VF1UdNRXtFl0VLl1gsWbPkRoxajCCmPRYfGxV7JHZyqffS3UuH4+ziCuPuLjNclrPs2nK15anLz66QX8FZcSoeGx8d3xD/iRPCqeVMrvRfuXflBNeTu4f7kufGK+eN8V34ZfyRBJeEsoTRRJfEXYljSa5JFUnjAk9BteB1sl/ygeSplJCUoykzqdGpzWmEtPi000IlYYqwK10zPSe9L8M0ozBDuspp1e5VE6JA0ZFMKHNZZruYjv5M9UiMJJslg1kLs2qy3mdHZZ/KUcwR5vTkmuRuyx3J88n7fjVmNXd1Z752/ob8wTXuaw6thdauXNu5Tnddwbrh9b7rj20gbUjZ8MtGy41lG99uit7UUaBRsL5gaLPv5sZCuUJR4b0tzlsObMVsFWzt3WazrWrblyJe0fViy+KK4k8l3JLr31l9V/ndzPaE7b2l9qX7d+B2CHfc3em681iZYlle2dCu4F2t5czyovK3u1fsvlZhW3FgD2mPZI+0MqiyvUqvakfVp+qk6oEaj5rmvep7t+2d2sfb17/fbX/TAY0DxQc+HhQcvH/I91BrrUFtxWHc4azDz+ui6rq/Z39ff0TtSPGRz0eFR6XHwo911TvU1zeoN5Q2wo2SxrHjccdv/eD1Q3sTq+lQM6O5+AQ4ITnx4sf4H++eDDzZeYp9qukn/Z/2ttBailqh1tzWibakNml7THvf6YDTnR3OHS0/m/989Iz2mZqzymdLz5HOFZybOZ93fvJCxoXxi4kXhzpXdD66tOTSna6wrt7LgZevXvG5cqnbvfv8VZerZ645XTt9nX297Yb9jdYeu56WX+x+aem172296XCz/ZbjrY6+BX3n+l37L972un3ljv+dGwOLBvruLr57/17cPel93v3RB6kPXj/Mejj9aP1j7OOiJwpPKp6qP6391fjXZqm99Oyg12DPs4hnj4a4Qy//lfmvT8MFz6nPK0a0RupHrUfPjPmM3Xqx9MXwy4yX0+OFvyn+tveV0auffnf7vWdiycTwa9HrmT9K3qi+OfrW9m3nZOjk03dp76anit6rvj/2gf2h+2P0x5Hp7E/4T5WfjT93fAn88ngmbWbm3/eE8/syOll+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAJklEQVQoFWM8c+bMfwYgMDExYQTR9OIzgSwbUYCRXkGLHpUDFtQAj1I+zTCPS2YAAAAASUVORK5CYII=');
+		}
+
+		.split.split-horizontal, .gutter.gutter-horizontal {
+			height: 100%;
+			float: left;
+		}
+
+		.txt {
+			border:1px solid;
+			width:50px;
+		}
+
+		#programs {
+			background-color: #0e62a5;
+			color: white;
+		}
+
+		#out {
+			border:1px solid;
+			width:300px;
+		}
+	</style>
+	<link rel="stylesheet" href="">
+	<link rel="stylesheet" href="js/jstree/themes/default/style.min.css" />
+	<link rel="shortcut icon" href="">
+	<script type="text/javascript" src="js/jquery/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="js/split.js/split.min.js"></script>
+	<script type="text/javascript" src="js/jstree/jstree.min.js"></script>
+	<script type="text/javascript">
+		// div
+		var _div_jstree;
+		// text
+		var _txt_jstree;
+		// checkbox
+		var _chk_jstree;
+		// elements
+		var _pc, _line, _prog, _nest, _out;
+		var _x_mcn, _y_mcn, _z_mcn, _a_mcn, _b_mcn, _c_mcn, _u_mcn, _v_mcn, _w_mcn;
+		var _x_mon, _y_mon, _z_mon, _a_mon, _b_mon, _c_mon, _u_mon, _v_mon, _w_mon;
+		var _x_ext, _y_ext, _z_ext, _a_ext, _b_ext, _c_ext, _u_ext, _v_ext, _w_ext;
+		var _x_g92, _y_g92, _z_g92, _a_g92, _b_g92, _c_g92, _u_g92, _v_g92, _w_g92;
+		var _x_tol, _y_tol, _z_tol, _a_tol, _b_tol, _c_tol, _u_tol, _v_tol, _w_tol;
+		var _x_g54, _y_g54, _z_g54, _a_g54, _b_g54, _c_g54, _u_g54, _v_g54, _w_g54;
+		var _x_g55, _y_g55, _z_g55, _a_g55, _b_g55, _c_g55, _u_g55, _v_g55, _w_g55;
+		var _x_g56, _y_g56, _z_g56, _a_g56, _b_g56, _c_g56, _u_g56, _v_g56, _w_g56;
+		var _x_g57, _y_g57, _z_g57, _a_g57, _b_g57, _c_g57, _u_g57, _v_g57, _w_g57;
+		var _x_g58, _y_g58, _z_g58, _a_g58, _b_g58, _c_g58, _u_g58, _v_g58, _w_g58;
+		var _x_g59, _y_g59, _z_g59, _a_g59, _b_g59, _c_g59, _u_g59, _v_g59, _w_g59;
+		var _var = [];
+		// jstree
+		var _jstree;
+		var _readline;
+		var _data = [];
+		var _buffer = [];
+		var _id;
+		var _re;
+		//
+		var _isJavaFX;
+		var _file_buffer;
+		var _file_count;
+
+		$(window).on('load', function () {
+			var readfile = document.getElementById('readfile');
+			if (window.navigator.userAgent.indexOf('JavaFX') === -1) {
+				_isJavaFX = false;
+				readfile.type = 'file';
+				readfile.onclick = null;
+			} else {
+				_isJavaFX = true;
+				readfile.type = 'button';
+				readfile.onclick = debug;
+			}
+			if (!_isJavaFX) {
+				startup();
+			}
+		});
+
+		function setup() {
+			try {
+				stage.show();
+				window.setTimeout(function(){
+					startup();
+				}, 500);
+			} catch (ex) {
+				alert(ex);
+			}
+		}
+
+		function startup() {
+			// events
+			document.getElementById('readfile').addEventListener('change', handleReadFile, false);
+			// elements
+			_div_jstree = $('#jstree');
+			_txt_jstree = $('#txt_jstree');
+			_chk_jstree = $('#chk_jstree');
+			// split.js
+			Split(
+				['#search', '#jstree'],
+				{
+					'sizes': [10, 90],
+					'minSize': [70, 100],
+					direction: 'vertical'
+				}
+			);
+			Split(
+				['#programs', '#variables'],
+				{'sizes': [30, 70]}
+			);
+		}
+
+		function handleReadFile(e){
+			try {
+				if (!_isJavaFX) {
+					var file = e.target.files[0];
+					if (file) {
+						var reader = new FileReader();
+						reader.onload = function(e){
+							_file_buffer = reader.result.split(/\r\n|\n|\r/);
+							if (_file_buffer.length) {
+								_file_count = 0;
+								debug();
+							}
+						};
+						reader.readAsText(file);
+					}
+				}
+			} catch (ex) {
+				alert(ex);
+			}
+		}
+
+		function debug() {
+			try {
+				if (_isJavaFX) {
+					// file reader
+					var filename = file.openDialog(null, 'Debug', '*.dbg');
+					if (!filename) {
+						return;
+					}
+					file.reader(filename, 'utf-8');
+				}
+				var i;
+				// jstree
+				while (_data.length) {
+					_data.pop();
+				}
+				while (_buffer.length) {
+					_buffer.pop();
+				}
+				_id = null;
+				createData('#');
+				if (_jstree) {
+					_jstree.destroy(true);
+				}
+				$('#jstree')
+					.on('keydown.jstree', '.jstree-anchor', jstreeKeydown)
+					.on('changed.jstree', jstreeChanged)
+					.jstree({
+						'core':{
+							'data' : _data,
+							'themes' : {
+								'dots' : false,
+								'icons' : false
+							},
+							'check_callback' : true,
+							"animation": 0
+						},
+						'plugins' : ['search', 'changed']
+				});
+				_jstree = $('#jstree').jstree(true);
+				_jstree.refresh(false, false);
+				// status
+				_pc = document.getElementById('pc');
+				_line = document.getElementById('line');
+				_prog = document.getElementById('prog');
+				_nest = document.getElementById('nest');
+				_out = document.getElementById('out');
+				// position machine
+				_x_mcn = document.getElementById('x_mcn');
+				_y_mcn = document.getElementById('y_mcn');
+				_z_mcn = document.getElementById('z_mcn');
+				_a_mcn = document.getElementById('a_mcn');
+				_b_mcn = document.getElementById('b_mcn');
+				_c_mcn = document.getElementById('c_mcn');
+				_u_mcn = document.getElementById('u_mcn');
+				_v_mcn = document.getElementById('v_mcn');
+				_w_mcn = document.getElementById('w_mcn');
+				// position monitor
+				_x_mon = document.getElementById('x_mon');
+				_y_mon = document.getElementById('y_mon');
+				_z_mon = document.getElementById('z_mon');
+				_a_mon = document.getElementById('a_mon');
+				_b_mon = document.getElementById('b_mon');
+				_c_mon = document.getElementById('c_mon');
+				_u_mon = document.getElementById('u_mon');
+				_v_mon = document.getElementById('v_mon');
+				_w_mon = document.getElementById('w_mon');
+				// offsets external
+				_x_ext = document.getElementById('x_ext');
+				_y_ext = document.getElementById('y_ext');
+				_z_ext = document.getElementById('z_ext');
+				_a_ext = document.getElementById('a_ext');
+				_b_ext = document.getElementById('b_ext');
+				_c_ext = document.getElementById('c_ext');
+				_u_ext = document.getElementById('u_ext');
+				_v_ext = document.getElementById('v_ext');
+				_w_ext = document.getElementById('w_ext');
+				// offsets g92
+				_x_g92 = document.getElementById('x_g92');
+				_y_g92 = document.getElementById('y_g92');
+				_z_g92 = document.getElementById('z_g92');
+				_a_g92 = document.getElementById('a_g92');
+				_b_g92 = document.getElementById('b_g92');
+				_c_g92 = document.getElementById('c_g92');
+				_u_g92 = document.getElementById('u_g92');
+				_v_g92 = document.getElementById('v_g92');
+				_w_g92 = document.getElementById('w_g92');
+				// offsets tool
+				_x_tol = document.getElementById('x_tol');
+				_y_tol = document.getElementById('y_tol');
+				_z_tol = document.getElementById('z_tol');
+				_a_tol = document.getElementById('a_tol');
+				_b_tol = document.getElementById('b_tol');
+				_c_tol = document.getElementById('c_tol');
+				_u_tol = document.getElementById('u_tol');
+				_v_tol = document.getElementById('v_tol');
+				_w_tol = document.getElementById('w_tol');
+				// offsets g54
+				_x_g54 = document.getElementById('x_g54');
+				_y_g54 = document.getElementById('y_g54');
+				_z_g54 = document.getElementById('z_g54');
+				_a_g54 = document.getElementById('a_g54');
+				_b_g54 = document.getElementById('b_g54');
+				_c_g54 = document.getElementById('c_g54');
+				_u_g54 = document.getElementById('u_g54');
+				_v_g54 = document.getElementById('v_g54');
+				_w_g54 = document.getElementById('w_g54');
+				// offsets g55
+				_x_g55 = document.getElementById('x_g55');
+				_y_g55 = document.getElementById('y_g55');
+				_z_g55 = document.getElementById('z_g55');
+				_a_g55 = document.getElementById('a_g55');
+				_b_g55 = document.getElementById('b_g55');
+				_c_g55 = document.getElementById('c_g55');
+				_u_g55 = document.getElementById('u_g55');
+				_v_g55 = document.getElementById('v_g55');
+				_w_g55 = document.getElementById('w_g55');
+				// offsets g56
+				_x_g56 = document.getElementById('x_g56');
+				_y_g56 = document.getElementById('y_g56');
+				_z_g56 = document.getElementById('z_g56');
+				_a_g56 = document.getElementById('a_g56');
+				_b_g56 = document.getElementById('b_g56');
+				_c_g56 = document.getElementById('c_g56');
+				_u_g56 = document.getElementById('u_g56');
+				_v_g56 = document.getElementById('v_g56');
+				_w_g56 = document.getElementById('w_g56');
+				// offsets g57
+				_x_g57 = document.getElementById('x_g57');
+				_y_g57 = document.getElementById('y_g57');
+				_z_g57 = document.getElementById('z_g57');
+				_a_g57 = document.getElementById('a_g57');
+				_b_g57 = document.getElementById('b_g57');
+				_c_g57 = document.getElementById('c_g57');
+				_u_g57 = document.getElementById('u_g57');
+				_v_g57 = document.getElementById('v_g57');
+				_w_g57 = document.getElementById('w_g57');
+				// offsets g58
+				_x_g58 = document.getElementById('x_g58');
+				_y_g58 = document.getElementById('y_g58');
+				_z_g58 = document.getElementById('z_g58');
+				_a_g58 = document.getElementById('a_g58');
+				_b_g58 = document.getElementById('b_g58');
+				_c_g58 = document.getElementById('c_g58');
+				_u_g58 = document.getElementById('u_g58');
+				_v_g58 = document.getElementById('v_g58');
+				_w_g58 = document.getElementById('w_g58');
+				// offsets g59
+				_x_g59 = document.getElementById('x_g59');
+				_y_g59 = document.getElementById('y_g59');
+				_z_g59 = document.getElementById('z_g59');
+				_a_g59 = document.getElementById('a_g59');
+				_b_g59 = document.getElementById('b_g59');
+				_c_g59 = document.getElementById('c_g59');
+				_u_g59 = document.getElementById('u_g59');
+				_v_g59 = document.getElementById('v_g59');
+				_w_g59 = document.getElementById('w_g59');
+				// variables
+				for (i = 1; i <= 33; i++) {
+					_var[i] = document.getElementById('var_' + i);
+				}
+				for (i = 100; i <= 199; i++) {
+					_var[i] = document.getElementById('var_' + i);
+				}
+				for (i = 500; i <= 999; i++) {
+					_var[i] = document.getElementById('var_' + i);
+				}
+				for (i = 4000; i <= 4030; i++) {
+					_var[i] = document.getElementById('var_' + i);
+				}
+				_var[4107] = document.getElementById('var_4107');
+				_var[4108] = document.getElementById('var_4108');
+				_var[4109] = document.getElementById('var_4109');
+				_var[4111] = document.getElementById('var_4111');
+				_var[4113] = document.getElementById('var_4113');
+				_var[4114] = document.getElementById('var_4114');
+				_var[4115] = document.getElementById('var_4115');
+				_var[4119] = document.getElementById('var_4119');
+				_var[4120] = document.getElementById('var_4120');
+				_var[4130] = document.getElementById('var_4130');
+				_var[5400] = document.getElementById('var_5400');
+			} catch (ex) {
+				alert(ex);
+			}
+		}
+
+		function createData(parent) {
+			var data = null;
+			var program_number = null;
+			var nest = null;
+			var child = null;
+
+			do {
+				if (_isJavaFX) {
+					_readline = file.readerReadLine();
+				} else {
+					_readline = _file_count < _file_buffer.length ? _file_buffer[_file_count++] : null;
+				}
+				if (_readline) {
+					try {
+						data = JSON.parse(_readline.replace(/∞/g, '1E400'));
+						if (program_number === null) {
+							program_number = data.status.program_number;
+							nest = data.status.nest;
+						}
+						if ((data.status.program_number < 0) || (data.status.program_number === program_number)) {
+							child = null;
+							_data.push({
+								'id' : String(_buffer.length),
+								'parent' : parent,
+								'text' : escape_html(data.status.block)
+							});
+							_buffer.push(data);
+							if (data.variables['#4113'] === 99.0) {
+								return;
+							} else {
+								if (data.status.program_number > 0) {
+									program_number = data.status.program_number;
+									nest = data.status.nest;
+								}
+							}
+						} else {
+							if (child === null) {
+								child = String(_buffer.length - 1);
+							}
+							_data.push({
+								'id' : String(_buffer.length),
+								'parent' : child,
+								'text' : escape_html(data.status.block)
+							});
+							_buffer.push(data);
+							createData(child);
+						}
+					} catch (ex) {
+						console.error(ex);
+					}
+				}
+			} while (_readline !== null);
+		}
+
+		function escape_html (string) {
+			if (typeof string !== 'string') {
+				return string;
+			}
+			return string.replace(/[&'`"<>]/g, function(match) {
+				return {
+				'&': '&amp;',
+				"'": '&#x27;',
+				'`': '&#x60;',
+				'"': '&quot;',
+				'<': '&lt;',
+				'>': '&gt;',
+				}[match];
+			});
+		}
+
+		function jstreeKeydown(e) {
+			if (e.target.tagName && e.target.tagName.toLowerCase() === "input") { return true; }
+			switch (e.which) {
+				case 38: // up
+					e.preventDefault();
+					o = _jstree.get_prev_dom(e.currentTarget);
+					if (o && o.length) {
+						_jstree.deselect_all(true);
+						_jstree.select_node(o, false, false, e);
+					}
+					break;
+				case 40: // down
+					e.preventDefault();
+					o = _jstree.get_next_dom(e.currentTarget);
+					if (o && o.length) {
+						_jstree.deselect_all(true);
+						_jstree.select_node(o, false, false, e);
+					}
+					break;
+				default:
+					break;
+			}
+		}
+
+		function jstreeChanged(e, data) {
+			try {
+				if (data.selected.length) {
+					// jstree id
+					_id = Number(data.instance.get_node(data.selected[0]).id);
+					// status
+					_pc.value = _buffer[_id].status.pc;
+					_line.value = _buffer[_id].status.line;
+					_prog.value = _buffer[_id].status.program_number;
+					_nest.value = _buffer[_id].status.nest;
+					if (_buffer[_id].out === void 0) {
+						_out.value = null;
+					} else {
+						_out.value = _buffer[_id].out;
+					}
+					// positions machine
+					_x_mcn.value = _buffer[_id].positions.machine.x;
+					_y_mcn.value = _buffer[_id].positions.machine.y;
+					_z_mcn.value = _buffer[_id].positions.machine.z;
+					_a_mcn.value = _buffer[_id].positions.machine.a;
+					_b_mcn.value = _buffer[_id].positions.machine.b;
+					_c_mcn.value = _buffer[_id].positions.machine.c;
+					_u_mcn.value = _buffer[_id].positions.machine.u;
+					_v_mcn.value = _buffer[_id].positions.machine.v;
+					_w_mcn.value = _buffer[_id].positions.machine.w;
+					// positions monitor
+					_x_mon.value = _buffer[_id].positions.monitor.x;
+					_y_mon.value = _buffer[_id].positions.monitor.y;
+					_z_mon.value = _buffer[_id].positions.monitor.z;
+					_a_mon.value = _buffer[_id].positions.monitor.a;
+					_b_mon.value = _buffer[_id].positions.monitor.b;
+					_c_mon.value = _buffer[_id].positions.monitor.c;
+					_u_mon.value = _buffer[_id].positions.monitor.u;
+					_v_mon.value = _buffer[_id].positions.monitor.v;
+					_w_mon.value = _buffer[_id].positions.monitor.w;
+					// offsets external
+					_x_ext.value = _buffer[_id].offsets.external.x;
+					_y_ext.value = _buffer[_id].offsets.external.y;
+					_z_ext.value = _buffer[_id].offsets.external.z;
+					_a_ext.value = _buffer[_id].offsets.external.a;
+					_b_ext.value = _buffer[_id].offsets.external.b;
+					_c_ext.value = _buffer[_id].offsets.external.c;
+					_u_ext.value = _buffer[_id].offsets.external.u;
+					_v_ext.value = _buffer[_id].offsets.external.v;
+					_w_ext.value = _buffer[_id].offsets.external.w;
+					// offsets g92
+					_x_g92.value = _buffer[_id].offsets.g92.x;
+					_y_g92.value = _buffer[_id].offsets.g92.y;
+					_z_g92.value = _buffer[_id].offsets.g92.z;
+					_a_g92.value = _buffer[_id].offsets.g92.a;
+					_b_g92.value = _buffer[_id].offsets.g92.b;
+					_c_g92.value = _buffer[_id].offsets.g92.c;
+					_u_g92.value = _buffer[_id].offsets.g92.u;
+					_v_g92.value = _buffer[_id].offsets.g92.v;
+					_w_g92.value = _buffer[_id].offsets.g92.w;
+					// offsets tool
+					_x_tol.value = _buffer[_id].offsets.tool.x;
+					_y_tol.value = _buffer[_id].offsets.tool.y;
+					_z_tol.value = _buffer[_id].offsets.tool.z;
+					_a_tol.value = _buffer[_id].offsets.tool.a;
+					_b_tol.value = _buffer[_id].offsets.tool.b;
+					_c_tol.value = _buffer[_id].offsets.tool.c;
+					_u_tol.value = _buffer[_id].offsets.tool.u;
+					_v_tol.value = _buffer[_id].offsets.tool.v;
+					_w_tol.value = _buffer[_id].offsets.tool.w;
+					// offsets g54
+					_x_g54.value = _buffer[_id].offsets.g54.x;
+					_y_g54.value = _buffer[_id].offsets.g54.y;
+					_z_g54.value = _buffer[_id].offsets.g54.z;
+					_a_g54.value = _buffer[_id].offsets.g54.a;
+					_b_g54.value = _buffer[_id].offsets.g54.b;
+					_c_g54.value = _buffer[_id].offsets.g54.c;
+					_u_g54.value = _buffer[_id].offsets.g54.u;
+					_v_g54.value = _buffer[_id].offsets.g54.v;
+					_w_g54.value = _buffer[_id].offsets.g54.w;
+					// offsets g55
+					_x_g55.value = _buffer[_id].offsets.g55.x;
+					_y_g55.value = _buffer[_id].offsets.g55.y;
+					_z_g55.value = _buffer[_id].offsets.g55.z;
+					_a_g55.value = _buffer[_id].offsets.g55.a;
+					_b_g55.value = _buffer[_id].offsets.g55.b;
+					_c_g55.value = _buffer[_id].offsets.g55.c;
+					_u_g55.value = _buffer[_id].offsets.g55.u;
+					_v_g55.value = _buffer[_id].offsets.g55.v;
+					_w_g55.value = _buffer[_id].offsets.g55.w;
+					// offsets g56
+					_x_g56.value = _buffer[_id].offsets.g56.x;
+					_y_g56.value = _buffer[_id].offsets.g56.y;
+					_z_g56.value = _buffer[_id].offsets.g56.z;
+					_a_g56.value = _buffer[_id].offsets.g56.a;
+					_b_g56.value = _buffer[_id].offsets.g56.b;
+					_c_g56.value = _buffer[_id].offsets.g56.c;
+					_u_g56.value = _buffer[_id].offsets.g56.u;
+					_v_g56.value = _buffer[_id].offsets.g56.v;
+					_w_g56.value = _buffer[_id].offsets.g56.w;
+					// offsets g57
+					_x_g57.value = _buffer[_id].offsets.g57.x;
+					_y_g57.value = _buffer[_id].offsets.g57.y;
+					_z_g57.value = _buffer[_id].offsets.g57.z;
+					_a_g57.value = _buffer[_id].offsets.g57.a;
+					_b_g57.value = _buffer[_id].offsets.g57.b;
+					_c_g57.value = _buffer[_id].offsets.g57.c;
+					_u_g57.value = _buffer[_id].offsets.g57.u;
+					_v_g57.value = _buffer[_id].offsets.g57.v;
+					_w_g57.value = _buffer[_id].offsets.g57.w;
+					// offsets g58
+					_x_g58.value = _buffer[_id].offsets.g58.x;
+					_y_g58.value = _buffer[_id].offsets.g58.y;
+					_z_g58.value = _buffer[_id].offsets.g58.z;
+					_a_g58.value = _buffer[_id].offsets.g58.a;
+					_b_g58.value = _buffer[_id].offsets.g58.b;
+					_c_g58.value = _buffer[_id].offsets.g58.c;
+					_u_g58.value = _buffer[_id].offsets.g58.u;
+					_v_g58.value = _buffer[_id].offsets.g58.v;
+					_w_g58.value = _buffer[_id].offsets.g58.w;
+					// offsets g59
+					_x_g59.value = _buffer[_id].offsets.g59.x;
+					_y_g59.value = _buffer[_id].offsets.g59.y;
+					_z_g59.value = _buffer[_id].offsets.g59.z;
+					_a_g59.value = _buffer[_id].offsets.g59.a;
+					_b_g59.value = _buffer[_id].offsets.g59.b;
+					_c_g59.value = _buffer[_id].offsets.g59.c;
+					_u_g59.value = _buffer[_id].offsets.g59.u;
+					_v_g59.value = _buffer[_id].offsets.g59.v;
+					_w_g59.value = _buffer[_id].offsets.g59.w;
+					// variables
+					for (i = 1; i <= 33; i++) {
+						_var[i].value = _buffer[_id].variables['#' + i];
+						if (_buffer[_id].change['#' + i] !== undefined) {
+							_var[i].style.border = '1px solid #ff0000';
+						} else {
+							_var[i].style.border = '1px solid';
+						}
+					}
+					for (i = 100; i <= 199; i++) {
+						_var[i].value = _buffer[_id].variables['#' + i];
+						if (_buffer[_id].change['#' + i] !== undefined) {
+							_var[i].style.border = '1px solid #ff0000';
+						} else {
+							_var[i].style.border = '1px solid';
+						}
+					}
+					for (i = 500; i <= 999; i++) {
+						_var[i].value = _buffer[_id].variables['#' + i];
+						if (_buffer[_id].change['#' + i] !== undefined) {
+							_var[i].style.border = '1px solid #ff0000';
+						} else {
+							_var[i].style.border = '1px solid';
+						}
+					}
+					for (i = 4000; i <= 4030; i++) {
+						_var[i].value = _buffer[_id].variables['#' + i];
+						if (_buffer[_id].change['#' + i] !== undefined) {
+							_var[i].style.border = '1px solid #ff0000';
+						} else {
+							_var[i].style.border = '1px solid';
+						}
+					}
+					_var[4107].value = _buffer[_id].variables['#4107'];
+					if (_buffer[_id].change['#4107'] !== undefined) {
+						_var[4107].style.border = '1px solid #ff0000';
+					} else {
+						_var[4107].style.border = '1px solid';
+					}
+					_var[4108].value = _buffer[_id].variables['#4108'];
+					if (_buffer[_id].change['#4108'] !== undefined) {
+						_var[4108].style.border = '1px solid #ff0000';
+					} else {
+						_var[4108].style.border = '1px solid';
+					}
+					_var[4109].value = _buffer[_id].variables['#4109'];
+					if (_buffer[_id].change['#4109'] !== undefined) {
+						_var[4109].style.border = '1px solid #ff0000';
+					} else {
+						_var[4109].style.border = '1px solid';
+					}
+					_var[4111].value = _buffer[_id].variables['#4111'];
+					if (_buffer[_id].change['#4111'] !== undefined) {
+						_var[4111].style.border = '1px solid #ff0000';
+					} else {
+						_var[4111].style.border = '1px solid';
+					}
+					_var[4113].value = _buffer[_id].variables['#4113'];
+					if (_buffer[_id].change['#4113'] !== undefined) {
+						_var[4113].style.border = '1px solid #ff0000';
+					} else {
+						_var[4113].style.border = '1px solid';
+					}
+					_var[4114].value = _buffer[_id].variables['#4114'];
+					if (_buffer[_id].change['#4114'] !== undefined) {
+						_var[4114].style.border = '1px solid #ff0000';
+					} else {
+						_var[4114].style.border = '1px solid';
+					}
+					_var[4115].value = _buffer[_id].variables['#4115'];
+					if (_buffer[_id].change['#4115'] !== undefined) {
+						_var[4115].style.border = '1px solid #ff0000';
+					} else {
+						_var[4115].style.border = '1px solid';
+					}
+					_var[4119].value = _buffer[_id].variables['#4119'];
+					if (_buffer[_id].change['#4119'] !== undefined) {
+						_var[4119].style.border = '1px solid #ff0000';
+					} else {
+						_var[4119].style.border = '1px solid';
+					}
+					_var[4120].value = _buffer[_id].variables['#4120'];
+					if (_buffer[_id].change['#4120'] !== undefined) {
+						_var[4120].style.border = '1px solid #ff0000';
+					} else {
+						_var[4120].style.border = '1px solid';
+					}
+					_var[4130].value = _buffer[_id].variables['#4130'];
+					if (_buffer[_id].change['#4130'] !== undefined) {
+						_var[4130].style.border = '1px solid #ff0000';
+					} else {
+						_var[4130].style.border = '1px solid';
+					}
+					_var[5400].value = _buffer[_id].variables['#5400'];
+					if (_buffer[_id].change['#5400'] !== undefined) {
+						_var[5400].style.border = '1px solid #ff0000';
+					} else {
+						_var[5400].style.border = '1px solid';
+					}
+				}
+			} catch (ex) {
+				alert(ex);
+			}
+		}
+
+		function search(event) {
+			if (event.keyCode === 13) {
+				if (_jstree) {
+					try {
+						var i = 0;
+						if (_chk_jstree.prop('checked')) {
+							_re = new RegExp(_txt_jstree.val());
+						} else {
+							_re = null;
+						}
+						if ((_id === null) || isNaN(_id)) {
+							for (; i < _data.length; i++) {
+								if (search_data(i)) {
+									return;
+								}
+							}
+						} else {
+							i = _id;
+							if (event.shiftKey) {
+								if (0 < _id) {
+									i--;
+								}
+								for (; 0 <= i; i--) {
+									if (search_data(i)) {
+										return;
+									}
+								}
+							} else {
+								if (_id < (_data.length - 1)) {
+									i++;
+								}
+								for (; i < _data.length; i++) {
+									if (search_data(i)) {
+										return;
+									}
+								}
+							}
+						}
+					} catch (ex) {
+						alert(ex);
+					}
+				}
+			}
+		}
+
+		function search_data(i) {
+			if (_re) {
+				if (_data[i].text.match(_re)) {
+					_div_jstree.jstree("activate_node", String(i));
+					scrollIntoViewCenter($('#jstree #' + String(i))[0], _div_jstree);
+					return true;
+				}
+			} else {
+				if (_data[i].text.indexOf(_txt_jstree.val()) > -1) {
+					_div_jstree.jstree("activate_node", String(i));
+					scrollIntoViewCenter($('#jstree #' + String(i))[0], _div_jstree);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		function scrollIntoViewCenter(element, container) {
+			var cont = $(container);
+			cont.scrollTop(element.offsetTop - (cont.height() / 2));
+		}
+	</script>
+</head>
+<body>
+<div id="programs" class="split split-horizontal">
+	<div id="search" class="split split-vertical">
+		<div><input id="readfile" value="read" /></div>
+		<div><input type="text" id="txt_jstree" onkeydown="search(event)" /><input type="checkbox" id="chk_jstree" class="chk_jstree"><label for="chk_jstree">.*</label></div>
+	</div>
+	<div id="jstree" class="split split-vertical"></div>
+</div>
+<div id="variables" class="split split-horizontal">
+	<div id="status">
+		<table>
+			<tr>
+				<td><label>pc</label></td><td><input id="pc" class="txt" type="text" readonly="true" /></td>
+				<td><label>line</label></td><td><input id="line" class="txt" type="text" readonly="true" /></td>
+				<td><label>prog</label></td><td><input id="prog" class="txt" type="text" readonly="true" /></td>
+				<td><label>nest</label></td><td><input id="nest" class="txt" type="text" readonly="true" /></td>
+				<td><label>out</label></td><td><input id="out" type="text" readonly="true" /></td>
+			</tr>
+		</table>
+	</div>
+	<div id="positions">
+		<table>
+			<tr>
+				<td><label>x_mcn</label></td><td><input class="txt" id="x_mcn" type="text" readonly="true" /></td>
+				<td><label>y_mcn</label></td><td><input class="txt" id="y_mcn" type="text" readonly="true" /></td>
+				<td><label>z_mcn</label></td><td><input class="txt" id="z_mcn" type="text" readonly="true" /></td>
+				<td><label>a_mcn</label></td><td><input class="txt" id="a_mcn" type="text" readonly="true" /></td>
+				<td><label>b_mcn</label></td><td><input class="txt" id="b_mcn" type="text" readonly="true" /></td>
+				<td><label>c_mcn</label></td><td><input class="txt" id="c_mcn" type="text" readonly="true" /></td>
+				<td><label>u_mcn</label></td><td><input class="txt" id="u_mcn" type="text" readonly="true" /></td>
+				<td><label>v_mcn</label></td><td><input class="txt" id="v_mcn" type="text" readonly="true" /></td>
+				<td><label>w_mcn</label></td><td><input class="txt" id="w_mcn" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_mon</label></td><td><input class="txt" id="x_mon" type="text" readonly="true" /></td>
+				<td><label>y_mon</label></td><td><input class="txt" id="y_mon" type="text" readonly="true" /></td>
+				<td><label>z_mon</label></td><td><input class="txt" id="z_mon" type="text" readonly="true" /></td>
+				<td><label>a_mon</label></td><td><input class="txt" id="a_mon" type="text" readonly="true" /></td>
+				<td><label>b_mon</label></td><td><input class="txt" id="b_mon" type="text" readonly="true" /></td>
+				<td><label>c_mon</label></td><td><input class="txt" id="c_mon" type="text" readonly="true" /></td>
+				<td><label>u_mon</label></td><td><input class="txt" id="u_mon" type="text" readonly="true" /></td>
+				<td><label>v_mon</label></td><td><input class="txt" id="v_mon" type="text" readonly="true" /></td>
+				<td><label>w_mon</label></td><td><input class="txt" id="w_mon" type="text" readonly="true" /></td>
+			</tr>
+		</table>
+	</div>
+	<div id="offsets">
+		<table>
+			<tr>
+				<td><label>x_ext</label></td><td><input class="txt" id="x_ext" type="text" readonly="true" /></td>
+				<td><label>y_ext</label></td><td><input class="txt" id="y_ext" type="text" readonly="true" /></td>
+				<td><label>z_ext</label></td><td><input class="txt" id="z_ext" type="text" readonly="true" /></td>
+				<td><label>a_ext</label></td><td><input class="txt" id="a_ext" type="text" readonly="true" /></td>
+				<td><label>b_ext</label></td><td><input class="txt" id="b_ext" type="text" readonly="true" /></td>
+				<td><label>c_ext</label></td><td><input class="txt" id="c_ext" type="text" readonly="true" /></td>
+				<td><label>u_ext</label></td><td><input class="txt" id="u_ext" type="text" readonly="true" /></td>
+				<td><label>v_ext</label></td><td><input class="txt" id="v_ext" type="text" readonly="true" /></td>
+				<td><label>w_ext</label></td><td><input class="txt" id="w_ext" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_g92</label></td><td><input class="txt" id="x_g92" type="text" readonly="true" /></td>
+				<td><label>y_g92</label></td><td><input class="txt" id="y_g92" type="text" readonly="true" /></td>
+				<td><label>z_g92</label></td><td><input class="txt" id="z_g92" type="text" readonly="true" /></td>
+				<td><label>a_g92</label></td><td><input class="txt" id="a_g92" type="text" readonly="true" /></td>
+				<td><label>b_g92</label></td><td><input class="txt" id="b_g92" type="text" readonly="true" /></td>
+				<td><label>c_g92</label></td><td><input class="txt" id="c_g92" type="text" readonly="true" /></td>
+				<td><label>u_g92</label></td><td><input class="txt" id="u_g92" type="text" readonly="true" /></td>
+				<td><label>v_g92</label></td><td><input class="txt" id="v_g92" type="text" readonly="true" /></td>
+				<td><label>w_g92</label></td><td><input class="txt" id="w_g92" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_tol</label></td><td><input class="txt" id="x_tol" type="text" readonly="true" /></td>
+				<td><label>y_tol</label></td><td><input class="txt" id="y_tol" type="text" readonly="true" /></td>
+				<td><label>z_tol</label></td><td><input class="txt" id="z_tol" type="text" readonly="true" /></td>
+				<td><label>a_tol</label></td><td><input class="txt" id="a_tol" type="text" readonly="true" /></td>
+				<td><label>b_tol</label></td><td><input class="txt" id="b_tol" type="text" readonly="true" /></td>
+				<td><label>c_tol</label></td><td><input class="txt" id="c_tol" type="text" readonly="true" /></td>
+				<td><label>u_tol</label></td><td><input class="txt" id="u_tol" type="text" readonly="true" /></td>
+				<td><label>v_tol</label></td><td><input class="txt" id="v_tol" type="text" readonly="true" /></td>
+				<td><label>w_tol</label></td><td><input class="txt" id="w_tol" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_g54</label></td><td><input class="txt" id="x_g54" type="text" readonly="true" /></td>
+				<td><label>y_g54</label></td><td><input class="txt" id="y_g54" type="text" readonly="true" /></td>
+				<td><label>z_g54</label></td><td><input class="txt" id="z_g54" type="text" readonly="true" /></td>
+				<td><label>a_g54</label></td><td><input class="txt" id="a_g54" type="text" readonly="true" /></td>
+				<td><label>b_g54</label></td><td><input class="txt" id="b_g54" type="text" readonly="true" /></td>
+				<td><label>c_g54</label></td><td><input class="txt" id="c_g54" type="text" readonly="true" /></td>
+				<td><label>u_g54</label></td><td><input class="txt" id="u_g54" type="text" readonly="true" /></td>
+				<td><label>v_g54</label></td><td><input class="txt" id="v_g54" type="text" readonly="true" /></td>
+				<td><label>w_g54</label></td><td><input class="txt" id="w_g54" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_g55</label></td><td><input class="txt" id="x_g55" type="text" readonly="true" /></td>
+				<td><label>y_g55</label></td><td><input class="txt" id="y_g55" type="text" readonly="true" /></td>
+				<td><label>z_g55</label></td><td><input class="txt" id="z_g55" type="text" readonly="true" /></td>
+				<td><label>a_g55</label></td><td><input class="txt" id="a_g55" type="text" readonly="true" /></td>
+				<td><label>b_g55</label></td><td><input class="txt" id="b_g55" type="text" readonly="true" /></td>
+				<td><label>c_g55</label></td><td><input class="txt" id="c_g55" type="text" readonly="true" /></td>
+				<td><label>u_g55</label></td><td><input class="txt" id="u_g55" type="text" readonly="true" /></td>
+				<td><label>v_g55</label></td><td><input class="txt" id="v_g55" type="text" readonly="true" /></td>
+				<td><label>w_g55</label></td><td><input class="txt" id="w_g55" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_g56</label></td><td><input class="txt" id="x_g56" type="text" readonly="true" /></td>
+				<td><label>y_g56</label></td><td><input class="txt" id="y_g56" type="text" readonly="true" /></td>
+				<td><label>z_g56</label></td><td><input class="txt" id="z_g56" type="text" readonly="true" /></td>
+				<td><label>a_g56</label></td><td><input class="txt" id="a_g56" type="text" readonly="true" /></td>
+				<td><label>b_g56</label></td><td><input class="txt" id="b_g56" type="text" readonly="true" /></td>
+				<td><label>c_g56</label></td><td><input class="txt" id="c_g56" type="text" readonly="true" /></td>
+				<td><label>u_g56</label></td><td><input class="txt" id="u_g56" type="text" readonly="true" /></td>
+				<td><label>v_g56</label></td><td><input class="txt" id="v_g56" type="text" readonly="true" /></td>
+				<td><label>w_g56</label></td><td><input class="txt" id="w_g56" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_g57</label></td><td><input class="txt" id="x_g57" type="text" readonly="true" /></td>
+				<td><label>y_g57</label></td><td><input class="txt" id="y_g57" type="text" readonly="true" /></td>
+				<td><label>z_g57</label></td><td><input class="txt" id="z_g57" type="text" readonly="true" /></td>
+				<td><label>a_g57</label></td><td><input class="txt" id="a_g57" type="text" readonly="true" /></td>
+				<td><label>b_g57</label></td><td><input class="txt" id="b_g57" type="text" readonly="true" /></td>
+				<td><label>c_g57</label></td><td><input class="txt" id="c_g57" type="text" readonly="true" /></td>
+				<td><label>u_g57</label></td><td><input class="txt" id="u_g57" type="text" readonly="true" /></td>
+				<td><label>v_g57</label></td><td><input class="txt" id="v_g57" type="text" readonly="true" /></td>
+				<td><label>w_g57</label></td><td><input class="txt" id="w_g57" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_g58</label></td><td><input class="txt" id="x_g58" type="text" readonly="true" /></td>
+				<td><label>y_g58</label></td><td><input class="txt" id="y_g58" type="text" readonly="true" /></td>
+				<td><label>z_g58</label></td><td><input class="txt" id="z_g58" type="text" readonly="true" /></td>
+				<td><label>a_g58</label></td><td><input class="txt" id="a_g58" type="text" readonly="true" /></td>
+				<td><label>b_g58</label></td><td><input class="txt" id="b_g58" type="text" readonly="true" /></td>
+				<td><label>c_g58</label></td><td><input class="txt" id="c_g58" type="text" readonly="true" /></td>
+				<td><label>u_g58</label></td><td><input class="txt" id="u_g58" type="text" readonly="true" /></td>
+				<td><label>v_g58</label></td><td><input class="txt" id="v_g58" type="text" readonly="true" /></td>
+				<td><label>w_g58</label></td><td><input class="txt" id="w_g58" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>x_g59</label></td><td><input class="txt" id="x_g59" type="text" readonly="true" /></td>
+				<td><label>y_g59</label></td><td><input class="txt" id="y_g59" type="text" readonly="true" /></td>
+				<td><label>z_g59</label></td><td><input class="txt" id="z_g59" type="text" readonly="true" /></td>
+				<td><label>a_g59</label></td><td><input class="txt" id="a_g59" type="text" readonly="true" /></td>
+				<td><label>b_g59</label></td><td><input class="txt" id="b_g59" type="text" readonly="true" /></td>
+				<td><label>c_g59</label></td><td><input class="txt" id="c_g59" type="text" readonly="true" /></td>
+				<td><label>u_g59</label></td><td><input class="txt" id="u_g59" type="text" readonly="true" /></td>
+				<td><label>v_g59</label></td><td><input class="txt" id="v_g59" type="text" readonly="true" /></td>
+				<td><label>w_g59</label></td><td><input class="txt" id="w_g59" type="text" readonly="true" /></td>
+			</tr>
+		</table>
+	</div>
+	<div id="variables">
+		<table>
+			<tr>
+				<td><label>#1(A)</label></td><td><input class="txt" id="var_1" type="text" readonly="true" /></td>
+				<td><label>#2(B)</label></td><td><input class="txt" id="var_2" type="text" readonly="true" /></td>
+				<td><label>#3(C)</label></td><td><input class="txt" id="var_3" type="text" readonly="true" /></td>
+				<td><label>#4(I)</label></td><td><input class="txt" id="var_4" type="text" readonly="true" /></td>
+				<td><label>#5(J)</label></td><td><input class="txt" id="var_5" type="text" readonly="true" /></td>
+				<td><label>#6(K)</label></td><td><input class="txt" id="var_6" type="text" readonly="true" /></td>
+				<td><label>#7(D)</label></td><td><input class="txt" id="var_7" type="text" readonly="true" /></td>
+				<td><label>#8(E)</label></td><td><input class="txt" id="var_8" type="text" readonly="true" /></td>
+				<td><label>#9(F)</label></td><td><input class="txt" id="var_9" type="text" readonly="true" /></td>
+				<td><label>#10</label></td><td><input class="txt" id="var_10" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#11(H)</label></td><td><input class="txt" id="var_11" type="text" readonly="true" /></td>
+				<td><label>#12</label></td><td><input class="txt" id="var_12" type="text" readonly="true" /></td>
+				<td><label>#13(M)</label></td><td><input class="txt" id="var_13" type="text" readonly="true" /></td>
+				<td><label>#14</label></td><td><input class="txt" id="var_14" type="text" readonly="true" /></td>
+				<td><label>#15</label></td><td><input class="txt" id="var_15" type="text" readonly="true" /></td>
+				<td><label>#16(P)</label></td><td><input class="txt" id="var_16" type="text" readonly="true" /></td>
+				<td><label>#17(Q)</label></td><td><input class="txt" id="var_17" type="text" readonly="true" /></td>
+				<td><label>#18(R)</label></td><td><input class="txt" id="var_18" type="text" readonly="true" /></td>
+				<td><label>#19(S)</label></td><td><input class="txt" id="var_19" type="text" readonly="true" /></td>
+				<td><label>#20(T)</label></td><td><input class="txt" id="var_20" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#21(U)</label></td><td><input class="txt" id="var_21" type="text" readonly="true" /></td>
+				<td><label>#22(V)</label></td><td><input class="txt" id="var_22" type="text" readonly="true" /></td>
+				<td><label>#23(W)</label></td><td><input class="txt" id="var_23" type="text" readonly="true" /></td>
+				<td><label>#24(X)</label></td><td><input class="txt" id="var_24" type="text" readonly="true" /></td>
+				<td><label>#25(Y)</label></td><td><input class="txt" id="var_25" type="text" readonly="true" /></td>
+				<td><label>#26(Z)</label></td><td><input class="txt" id="var_26" type="text" readonly="true" /></td>
+				<td><label>#27</label></td><td><input class="txt" id="var_27" type="text" readonly="true" /></td>
+				<td><label>#28</label></td><td><input class="txt" id="var_28" type="text" readonly="true" /></td>
+				<td><label>#29</label></td><td><input class="txt" id="var_29" type="text" readonly="true" /></td>
+				<td><label>#30</label></td><td><input class="txt" id="var_30" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#31</label></td><td><input class="txt" id="var_31" type="text" readonly="true" /></td>
+				<td><label>#32</label></td><td><input class="txt" id="var_32" type="text" readonly="true" /></td>
+				<td><label>#33</label></td><td><input class="txt" id="var_33" type="text" readonly="true" /></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><label>#100</label></td><td><input class="txt" id="var_100" type="text" readonly="true" /></td>
+				<td><label>#101</label></td><td><input class="txt" id="var_101" type="text" readonly="true" /></td>
+				<td><label>#102</label></td><td><input class="txt" id="var_102" type="text" readonly="true" /></td>
+				<td><label>#103</label></td><td><input class="txt" id="var_103" type="text" readonly="true" /></td>
+				<td><label>#104</label></td><td><input class="txt" id="var_104" type="text" readonly="true" /></td>
+				<td><label>#105</label></td><td><input class="txt" id="var_105" type="text" readonly="true" /></td>
+				<td><label>#106</label></td><td><input class="txt" id="var_106" type="text" readonly="true" /></td>
+				<td><label>#107</label></td><td><input class="txt" id="var_107" type="text" readonly="true" /></td>
+				<td><label>#108</label></td><td><input class="txt" id="var_108" type="text" readonly="true" /></td>
+				<td><label>#109</label></td><td><input class="txt" id="var_109" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#110</label></td><td><input class="txt" id="var_110" type="text" readonly="true" /></td>
+				<td><label>#111</label></td><td><input class="txt" id="var_111" type="text" readonly="true" /></td>
+				<td><label>#112</label></td><td><input class="txt" id="var_112" type="text" readonly="true" /></td>
+				<td><label>#113</label></td><td><input class="txt" id="var_113" type="text" readonly="true" /></td>
+				<td><label>#114</label></td><td><input class="txt" id="var_114" type="text" readonly="true" /></td>
+				<td><label>#115</label></td><td><input class="txt" id="var_115" type="text" readonly="true" /></td>
+				<td><label>#116</label></td><td><input class="txt" id="var_116" type="text" readonly="true" /></td>
+				<td><label>#117</label></td><td><input class="txt" id="var_117" type="text" readonly="true" /></td>
+				<td><label>#118</label></td><td><input class="txt" id="var_118" type="text" readonly="true" /></td>
+				<td><label>#119</label></td><td><input class="txt" id="var_119" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#120</label></td><td><input class="txt" id="var_120" type="text" readonly="true" /></td>
+				<td><label>#121</label></td><td><input class="txt" id="var_121" type="text" readonly="true" /></td>
+				<td><label>#122</label></td><td><input class="txt" id="var_122" type="text" readonly="true" /></td>
+				<td><label>#123</label></td><td><input class="txt" id="var_123" type="text" readonly="true" /></td>
+				<td><label>#124</label></td><td><input class="txt" id="var_124" type="text" readonly="true" /></td>
+				<td><label>#125</label></td><td><input class="txt" id="var_125" type="text" readonly="true" /></td>
+				<td><label>#126</label></td><td><input class="txt" id="var_126" type="text" readonly="true" /></td>
+				<td><label>#127</label></td><td><input class="txt" id="var_127" type="text" readonly="true" /></td>
+				<td><label>#128</label></td><td><input class="txt" id="var_128" type="text" readonly="true" /></td>
+				<td><label>#129</label></td><td><input class="txt" id="var_129" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#130</label></td><td><input class="txt" id="var_130" type="text" readonly="true" /></td>
+				<td><label>#131</label></td><td><input class="txt" id="var_131" type="text" readonly="true" /></td>
+				<td><label>#132</label></td><td><input class="txt" id="var_132" type="text" readonly="true" /></td>
+				<td><label>#133</label></td><td><input class="txt" id="var_133" type="text" readonly="true" /></td>
+				<td><label>#134</label></td><td><input class="txt" id="var_134" type="text" readonly="true" /></td>
+				<td><label>#135</label></td><td><input class="txt" id="var_135" type="text" readonly="true" /></td>
+				<td><label>#136</label></td><td><input class="txt" id="var_136" type="text" readonly="true" /></td>
+				<td><label>#137</label></td><td><input class="txt" id="var_137" type="text" readonly="true" /></td>
+				<td><label>#138</label></td><td><input class="txt" id="var_138" type="text" readonly="true" /></td>
+				<td><label>#139</label></td><td><input class="txt" id="var_139" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#140</label></td><td><input class="txt" id="var_140" type="text" readonly="true" /></td>
+				<td><label>#141</label></td><td><input class="txt" id="var_141" type="text" readonly="true" /></td>
+				<td><label>#142</label></td><td><input class="txt" id="var_142" type="text" readonly="true" /></td>
+				<td><label>#143</label></td><td><input class="txt" id="var_143" type="text" readonly="true" /></td>
+				<td><label>#144</label></td><td><input class="txt" id="var_144" type="text" readonly="true" /></td>
+				<td><label>#145</label></td><td><input class="txt" id="var_145" type="text" readonly="true" /></td>
+				<td><label>#146</label></td><td><input class="txt" id="var_146" type="text" readonly="true" /></td>
+				<td><label>#147</label></td><td><input class="txt" id="var_147" type="text" readonly="true" /></td>
+				<td><label>#148</label></td><td><input class="txt" id="var_148" type="text" readonly="true" /></td>
+				<td><label>#149</label></td><td><input class="txt" id="var_149" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#150</label></td><td><input class="txt" id="var_150" type="text" readonly="true" /></td>
+				<td><label>#151</label></td><td><input class="txt" id="var_151" type="text" readonly="true" /></td>
+				<td><label>#152</label></td><td><input class="txt" id="var_152" type="text" readonly="true" /></td>
+				<td><label>#153</label></td><td><input class="txt" id="var_153" type="text" readonly="true" /></td>
+				<td><label>#154</label></td><td><input class="txt" id="var_154" type="text" readonly="true" /></td>
+				<td><label>#155</label></td><td><input class="txt" id="var_155" type="text" readonly="true" /></td>
+				<td><label>#156</label></td><td><input class="txt" id="var_156" type="text" readonly="true" /></td>
+				<td><label>#157</label></td><td><input class="txt" id="var_157" type="text" readonly="true" /></td>
+				<td><label>#158</label></td><td><input class="txt" id="var_158" type="text" readonly="true" /></td>
+				<td><label>#159</label></td><td><input class="txt" id="var_159" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#160</label></td><td><input class="txt" id="var_160" type="text" readonly="true" /></td>
+				<td><label>#161</label></td><td><input class="txt" id="var_161" type="text" readonly="true" /></td>
+				<td><label>#162</label></td><td><input class="txt" id="var_162" type="text" readonly="true" /></td>
+				<td><label>#163</label></td><td><input class="txt" id="var_163" type="text" readonly="true" /></td>
+				<td><label>#164</label></td><td><input class="txt" id="var_164" type="text" readonly="true" /></td>
+				<td><label>#165</label></td><td><input class="txt" id="var_165" type="text" readonly="true" /></td>
+				<td><label>#166</label></td><td><input class="txt" id="var_166" type="text" readonly="true" /></td>
+				<td><label>#167</label></td><td><input class="txt" id="var_167" type="text" readonly="true" /></td>
+				<td><label>#168</label></td><td><input class="txt" id="var_168" type="text" readonly="true" /></td>
+				<td><label>#169</label></td><td><input class="txt" id="var_169" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#170</label></td><td><input class="txt" id="var_170" type="text" readonly="true" /></td>
+				<td><label>#171</label></td><td><input class="txt" id="var_171" type="text" readonly="true" /></td>
+				<td><label>#172</label></td><td><input class="txt" id="var_172" type="text" readonly="true" /></td>
+				<td><label>#173</label></td><td><input class="txt" id="var_173" type="text" readonly="true" /></td>
+				<td><label>#174</label></td><td><input class="txt" id="var_174" type="text" readonly="true" /></td>
+				<td><label>#175</label></td><td><input class="txt" id="var_175" type="text" readonly="true" /></td>
+				<td><label>#176</label></td><td><input class="txt" id="var_176" type="text" readonly="true" /></td>
+				<td><label>#177</label></td><td><input class="txt" id="var_177" type="text" readonly="true" /></td>
+				<td><label>#178</label></td><td><input class="txt" id="var_178" type="text" readonly="true" /></td>
+				<td><label>#179</label></td><td><input class="txt" id="var_179" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#180</label></td><td><input class="txt" id="var_180" type="text" readonly="true" /></td>
+				<td><label>#181</label></td><td><input class="txt" id="var_181" type="text" readonly="true" /></td>
+				<td><label>#182</label></td><td><input class="txt" id="var_182" type="text" readonly="true" /></td>
+				<td><label>#183</label></td><td><input class="txt" id="var_183" type="text" readonly="true" /></td>
+				<td><label>#184</label></td><td><input class="txt" id="var_184" type="text" readonly="true" /></td>
+				<td><label>#185</label></td><td><input class="txt" id="var_185" type="text" readonly="true" /></td>
+				<td><label>#186</label></td><td><input class="txt" id="var_186" type="text" readonly="true" /></td>
+				<td><label>#187</label></td><td><input class="txt" id="var_187" type="text" readonly="true" /></td>
+				<td><label>#188</label></td><td><input class="txt" id="var_188" type="text" readonly="true" /></td>
+				<td><label>#189</label></td><td><input class="txt" id="var_189" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#190</label></td><td><input class="txt" id="var_190" type="text" readonly="true" /></td>
+				<td><label>#191</label></td><td><input class="txt" id="var_191" type="text" readonly="true" /></td>
+				<td><label>#192</label></td><td><input class="txt" id="var_192" type="text" readonly="true" /></td>
+				<td><label>#193</label></td><td><input class="txt" id="var_193" type="text" readonly="true" /></td>
+				<td><label>#194</label></td><td><input class="txt" id="var_194" type="text" readonly="true" /></td>
+				<td><label>#195</label></td><td><input class="txt" id="var_195" type="text" readonly="true" /></td>
+				<td><label>#196</label></td><td><input class="txt" id="var_196" type="text" readonly="true" /></td>
+				<td><label>#197</label></td><td><input class="txt" id="var_197" type="text" readonly="true" /></td>
+				<td><label>#198</label></td><td><input class="txt" id="var_198" type="text" readonly="true" /></td>
+				<td><label>#199</label></td><td><input class="txt" id="var_199" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#500</label></td><td><input class="txt" id="var_500" type="text" readonly="true" /></td>
+				<td><label>#501</label></td><td><input class="txt" id="var_501" type="text" readonly="true" /></td>
+				<td><label>#502</label></td><td><input class="txt" id="var_502" type="text" readonly="true" /></td>
+				<td><label>#503</label></td><td><input class="txt" id="var_503" type="text" readonly="true" /></td>
+				<td><label>#504</label></td><td><input class="txt" id="var_504" type="text" readonly="true" /></td>
+				<td><label>#505</label></td><td><input class="txt" id="var_505" type="text" readonly="true" /></td>
+				<td><label>#506</label></td><td><input class="txt" id="var_506" type="text" readonly="true" /></td>
+				<td><label>#507</label></td><td><input class="txt" id="var_507" type="text" readonly="true" /></td>
+				<td><label>#508</label></td><td><input class="txt" id="var_508" type="text" readonly="true" /></td>
+				<td><label>#509</label></td><td><input class="txt" id="var_509" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#510</label></td><td><input class="txt" id="var_510" type="text" readonly="true" /></td>
+				<td><label>#511</label></td><td><input class="txt" id="var_511" type="text" readonly="true" /></td>
+				<td><label>#512</label></td><td><input class="txt" id="var_512" type="text" readonly="true" /></td>
+				<td><label>#513</label></td><td><input class="txt" id="var_513" type="text" readonly="true" /></td>
+				<td><label>#514</label></td><td><input class="txt" id="var_514" type="text" readonly="true" /></td>
+				<td><label>#515</label></td><td><input class="txt" id="var_515" type="text" readonly="true" /></td>
+				<td><label>#516</label></td><td><input class="txt" id="var_516" type="text" readonly="true" /></td>
+				<td><label>#517</label></td><td><input class="txt" id="var_517" type="text" readonly="true" /></td>
+				<td><label>#518</label></td><td><input class="txt" id="var_518" type="text" readonly="true" /></td>
+				<td><label>#519</label></td><td><input class="txt" id="var_519" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#520</label></td><td><input class="txt" id="var_520" type="text" readonly="true" /></td>
+				<td><label>#521</label></td><td><input class="txt" id="var_521" type="text" readonly="true" /></td>
+				<td><label>#522</label></td><td><input class="txt" id="var_522" type="text" readonly="true" /></td>
+				<td><label>#523</label></td><td><input class="txt" id="var_523" type="text" readonly="true" /></td>
+				<td><label>#524</label></td><td><input class="txt" id="var_524" type="text" readonly="true" /></td>
+				<td><label>#525</label></td><td><input class="txt" id="var_525" type="text" readonly="true" /></td>
+				<td><label>#526</label></td><td><input class="txt" id="var_526" type="text" readonly="true" /></td>
+				<td><label>#527</label></td><td><input class="txt" id="var_527" type="text" readonly="true" /></td>
+				<td><label>#528</label></td><td><input class="txt" id="var_528" type="text" readonly="true" /></td>
+				<td><label>#529</label></td><td><input class="txt" id="var_529" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#530</label></td><td><input class="txt" id="var_530" type="text" readonly="true" /></td>
+				<td><label>#531</label></td><td><input class="txt" id="var_531" type="text" readonly="true" /></td>
+				<td><label>#532</label></td><td><input class="txt" id="var_532" type="text" readonly="true" /></td>
+				<td><label>#533</label></td><td><input class="txt" id="var_533" type="text" readonly="true" /></td>
+				<td><label>#534</label></td><td><input class="txt" id="var_534" type="text" readonly="true" /></td>
+				<td><label>#535</label></td><td><input class="txt" id="var_535" type="text" readonly="true" /></td>
+				<td><label>#536</label></td><td><input class="txt" id="var_536" type="text" readonly="true" /></td>
+				<td><label>#537</label></td><td><input class="txt" id="var_537" type="text" readonly="true" /></td>
+				<td><label>#538</label></td><td><input class="txt" id="var_538" type="text" readonly="true" /></td>
+				<td><label>#539</label></td><td><input class="txt" id="var_539" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#540</label></td><td><input class="txt" id="var_540" type="text" readonly="true" /></td>
+				<td><label>#541</label></td><td><input class="txt" id="var_541" type="text" readonly="true" /></td>
+				<td><label>#542</label></td><td><input class="txt" id="var_542" type="text" readonly="true" /></td>
+				<td><label>#543</label></td><td><input class="txt" id="var_543" type="text" readonly="true" /></td>
+				<td><label>#544</label></td><td><input class="txt" id="var_544" type="text" readonly="true" /></td>
+				<td><label>#545</label></td><td><input class="txt" id="var_545" type="text" readonly="true" /></td>
+				<td><label>#546</label></td><td><input class="txt" id="var_546" type="text" readonly="true" /></td>
+				<td><label>#547</label></td><td><input class="txt" id="var_547" type="text" readonly="true" /></td>
+				<td><label>#548</label></td><td><input class="txt" id="var_548" type="text" readonly="true" /></td>
+				<td><label>#549</label></td><td><input class="txt" id="var_549" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#550</label></td><td><input class="txt" id="var_550" type="text" readonly="true" /></td>
+				<td><label>#551</label></td><td><input class="txt" id="var_551" type="text" readonly="true" /></td>
+				<td><label>#552</label></td><td><input class="txt" id="var_552" type="text" readonly="true" /></td>
+				<td><label>#553</label></td><td><input class="txt" id="var_553" type="text" readonly="true" /></td>
+				<td><label>#554</label></td><td><input class="txt" id="var_554" type="text" readonly="true" /></td>
+				<td><label>#555</label></td><td><input class="txt" id="var_555" type="text" readonly="true" /></td>
+				<td><label>#556</label></td><td><input class="txt" id="var_556" type="text" readonly="true" /></td>
+				<td><label>#557</label></td><td><input class="txt" id="var_557" type="text" readonly="true" /></td>
+				<td><label>#558</label></td><td><input class="txt" id="var_558" type="text" readonly="true" /></td>
+				<td><label>#559</label></td><td><input class="txt" id="var_559" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#560</label></td><td><input class="txt" id="var_560" type="text" readonly="true" /></td>
+				<td><label>#561</label></td><td><input class="txt" id="var_561" type="text" readonly="true" /></td>
+				<td><label>#562</label></td><td><input class="txt" id="var_562" type="text" readonly="true" /></td>
+				<td><label>#563</label></td><td><input class="txt" id="var_563" type="text" readonly="true" /></td>
+				<td><label>#564</label></td><td><input class="txt" id="var_564" type="text" readonly="true" /></td>
+				<td><label>#565</label></td><td><input class="txt" id="var_565" type="text" readonly="true" /></td>
+				<td><label>#566</label></td><td><input class="txt" id="var_566" type="text" readonly="true" /></td>
+				<td><label>#567</label></td><td><input class="txt" id="var_567" type="text" readonly="true" /></td>
+				<td><label>#568</label></td><td><input class="txt" id="var_568" type="text" readonly="true" /></td>
+				<td><label>#569</label></td><td><input class="txt" id="var_569" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#570</label></td><td><input class="txt" id="var_570" type="text" readonly="true" /></td>
+				<td><label>#571</label></td><td><input class="txt" id="var_571" type="text" readonly="true" /></td>
+				<td><label>#572</label></td><td><input class="txt" id="var_572" type="text" readonly="true" /></td>
+				<td><label>#573</label></td><td><input class="txt" id="var_573" type="text" readonly="true" /></td>
+				<td><label>#574</label></td><td><input class="txt" id="var_574" type="text" readonly="true" /></td>
+				<td><label>#575</label></td><td><input class="txt" id="var_575" type="text" readonly="true" /></td>
+				<td><label>#576</label></td><td><input class="txt" id="var_576" type="text" readonly="true" /></td>
+				<td><label>#577</label></td><td><input class="txt" id="var_577" type="text" readonly="true" /></td>
+				<td><label>#578</label></td><td><input class="txt" id="var_578" type="text" readonly="true" /></td>
+				<td><label>#579</label></td><td><input class="txt" id="var_579" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#580</label></td><td><input class="txt" id="var_580" type="text" readonly="true" /></td>
+				<td><label>#581</label></td><td><input class="txt" id="var_581" type="text" readonly="true" /></td>
+				<td><label>#582</label></td><td><input class="txt" id="var_582" type="text" readonly="true" /></td>
+				<td><label>#583</label></td><td><input class="txt" id="var_583" type="text" readonly="true" /></td>
+				<td><label>#584</label></td><td><input class="txt" id="var_584" type="text" readonly="true" /></td>
+				<td><label>#585</label></td><td><input class="txt" id="var_585" type="text" readonly="true" /></td>
+				<td><label>#586</label></td><td><input class="txt" id="var_586" type="text" readonly="true" /></td>
+				<td><label>#587</label></td><td><input class="txt" id="var_587" type="text" readonly="true" /></td>
+				<td><label>#588</label></td><td><input class="txt" id="var_588" type="text" readonly="true" /></td>
+				<td><label>#589</label></td><td><input class="txt" id="var_589" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#590</label></td><td><input class="txt" id="var_590" type="text" readonly="true" /></td>
+				<td><label>#591</label></td><td><input class="txt" id="var_591" type="text" readonly="true" /></td>
+				<td><label>#592</label></td><td><input class="txt" id="var_592" type="text" readonly="true" /></td>
+				<td><label>#593</label></td><td><input class="txt" id="var_593" type="text" readonly="true" /></td>
+				<td><label>#594</label></td><td><input class="txt" id="var_594" type="text" readonly="true" /></td>
+				<td><label>#595</label></td><td><input class="txt" id="var_595" type="text" readonly="true" /></td>
+				<td><label>#596</label></td><td><input class="txt" id="var_596" type="text" readonly="true" /></td>
+				<td><label>#597</label></td><td><input class="txt" id="var_597" type="text" readonly="true" /></td>
+				<td><label>#598</label></td><td><input class="txt" id="var_598" type="text" readonly="true" /></td>
+				<td><label>#599</label></td><td><input class="txt" id="var_599" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#600</label></td><td><input class="txt" id="var_600" type="text" readonly="true" /></td>
+				<td><label>#601</label></td><td><input class="txt" id="var_601" type="text" readonly="true" /></td>
+				<td><label>#602</label></td><td><input class="txt" id="var_602" type="text" readonly="true" /></td>
+				<td><label>#603</label></td><td><input class="txt" id="var_603" type="text" readonly="true" /></td>
+				<td><label>#604</label></td><td><input class="txt" id="var_604" type="text" readonly="true" /></td>
+				<td><label>#605</label></td><td><input class="txt" id="var_605" type="text" readonly="true" /></td>
+				<td><label>#606</label></td><td><input class="txt" id="var_606" type="text" readonly="true" /></td>
+				<td><label>#607</label></td><td><input class="txt" id="var_607" type="text" readonly="true" /></td>
+				<td><label>#608</label></td><td><input class="txt" id="var_608" type="text" readonly="true" /></td>
+				<td><label>#609</label></td><td><input class="txt" id="var_609" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#610</label></td><td><input class="txt" id="var_610" type="text" readonly="true" /></td>
+				<td><label>#611</label></td><td><input class="txt" id="var_611" type="text" readonly="true" /></td>
+				<td><label>#612</label></td><td><input class="txt" id="var_612" type="text" readonly="true" /></td>
+				<td><label>#613</label></td><td><input class="txt" id="var_613" type="text" readonly="true" /></td>
+				<td><label>#614</label></td><td><input class="txt" id="var_614" type="text" readonly="true" /></td>
+				<td><label>#615</label></td><td><input class="txt" id="var_615" type="text" readonly="true" /></td>
+				<td><label>#616</label></td><td><input class="txt" id="var_616" type="text" readonly="true" /></td>
+				<td><label>#617</label></td><td><input class="txt" id="var_617" type="text" readonly="true" /></td>
+				<td><label>#618</label></td><td><input class="txt" id="var_618" type="text" readonly="true" /></td>
+				<td><label>#619</label></td><td><input class="txt" id="var_619" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#620</label></td><td><input class="txt" id="var_620" type="text" readonly="true" /></td>
+				<td><label>#621</label></td><td><input class="txt" id="var_621" type="text" readonly="true" /></td>
+				<td><label>#622</label></td><td><input class="txt" id="var_622" type="text" readonly="true" /></td>
+				<td><label>#623</label></td><td><input class="txt" id="var_623" type="text" readonly="true" /></td>
+				<td><label>#624</label></td><td><input class="txt" id="var_624" type="text" readonly="true" /></td>
+				<td><label>#625</label></td><td><input class="txt" id="var_625" type="text" readonly="true" /></td>
+				<td><label>#626</label></td><td><input class="txt" id="var_626" type="text" readonly="true" /></td>
+				<td><label>#627</label></td><td><input class="txt" id="var_627" type="text" readonly="true" /></td>
+				<td><label>#628</label></td><td><input class="txt" id="var_628" type="text" readonly="true" /></td>
+				<td><label>#629</label></td><td><input class="txt" id="var_629" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#630</label></td><td><input class="txt" id="var_630" type="text" readonly="true" /></td>
+				<td><label>#631</label></td><td><input class="txt" id="var_631" type="text" readonly="true" /></td>
+				<td><label>#632</label></td><td><input class="txt" id="var_632" type="text" readonly="true" /></td>
+				<td><label>#633</label></td><td><input class="txt" id="var_633" type="text" readonly="true" /></td>
+				<td><label>#634</label></td><td><input class="txt" id="var_634" type="text" readonly="true" /></td>
+				<td><label>#635</label></td><td><input class="txt" id="var_635" type="text" readonly="true" /></td>
+				<td><label>#636</label></td><td><input class="txt" id="var_636" type="text" readonly="true" /></td>
+				<td><label>#637</label></td><td><input class="txt" id="var_637" type="text" readonly="true" /></td>
+				<td><label>#638</label></td><td><input class="txt" id="var_638" type="text" readonly="true" /></td>
+				<td><label>#639</label></td><td><input class="txt" id="var_639" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#640</label></td><td><input class="txt" id="var_640" type="text" readonly="true" /></td>
+				<td><label>#641</label></td><td><input class="txt" id="var_641" type="text" readonly="true" /></td>
+				<td><label>#642</label></td><td><input class="txt" id="var_642" type="text" readonly="true" /></td>
+				<td><label>#643</label></td><td><input class="txt" id="var_643" type="text" readonly="true" /></td>
+				<td><label>#644</label></td><td><input class="txt" id="var_644" type="text" readonly="true" /></td>
+				<td><label>#645</label></td><td><input class="txt" id="var_645" type="text" readonly="true" /></td>
+				<td><label>#646</label></td><td><input class="txt" id="var_646" type="text" readonly="true" /></td>
+				<td><label>#647</label></td><td><input class="txt" id="var_647" type="text" readonly="true" /></td>
+				<td><label>#648</label></td><td><input class="txt" id="var_648" type="text" readonly="true" /></td>
+				<td><label>#649</label></td><td><input class="txt" id="var_649" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#650</label></td><td><input class="txt" id="var_650" type="text" readonly="true" /></td>
+				<td><label>#651</label></td><td><input class="txt" id="var_651" type="text" readonly="true" /></td>
+				<td><label>#652</label></td><td><input class="txt" id="var_652" type="text" readonly="true" /></td>
+				<td><label>#653</label></td><td><input class="txt" id="var_653" type="text" readonly="true" /></td>
+				<td><label>#654</label></td><td><input class="txt" id="var_654" type="text" readonly="true" /></td>
+				<td><label>#655</label></td><td><input class="txt" id="var_655" type="text" readonly="true" /></td>
+				<td><label>#656</label></td><td><input class="txt" id="var_656" type="text" readonly="true" /></td>
+				<td><label>#657</label></td><td><input class="txt" id="var_657" type="text" readonly="true" /></td>
+				<td><label>#658</label></td><td><input class="txt" id="var_658" type="text" readonly="true" /></td>
+				<td><label>#659</label></td><td><input class="txt" id="var_659" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#660</label></td><td><input class="txt" id="var_660" type="text" readonly="true" /></td>
+				<td><label>#661</label></td><td><input class="txt" id="var_661" type="text" readonly="true" /></td>
+				<td><label>#662</label></td><td><input class="txt" id="var_662" type="text" readonly="true" /></td>
+				<td><label>#663</label></td><td><input class="txt" id="var_663" type="text" readonly="true" /></td>
+				<td><label>#664</label></td><td><input class="txt" id="var_664" type="text" readonly="true" /></td>
+				<td><label>#665</label></td><td><input class="txt" id="var_665" type="text" readonly="true" /></td>
+				<td><label>#666</label></td><td><input class="txt" id="var_666" type="text" readonly="true" /></td>
+				<td><label>#667</label></td><td><input class="txt" id="var_667" type="text" readonly="true" /></td>
+				<td><label>#668</label></td><td><input class="txt" id="var_668" type="text" readonly="true" /></td>
+				<td><label>#669</label></td><td><input class="txt" id="var_669" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#670</label></td><td><input class="txt" id="var_670" type="text" readonly="true" /></td>
+				<td><label>#671</label></td><td><input class="txt" id="var_671" type="text" readonly="true" /></td>
+				<td><label>#672</label></td><td><input class="txt" id="var_672" type="text" readonly="true" /></td>
+				<td><label>#673</label></td><td><input class="txt" id="var_673" type="text" readonly="true" /></td>
+				<td><label>#674</label></td><td><input class="txt" id="var_674" type="text" readonly="true" /></td>
+				<td><label>#675</label></td><td><input class="txt" id="var_675" type="text" readonly="true" /></td>
+				<td><label>#676</label></td><td><input class="txt" id="var_676" type="text" readonly="true" /></td>
+				<td><label>#677</label></td><td><input class="txt" id="var_677" type="text" readonly="true" /></td>
+				<td><label>#678</label></td><td><input class="txt" id="var_678" type="text" readonly="true" /></td>
+				<td><label>#679</label></td><td><input class="txt" id="var_679" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#680</label></td><td><input class="txt" id="var_680" type="text" readonly="true" /></td>
+				<td><label>#681</label></td><td><input class="txt" id="var_681" type="text" readonly="true" /></td>
+				<td><label>#682</label></td><td><input class="txt" id="var_682" type="text" readonly="true" /></td>
+				<td><label>#683</label></td><td><input class="txt" id="var_683" type="text" readonly="true" /></td>
+				<td><label>#684</label></td><td><input class="txt" id="var_684" type="text" readonly="true" /></td>
+				<td><label>#685</label></td><td><input class="txt" id="var_685" type="text" readonly="true" /></td>
+				<td><label>#686</label></td><td><input class="txt" id="var_686" type="text" readonly="true" /></td>
+				<td><label>#687</label></td><td><input class="txt" id="var_687" type="text" readonly="true" /></td>
+				<td><label>#688</label></td><td><input class="txt" id="var_688" type="text" readonly="true" /></td>
+				<td><label>#689</label></td><td><input class="txt" id="var_689" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#690</label></td><td><input class="txt" id="var_690" type="text" readonly="true" /></td>
+				<td><label>#691</label></td><td><input class="txt" id="var_691" type="text" readonly="true" /></td>
+				<td><label>#692</label></td><td><input class="txt" id="var_692" type="text" readonly="true" /></td>
+				<td><label>#693</label></td><td><input class="txt" id="var_693" type="text" readonly="true" /></td>
+				<td><label>#694</label></td><td><input class="txt" id="var_694" type="text" readonly="true" /></td>
+				<td><label>#695</label></td><td><input class="txt" id="var_695" type="text" readonly="true" /></td>
+				<td><label>#696</label></td><td><input class="txt" id="var_696" type="text" readonly="true" /></td>
+				<td><label>#697</label></td><td><input class="txt" id="var_697" type="text" readonly="true" /></td>
+				<td><label>#698</label></td><td><input class="txt" id="var_698" type="text" readonly="true" /></td>
+				<td><label>#699</label></td><td><input class="txt" id="var_699" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#700</label></td><td><input class="txt" id="var_700" type="text" readonly="true" /></td>
+				<td><label>#701</label></td><td><input class="txt" id="var_701" type="text" readonly="true" /></td>
+				<td><label>#702</label></td><td><input class="txt" id="var_702" type="text" readonly="true" /></td>
+				<td><label>#703</label></td><td><input class="txt" id="var_703" type="text" readonly="true" /></td>
+				<td><label>#704</label></td><td><input class="txt" id="var_704" type="text" readonly="true" /></td>
+				<td><label>#705</label></td><td><input class="txt" id="var_705" type="text" readonly="true" /></td>
+				<td><label>#706</label></td><td><input class="txt" id="var_706" type="text" readonly="true" /></td>
+				<td><label>#707</label></td><td><input class="txt" id="var_707" type="text" readonly="true" /></td>
+				<td><label>#708</label></td><td><input class="txt" id="var_708" type="text" readonly="true" /></td>
+				<td><label>#709</label></td><td><input class="txt" id="var_709" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#710</label></td><td><input class="txt" id="var_710" type="text" readonly="true" /></td>
+				<td><label>#711</label></td><td><input class="txt" id="var_711" type="text" readonly="true" /></td>
+				<td><label>#712</label></td><td><input class="txt" id="var_712" type="text" readonly="true" /></td>
+				<td><label>#713</label></td><td><input class="txt" id="var_713" type="text" readonly="true" /></td>
+				<td><label>#714</label></td><td><input class="txt" id="var_714" type="text" readonly="true" /></td>
+				<td><label>#715</label></td><td><input class="txt" id="var_715" type="text" readonly="true" /></td>
+				<td><label>#716</label></td><td><input class="txt" id="var_716" type="text" readonly="true" /></td>
+				<td><label>#717</label></td><td><input class="txt" id="var_717" type="text" readonly="true" /></td>
+				<td><label>#718</label></td><td><input class="txt" id="var_718" type="text" readonly="true" /></td>
+				<td><label>#719</label></td><td><input class="txt" id="var_719" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#720</label></td><td><input class="txt" id="var_720" type="text" readonly="true" /></td>
+				<td><label>#721</label></td><td><input class="txt" id="var_721" type="text" readonly="true" /></td>
+				<td><label>#722</label></td><td><input class="txt" id="var_722" type="text" readonly="true" /></td>
+				<td><label>#723</label></td><td><input class="txt" id="var_723" type="text" readonly="true" /></td>
+				<td><label>#724</label></td><td><input class="txt" id="var_724" type="text" readonly="true" /></td>
+				<td><label>#725</label></td><td><input class="txt" id="var_725" type="text" readonly="true" /></td>
+				<td><label>#726</label></td><td><input class="txt" id="var_726" type="text" readonly="true" /></td>
+				<td><label>#727</label></td><td><input class="txt" id="var_727" type="text" readonly="true" /></td>
+				<td><label>#728</label></td><td><input class="txt" id="var_728" type="text" readonly="true" /></td>
+				<td><label>#729</label></td><td><input class="txt" id="var_729" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#730</label></td><td><input class="txt" id="var_730" type="text" readonly="true" /></td>
+				<td><label>#731</label></td><td><input class="txt" id="var_731" type="text" readonly="true" /></td>
+				<td><label>#732</label></td><td><input class="txt" id="var_732" type="text" readonly="true" /></td>
+				<td><label>#733</label></td><td><input class="txt" id="var_733" type="text" readonly="true" /></td>
+				<td><label>#734</label></td><td><input class="txt" id="var_734" type="text" readonly="true" /></td>
+				<td><label>#735</label></td><td><input class="txt" id="var_735" type="text" readonly="true" /></td>
+				<td><label>#736</label></td><td><input class="txt" id="var_736" type="text" readonly="true" /></td>
+				<td><label>#737</label></td><td><input class="txt" id="var_737" type="text" readonly="true" /></td>
+				<td><label>#738</label></td><td><input class="txt" id="var_738" type="text" readonly="true" /></td>
+				<td><label>#739</label></td><td><input class="txt" id="var_739" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#740</label></td><td><input class="txt" id="var_740" type="text" readonly="true" /></td>
+				<td><label>#741</label></td><td><input class="txt" id="var_741" type="text" readonly="true" /></td>
+				<td><label>#742</label></td><td><input class="txt" id="var_742" type="text" readonly="true" /></td>
+				<td><label>#743</label></td><td><input class="txt" id="var_743" type="text" readonly="true" /></td>
+				<td><label>#744</label></td><td><input class="txt" id="var_744" type="text" readonly="true" /></td>
+				<td><label>#745</label></td><td><input class="txt" id="var_745" type="text" readonly="true" /></td>
+				<td><label>#746</label></td><td><input class="txt" id="var_746" type="text" readonly="true" /></td>
+				<td><label>#747</label></td><td><input class="txt" id="var_747" type="text" readonly="true" /></td>
+				<td><label>#748</label></td><td><input class="txt" id="var_748" type="text" readonly="true" /></td>
+				<td><label>#749</label></td><td><input class="txt" id="var_749" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#750</label></td><td><input class="txt" id="var_750" type="text" readonly="true" /></td>
+				<td><label>#751</label></td><td><input class="txt" id="var_751" type="text" readonly="true" /></td>
+				<td><label>#752</label></td><td><input class="txt" id="var_752" type="text" readonly="true" /></td>
+				<td><label>#753</label></td><td><input class="txt" id="var_753" type="text" readonly="true" /></td>
+				<td><label>#754</label></td><td><input class="txt" id="var_754" type="text" readonly="true" /></td>
+				<td><label>#755</label></td><td><input class="txt" id="var_755" type="text" readonly="true" /></td>
+				<td><label>#756</label></td><td><input class="txt" id="var_756" type="text" readonly="true" /></td>
+				<td><label>#757</label></td><td><input class="txt" id="var_757" type="text" readonly="true" /></td>
+				<td><label>#758</label></td><td><input class="txt" id="var_758" type="text" readonly="true" /></td>
+				<td><label>#759</label></td><td><input class="txt" id="var_759" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#760</label></td><td><input class="txt" id="var_760" type="text" readonly="true" /></td>
+				<td><label>#761</label></td><td><input class="txt" id="var_761" type="text" readonly="true" /></td>
+				<td><label>#762</label></td><td><input class="txt" id="var_762" type="text" readonly="true" /></td>
+				<td><label>#763</label></td><td><input class="txt" id="var_763" type="text" readonly="true" /></td>
+				<td><label>#764</label></td><td><input class="txt" id="var_764" type="text" readonly="true" /></td>
+				<td><label>#765</label></td><td><input class="txt" id="var_765" type="text" readonly="true" /></td>
+				<td><label>#766</label></td><td><input class="txt" id="var_766" type="text" readonly="true" /></td>
+				<td><label>#767</label></td><td><input class="txt" id="var_767" type="text" readonly="true" /></td>
+				<td><label>#768</label></td><td><input class="txt" id="var_768" type="text" readonly="true" /></td>
+				<td><label>#769</label></td><td><input class="txt" id="var_769" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#770</label></td><td><input class="txt" id="var_770" type="text" readonly="true" /></td>
+				<td><label>#771</label></td><td><input class="txt" id="var_771" type="text" readonly="true" /></td>
+				<td><label>#772</label></td><td><input class="txt" id="var_772" type="text" readonly="true" /></td>
+				<td><label>#773</label></td><td><input class="txt" id="var_773" type="text" readonly="true" /></td>
+				<td><label>#774</label></td><td><input class="txt" id="var_774" type="text" readonly="true" /></td>
+				<td><label>#775</label></td><td><input class="txt" id="var_775" type="text" readonly="true" /></td>
+				<td><label>#776</label></td><td><input class="txt" id="var_776" type="text" readonly="true" /></td>
+				<td><label>#777</label></td><td><input class="txt" id="var_777" type="text" readonly="true" /></td>
+				<td><label>#778</label></td><td><input class="txt" id="var_778" type="text" readonly="true" /></td>
+				<td><label>#779</label></td><td><input class="txt" id="var_779" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#780</label></td><td><input class="txt" id="var_780" type="text" readonly="true" /></td>
+				<td><label>#781</label></td><td><input class="txt" id="var_781" type="text" readonly="true" /></td>
+				<td><label>#782</label></td><td><input class="txt" id="var_782" type="text" readonly="true" /></td>
+				<td><label>#783</label></td><td><input class="txt" id="var_783" type="text" readonly="true" /></td>
+				<td><label>#784</label></td><td><input class="txt" id="var_784" type="text" readonly="true" /></td>
+				<td><label>#785</label></td><td><input class="txt" id="var_785" type="text" readonly="true" /></td>
+				<td><label>#786</label></td><td><input class="txt" id="var_786" type="text" readonly="true" /></td>
+				<td><label>#787</label></td><td><input class="txt" id="var_787" type="text" readonly="true" /></td>
+				<td><label>#788</label></td><td><input class="txt" id="var_788" type="text" readonly="true" /></td>
+				<td><label>#789</label></td><td><input class="txt" id="var_789" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#790</label></td><td><input class="txt" id="var_790" type="text" readonly="true" /></td>
+				<td><label>#791</label></td><td><input class="txt" id="var_791" type="text" readonly="true" /></td>
+				<td><label>#792</label></td><td><input class="txt" id="var_792" type="text" readonly="true" /></td>
+				<td><label>#793</label></td><td><input class="txt" id="var_793" type="text" readonly="true" /></td>
+				<td><label>#794</label></td><td><input class="txt" id="var_794" type="text" readonly="true" /></td>
+				<td><label>#795</label></td><td><input class="txt" id="var_795" type="text" readonly="true" /></td>
+				<td><label>#796</label></td><td><input class="txt" id="var_796" type="text" readonly="true" /></td>
+				<td><label>#797</label></td><td><input class="txt" id="var_797" type="text" readonly="true" /></td>
+				<td><label>#798</label></td><td><input class="txt" id="var_798" type="text" readonly="true" /></td>
+				<td><label>#799</label></td><td><input class="txt" id="var_799" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#800</label></td><td><input class="txt" id="var_800" type="text" readonly="true" /></td>
+				<td><label>#801</label></td><td><input class="txt" id="var_801" type="text" readonly="true" /></td>
+				<td><label>#802</label></td><td><input class="txt" id="var_802" type="text" readonly="true" /></td>
+				<td><label>#803</label></td><td><input class="txt" id="var_803" type="text" readonly="true" /></td>
+				<td><label>#804</label></td><td><input class="txt" id="var_804" type="text" readonly="true" /></td>
+				<td><label>#805</label></td><td><input class="txt" id="var_805" type="text" readonly="true" /></td>
+				<td><label>#806</label></td><td><input class="txt" id="var_806" type="text" readonly="true" /></td>
+				<td><label>#807</label></td><td><input class="txt" id="var_807" type="text" readonly="true" /></td>
+				<td><label>#808</label></td><td><input class="txt" id="var_808" type="text" readonly="true" /></td>
+				<td><label>#809</label></td><td><input class="txt" id="var_809" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#810</label></td><td><input class="txt" id="var_810" type="text" readonly="true" /></td>
+				<td><label>#811</label></td><td><input class="txt" id="var_811" type="text" readonly="true" /></td>
+				<td><label>#812</label></td><td><input class="txt" id="var_812" type="text" readonly="true" /></td>
+				<td><label>#813</label></td><td><input class="txt" id="var_813" type="text" readonly="true" /></td>
+				<td><label>#814</label></td><td><input class="txt" id="var_814" type="text" readonly="true" /></td>
+				<td><label>#815</label></td><td><input class="txt" id="var_815" type="text" readonly="true" /></td>
+				<td><label>#816</label></td><td><input class="txt" id="var_816" type="text" readonly="true" /></td>
+				<td><label>#817</label></td><td><input class="txt" id="var_817" type="text" readonly="true" /></td>
+				<td><label>#818</label></td><td><input class="txt" id="var_818" type="text" readonly="true" /></td>
+				<td><label>#819</label></td><td><input class="txt" id="var_819" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#820</label></td><td><input class="txt" id="var_820" type="text" readonly="true" /></td>
+				<td><label>#821</label></td><td><input class="txt" id="var_821" type="text" readonly="true" /></td>
+				<td><label>#822</label></td><td><input class="txt" id="var_822" type="text" readonly="true" /></td>
+				<td><label>#823</label></td><td><input class="txt" id="var_823" type="text" readonly="true" /></td>
+				<td><label>#824</label></td><td><input class="txt" id="var_824" type="text" readonly="true" /></td>
+				<td><label>#825</label></td><td><input class="txt" id="var_825" type="text" readonly="true" /></td>
+				<td><label>#826</label></td><td><input class="txt" id="var_826" type="text" readonly="true" /></td>
+				<td><label>#827</label></td><td><input class="txt" id="var_827" type="text" readonly="true" /></td>
+				<td><label>#828</label></td><td><input class="txt" id="var_828" type="text" readonly="true" /></td>
+				<td><label>#829</label></td><td><input class="txt" id="var_829" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#830</label></td><td><input class="txt" id="var_830" type="text" readonly="true" /></td>
+				<td><label>#831</label></td><td><input class="txt" id="var_831" type="text" readonly="true" /></td>
+				<td><label>#832</label></td><td><input class="txt" id="var_832" type="text" readonly="true" /></td>
+				<td><label>#833</label></td><td><input class="txt" id="var_833" type="text" readonly="true" /></td>
+				<td><label>#834</label></td><td><input class="txt" id="var_834" type="text" readonly="true" /></td>
+				<td><label>#835</label></td><td><input class="txt" id="var_835" type="text" readonly="true" /></td>
+				<td><label>#836</label></td><td><input class="txt" id="var_836" type="text" readonly="true" /></td>
+				<td><label>#837</label></td><td><input class="txt" id="var_837" type="text" readonly="true" /></td>
+				<td><label>#838</label></td><td><input class="txt" id="var_838" type="text" readonly="true" /></td>
+				<td><label>#839</label></td><td><input class="txt" id="var_839" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#840</label></td><td><input class="txt" id="var_840" type="text" readonly="true" /></td>
+				<td><label>#841</label></td><td><input class="txt" id="var_841" type="text" readonly="true" /></td>
+				<td><label>#842</label></td><td><input class="txt" id="var_842" type="text" readonly="true" /></td>
+				<td><label>#843</label></td><td><input class="txt" id="var_843" type="text" readonly="true" /></td>
+				<td><label>#844</label></td><td><input class="txt" id="var_844" type="text" readonly="true" /></td>
+				<td><label>#845</label></td><td><input class="txt" id="var_845" type="text" readonly="true" /></td>
+				<td><label>#846</label></td><td><input class="txt" id="var_846" type="text" readonly="true" /></td>
+				<td><label>#847</label></td><td><input class="txt" id="var_847" type="text" readonly="true" /></td>
+				<td><label>#848</label></td><td><input class="txt" id="var_848" type="text" readonly="true" /></td>
+				<td><label>#849</label></td><td><input class="txt" id="var_849" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#850</label></td><td><input class="txt" id="var_850" type="text" readonly="true" /></td>
+				<td><label>#851</label></td><td><input class="txt" id="var_851" type="text" readonly="true" /></td>
+				<td><label>#852</label></td><td><input class="txt" id="var_852" type="text" readonly="true" /></td>
+				<td><label>#853</label></td><td><input class="txt" id="var_853" type="text" readonly="true" /></td>
+				<td><label>#854</label></td><td><input class="txt" id="var_854" type="text" readonly="true" /></td>
+				<td><label>#855</label></td><td><input class="txt" id="var_855" type="text" readonly="true" /></td>
+				<td><label>#856</label></td><td><input class="txt" id="var_856" type="text" readonly="true" /></td>
+				<td><label>#857</label></td><td><input class="txt" id="var_857" type="text" readonly="true" /></td>
+				<td><label>#858</label></td><td><input class="txt" id="var_858" type="text" readonly="true" /></td>
+				<td><label>#859</label></td><td><input class="txt" id="var_859" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#860</label></td><td><input class="txt" id="var_860" type="text" readonly="true" /></td>
+				<td><label>#861</label></td><td><input class="txt" id="var_861" type="text" readonly="true" /></td>
+				<td><label>#862</label></td><td><input class="txt" id="var_862" type="text" readonly="true" /></td>
+				<td><label>#863</label></td><td><input class="txt" id="var_863" type="text" readonly="true" /></td>
+				<td><label>#864</label></td><td><input class="txt" id="var_864" type="text" readonly="true" /></td>
+				<td><label>#865</label></td><td><input class="txt" id="var_865" type="text" readonly="true" /></td>
+				<td><label>#866</label></td><td><input class="txt" id="var_866" type="text" readonly="true" /></td>
+				<td><label>#867</label></td><td><input class="txt" id="var_867" type="text" readonly="true" /></td>
+				<td><label>#868</label></td><td><input class="txt" id="var_868" type="text" readonly="true" /></td>
+				<td><label>#869</label></td><td><input class="txt" id="var_869" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#870</label></td><td><input class="txt" id="var_870" type="text" readonly="true" /></td>
+				<td><label>#871</label></td><td><input class="txt" id="var_871" type="text" readonly="true" /></td>
+				<td><label>#872</label></td><td><input class="txt" id="var_872" type="text" readonly="true" /></td>
+				<td><label>#873</label></td><td><input class="txt" id="var_873" type="text" readonly="true" /></td>
+				<td><label>#874</label></td><td><input class="txt" id="var_874" type="text" readonly="true" /></td>
+				<td><label>#875</label></td><td><input class="txt" id="var_875" type="text" readonly="true" /></td>
+				<td><label>#876</label></td><td><input class="txt" id="var_876" type="text" readonly="true" /></td>
+				<td><label>#877</label></td><td><input class="txt" id="var_877" type="text" readonly="true" /></td>
+				<td><label>#878</label></td><td><input class="txt" id="var_878" type="text" readonly="true" /></td>
+				<td><label>#879</label></td><td><input class="txt" id="var_879" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#880</label></td><td><input class="txt" id="var_880" type="text" readonly="true" /></td>
+				<td><label>#881</label></td><td><input class="txt" id="var_881" type="text" readonly="true" /></td>
+				<td><label>#882</label></td><td><input class="txt" id="var_882" type="text" readonly="true" /></td>
+				<td><label>#883</label></td><td><input class="txt" id="var_883" type="text" readonly="true" /></td>
+				<td><label>#884</label></td><td><input class="txt" id="var_884" type="text" readonly="true" /></td>
+				<td><label>#885</label></td><td><input class="txt" id="var_885" type="text" readonly="true" /></td>
+				<td><label>#886</label></td><td><input class="txt" id="var_886" type="text" readonly="true" /></td>
+				<td><label>#887</label></td><td><input class="txt" id="var_887" type="text" readonly="true" /></td>
+				<td><label>#888</label></td><td><input class="txt" id="var_888" type="text" readonly="true" /></td>
+				<td><label>#889</label></td><td><input class="txt" id="var_889" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#890</label></td><td><input class="txt" id="var_890" type="text" readonly="true" /></td>
+				<td><label>#891</label></td><td><input class="txt" id="var_891" type="text" readonly="true" /></td>
+				<td><label>#892</label></td><td><input class="txt" id="var_892" type="text" readonly="true" /></td>
+				<td><label>#893</label></td><td><input class="txt" id="var_893" type="text" readonly="true" /></td>
+				<td><label>#894</label></td><td><input class="txt" id="var_894" type="text" readonly="true" /></td>
+				<td><label>#895</label></td><td><input class="txt" id="var_895" type="text" readonly="true" /></td>
+				<td><label>#896</label></td><td><input class="txt" id="var_896" type="text" readonly="true" /></td>
+				<td><label>#897</label></td><td><input class="txt" id="var_897" type="text" readonly="true" /></td>
+				<td><label>#898</label></td><td><input class="txt" id="var_898" type="text" readonly="true" /></td>
+				<td><label>#899</label></td><td><input class="txt" id="var_899" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#900</label></td><td><input class="txt" id="var_900" type="text" readonly="true" /></td>
+				<td><label>#901</label></td><td><input class="txt" id="var_901" type="text" readonly="true" /></td>
+				<td><label>#902</label></td><td><input class="txt" id="var_902" type="text" readonly="true" /></td>
+				<td><label>#903</label></td><td><input class="txt" id="var_903" type="text" readonly="true" /></td>
+				<td><label>#904</label></td><td><input class="txt" id="var_904" type="text" readonly="true" /></td>
+				<td><label>#905</label></td><td><input class="txt" id="var_905" type="text" readonly="true" /></td>
+				<td><label>#906</label></td><td><input class="txt" id="var_906" type="text" readonly="true" /></td>
+				<td><label>#907</label></td><td><input class="txt" id="var_907" type="text" readonly="true" /></td>
+				<td><label>#908</label></td><td><input class="txt" id="var_908" type="text" readonly="true" /></td>
+				<td><label>#909</label></td><td><input class="txt" id="var_909" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#910</label></td><td><input class="txt" id="var_910" type="text" readonly="true" /></td>
+				<td><label>#911</label></td><td><input class="txt" id="var_911" type="text" readonly="true" /></td>
+				<td><label>#912</label></td><td><input class="txt" id="var_912" type="text" readonly="true" /></td>
+				<td><label>#913</label></td><td><input class="txt" id="var_913" type="text" readonly="true" /></td>
+				<td><label>#914</label></td><td><input class="txt" id="var_914" type="text" readonly="true" /></td>
+				<td><label>#915</label></td><td><input class="txt" id="var_915" type="text" readonly="true" /></td>
+				<td><label>#916</label></td><td><input class="txt" id="var_916" type="text" readonly="true" /></td>
+				<td><label>#917</label></td><td><input class="txt" id="var_917" type="text" readonly="true" /></td>
+				<td><label>#918</label></td><td><input class="txt" id="var_918" type="text" readonly="true" /></td>
+				<td><label>#919</label></td><td><input class="txt" id="var_919" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#920</label></td><td><input class="txt" id="var_920" type="text" readonly="true" /></td>
+				<td><label>#921</label></td><td><input class="txt" id="var_921" type="text" readonly="true" /></td>
+				<td><label>#922</label></td><td><input class="txt" id="var_922" type="text" readonly="true" /></td>
+				<td><label>#923</label></td><td><input class="txt" id="var_923" type="text" readonly="true" /></td>
+				<td><label>#924</label></td><td><input class="txt" id="var_924" type="text" readonly="true" /></td>
+				<td><label>#925</label></td><td><input class="txt" id="var_925" type="text" readonly="true" /></td>
+				<td><label>#926</label></td><td><input class="txt" id="var_926" type="text" readonly="true" /></td>
+				<td><label>#927</label></td><td><input class="txt" id="var_927" type="text" readonly="true" /></td>
+				<td><label>#928</label></td><td><input class="txt" id="var_928" type="text" readonly="true" /></td>
+				<td><label>#929</label></td><td><input class="txt" id="var_929" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#930</label></td><td><input class="txt" id="var_930" type="text" readonly="true" /></td>
+				<td><label>#931</label></td><td><input class="txt" id="var_931" type="text" readonly="true" /></td>
+				<td><label>#932</label></td><td><input class="txt" id="var_932" type="text" readonly="true" /></td>
+				<td><label>#933</label></td><td><input class="txt" id="var_933" type="text" readonly="true" /></td>
+				<td><label>#934</label></td><td><input class="txt" id="var_934" type="text" readonly="true" /></td>
+				<td><label>#935</label></td><td><input class="txt" id="var_935" type="text" readonly="true" /></td>
+				<td><label>#936</label></td><td><input class="txt" id="var_936" type="text" readonly="true" /></td>
+				<td><label>#937</label></td><td><input class="txt" id="var_937" type="text" readonly="true" /></td>
+				<td><label>#938</label></td><td><input class="txt" id="var_938" type="text" readonly="true" /></td>
+				<td><label>#939</label></td><td><input class="txt" id="var_939" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#940</label></td><td><input class="txt" id="var_940" type="text" readonly="true" /></td>
+				<td><label>#941</label></td><td><input class="txt" id="var_941" type="text" readonly="true" /></td>
+				<td><label>#942</label></td><td><input class="txt" id="var_942" type="text" readonly="true" /></td>
+				<td><label>#943</label></td><td><input class="txt" id="var_943" type="text" readonly="true" /></td>
+				<td><label>#944</label></td><td><input class="txt" id="var_944" type="text" readonly="true" /></td>
+				<td><label>#945</label></td><td><input class="txt" id="var_945" type="text" readonly="true" /></td>
+				<td><label>#946</label></td><td><input class="txt" id="var_946" type="text" readonly="true" /></td>
+				<td><label>#947</label></td><td><input class="txt" id="var_947" type="text" readonly="true" /></td>
+				<td><label>#948</label></td><td><input class="txt" id="var_948" type="text" readonly="true" /></td>
+				<td><label>#949</label></td><td><input class="txt" id="var_949" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#950</label></td><td><input class="txt" id="var_950" type="text" readonly="true" /></td>
+				<td><label>#951</label></td><td><input class="txt" id="var_951" type="text" readonly="true" /></td>
+				<td><label>#952</label></td><td><input class="txt" id="var_952" type="text" readonly="true" /></td>
+				<td><label>#953</label></td><td><input class="txt" id="var_953" type="text" readonly="true" /></td>
+				<td><label>#954</label></td><td><input class="txt" id="var_954" type="text" readonly="true" /></td>
+				<td><label>#955</label></td><td><input class="txt" id="var_955" type="text" readonly="true" /></td>
+				<td><label>#956</label></td><td><input class="txt" id="var_956" type="text" readonly="true" /></td>
+				<td><label>#957</label></td><td><input class="txt" id="var_957" type="text" readonly="true" /></td>
+				<td><label>#958</label></td><td><input class="txt" id="var_958" type="text" readonly="true" /></td>
+				<td><label>#959</label></td><td><input class="txt" id="var_959" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#960</label></td><td><input class="txt" id="var_960" type="text" readonly="true" /></td>
+				<td><label>#961</label></td><td><input class="txt" id="var_961" type="text" readonly="true" /></td>
+				<td><label>#962</label></td><td><input class="txt" id="var_962" type="text" readonly="true" /></td>
+				<td><label>#963</label></td><td><input class="txt" id="var_963" type="text" readonly="true" /></td>
+				<td><label>#964</label></td><td><input class="txt" id="var_964" type="text" readonly="true" /></td>
+				<td><label>#965</label></td><td><input class="txt" id="var_965" type="text" readonly="true" /></td>
+				<td><label>#966</label></td><td><input class="txt" id="var_966" type="text" readonly="true" /></td>
+				<td><label>#967</label></td><td><input class="txt" id="var_967" type="text" readonly="true" /></td>
+				<td><label>#968</label></td><td><input class="txt" id="var_968" type="text" readonly="true" /></td>
+				<td><label>#969</label></td><td><input class="txt" id="var_969" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#970</label></td><td><input class="txt" id="var_970" type="text" readonly="true" /></td>
+				<td><label>#971</label></td><td><input class="txt" id="var_971" type="text" readonly="true" /></td>
+				<td><label>#972</label></td><td><input class="txt" id="var_972" type="text" readonly="true" /></td>
+				<td><label>#973</label></td><td><input class="txt" id="var_973" type="text" readonly="true" /></td>
+				<td><label>#974</label></td><td><input class="txt" id="var_974" type="text" readonly="true" /></td>
+				<td><label>#975</label></td><td><input class="txt" id="var_975" type="text" readonly="true" /></td>
+				<td><label>#976</label></td><td><input class="txt" id="var_976" type="text" readonly="true" /></td>
+				<td><label>#977</label></td><td><input class="txt" id="var_977" type="text" readonly="true" /></td>
+				<td><label>#978</label></td><td><input class="txt" id="var_978" type="text" readonly="true" /></td>
+				<td><label>#979</label></td><td><input class="txt" id="var_979" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#980</label></td><td><input class="txt" id="var_980" type="text" readonly="true" /></td>
+				<td><label>#981</label></td><td><input class="txt" id="var_981" type="text" readonly="true" /></td>
+				<td><label>#982</label></td><td><input class="txt" id="var_982" type="text" readonly="true" /></td>
+				<td><label>#983</label></td><td><input class="txt" id="var_983" type="text" readonly="true" /></td>
+				<td><label>#984</label></td><td><input class="txt" id="var_984" type="text" readonly="true" /></td>
+				<td><label>#985</label></td><td><input class="txt" id="var_985" type="text" readonly="true" /></td>
+				<td><label>#986</label></td><td><input class="txt" id="var_986" type="text" readonly="true" /></td>
+				<td><label>#987</label></td><td><input class="txt" id="var_987" type="text" readonly="true" /></td>
+				<td><label>#988</label></td><td><input class="txt" id="var_988" type="text" readonly="true" /></td>
+				<td><label>#989</label></td><td><input class="txt" id="var_989" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#990</label></td><td><input class="txt" id="var_990" type="text" readonly="true" /></td>
+				<td><label>#991</label></td><td><input class="txt" id="var_991" type="text" readonly="true" /></td>
+				<td><label>#992</label></td><td><input class="txt" id="var_992" type="text" readonly="true" /></td>
+				<td><label>#993</label></td><td><input class="txt" id="var_993" type="text" readonly="true" /></td>
+				<td><label>#994</label></td><td><input class="txt" id="var_994" type="text" readonly="true" /></td>
+				<td><label>#995</label></td><td><input class="txt" id="var_995" type="text" readonly="true" /></td>
+				<td><label>#996</label></td><td><input class="txt" id="var_996" type="text" readonly="true" /></td>
+				<td><label>#997</label></td><td><input class="txt" id="var_997" type="text" readonly="true" /></td>
+				<td><label>#998</label></td><td><input class="txt" id="var_998" type="text" readonly="true" /></td>
+				<td><label>#999</label></td><td><input class="txt" id="var_999" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#4000</label></td><td><input class="txt" id="var_4000" type="text" readonly="true" /></td>
+				<td><label>#4001</label></td><td><input class="txt" id="var_4001" type="text" readonly="true" /></td>
+				<td><label>#4002</label></td><td><input class="txt" id="var_4002" type="text" readonly="true" /></td>
+				<td><label>#4003</label></td><td><input class="txt" id="var_4003" type="text" readonly="true" /></td>
+				<td><label>#4004</label></td><td><input class="txt" id="var_4004" type="text" readonly="true" /></td>
+				<td><label>#4005</label></td><td><input class="txt" id="var_4005" type="text" readonly="true" /></td>
+				<td><label>#4006</label></td><td><input class="txt" id="var_4006" type="text" readonly="true" /></td>
+				<td><label>#4007</label></td><td><input class="txt" id="var_4007" type="text" readonly="true" /></td>
+				<td><label>#4008</label></td><td><input class="txt" id="var_4008" type="text" readonly="true" /></td>
+				<td><label>#4009</label></td><td><input class="txt" id="var_4009" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#4010</label></td><td><input class="txt" id="var_4010" type="text" readonly="true" /></td>
+				<td><label>#4011</label></td><td><input class="txt" id="var_4011" type="text" readonly="true" /></td>
+				<td><label>#4012</label></td><td><input class="txt" id="var_4012" type="text" readonly="true" /></td>
+				<td><label>#4013</label></td><td><input class="txt" id="var_4013" type="text" readonly="true" /></td>
+				<td><label>#4014</label></td><td><input class="txt" id="var_4014" type="text" readonly="true" /></td>
+				<td><label>#4015</label></td><td><input class="txt" id="var_4015" type="text" readonly="true" /></td>
+				<td><label>#4016</label></td><td><input class="txt" id="var_4016" type="text" readonly="true" /></td>
+				<td><label>#4017</label></td><td><input class="txt" id="var_4017" type="text" readonly="true" /></td>
+				<td><label>#4018</label></td><td><input class="txt" id="var_4018" type="text" readonly="true" /></td>
+				<td><label>#4019</label></td><td><input class="txt" id="var_4019" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#4020</label></td><td><input class="txt" id="var_4020" type="text" readonly="true" /></td>
+				<td><label>#4021</label></td><td><input class="txt" id="var_4021" type="text" readonly="true" /></td>
+				<td><label>#4022</label></td><td><input class="txt" id="var_4022" type="text" readonly="true" /></td>
+				<td><label>#4023</label></td><td><input class="txt" id="var_4023" type="text" readonly="true" /></td>
+				<td><label>#4024</label></td><td><input class="txt" id="var_4024" type="text" readonly="true" /></td>
+				<td><label>#4025</label></td><td><input class="txt" id="var_4025" type="text" readonly="true" /></td>
+				<td><label>#4026</label></td><td><input class="txt" id="var_4026" type="text" readonly="true" /></td>
+				<td><label>#4027</label></td><td><input class="txt" id="var_4027" type="text" readonly="true" /></td>
+				<td><label>#4028</label></td><td><input class="txt" id="var_4028" type="text" readonly="true" /></td>
+				<td><label>#4029</label></td><td><input class="txt" id="var_4029" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#4030</label></td><td><input class="txt" id="var_4030" type="text" readonly="true" /></td>
+				<td><label>#4107</label></td><td><input class="txt" id="var_4107" type="text" readonly="true" /></td>
+				<td><label>#4108</label></td><td><input class="txt" id="var_4108" type="text" readonly="true" /></td>
+				<td><label>#4109</label></td><td><input class="txt" id="var_4109" type="text" readonly="true" /></td>
+				<td><label>#4111</label></td><td><input class="txt" id="var_4111" type="text" readonly="true" /></td>
+				<td><label>#4113</label></td><td><input class="txt" id="var_4113" type="text" readonly="true" /></td>
+				<td><label>#4114</label></td><td><input class="txt" id="var_4114" type="text" readonly="true" /></td>
+				<td><label>#4115</label></td><td><input class="txt" id="var_4115" type="text" readonly="true" /></td>
+				<td><label>#4119</label></td><td><input class="txt" id="var_4119" type="text" readonly="true" /></td>
+				<td><label>#4120</label></td><td><input class="txt" id="var_4120" type="text" readonly="true" /></td>
+			</tr>
+			<tr>
+				<td><label>#4130</label></td><td><input class="txt" id="var_4130" type="text" readonly="true" /></td>
+				<td><label>#5400</label></td><td><input class="txt" id="var_5400" type="text" readonly="true" /></td>
+			</tr>
+		</table>
+	</div>
+</div>
+</body>
+</html>

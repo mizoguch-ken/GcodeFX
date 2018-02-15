@@ -1,0 +1,66 @@
+[ace.js][ace/keyboard/textinput]
+    var handleClipboardData = function(e, data, forceIEMime) {
+        var clipboardData = e.clipboardData || window.clipboardData;
+        if (!clipboardData || BROKEN_SETDATA)
+            return;
+        var mime = USE_IE_MIME_TYPE || forceIEMime ? "Text" : "text/plain";
+        try {
+            if (data) {
+-                return clipboardData.setData(mime, data) !== false;
++                var eClipboardSetData = false;
++                var windowClipboardSetData = false;
++                if (e.clipboardData) {
++                    eClipboardSetData = e.clipboardData.setData(mime, data);
++                }
++                if (window.clipboardData) {
++                    windowClipboardSetData = window.clipboardData.setData(mime, data);
++                }
++                return (eClipboardSetData | windowClipboardSetData) !== false;
+            } else {
+-                return clipboardData.getData(mime);
++                var eClipboardGetData;
++                var windowClipboardGetData;
++                if (e.clipboardData) {
++                    eClipboardGetData = e.clipboardData.getData(mime);
++                }
++                if (window.clipboardData) {
++                    windowClipboardGetData = window.clipboardData.getData(mime);
++                }
++                return (eClipboardGetData || windowClipboardGetData);
+            }
+        } catch(e) {
+            if (!forceIEMime)
+                return handleClipboardData(e, data, true);
+        }
+    };
+
+[ace.js][ace/mouse/dragdrop_handler]
+    this.onDragStart = function(e) {
+        if (this.cancelDrag || !mouseTarget.draggable) {
+            var self = this;
+            setTimeout(function(){
+                self.startSelect();
+                self.captureMouse(e);
+            }, 0);
+            return e.preventDefault();
+        }
+        range = editor.getSelectionRange();
+
+        var dataTransfer = e.dataTransfer;
+        dataTransfer.effectAllowed = editor.getReadOnly() ? "copy" : "copyMove";
+-        if (useragent.isOpera) {
++        if (useragent.isOpera || useragent.isWebKit) {
+            editor.container.appendChild(blankImage);
+            blankImage.scrollTop = 0;
+        }
+        dataTransfer.setDragImage && dataTransfer.setDragImage(blankImage, 0, 0);
+-        if (useragent.isOpera) {
++        if (useragent.isOpera || useragent.isWebKit) {
+            editor.container.removeChild(blankImage);
+        }
+        dataTransfer.clearData();
+        dataTransfer.setData("Text", editor.session.getTextRange());
+
+        isInternal = true;
+        this.setState("drag");
+    };

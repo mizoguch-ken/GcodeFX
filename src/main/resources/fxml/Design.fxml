@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<VBox fx:id="paneRoot" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ken.mizoguch.gcodefx.DesignController">
+    <children>
+        <MenuBar fx:id="menuBar">
+            <menus>
+                <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="menuFileNew" mnemonicParsing="false" text="New">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileOpen" mnemonicParsing="false" text="Open">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileSave" mnemonicParsing="false" text="Save">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileSaveAs" mnemonicParsing="false" text="Save As..">
+                            <accelerator>
+                                <KeyCodeCombination alt="DOWN" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileNextGenerationController" mnemonicParsing="false" text="ngc">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileGcodeByteCode" mnemonicParsing="false" text="gbc" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="menuFileRecentFile1" mnemonicParsing="false" text="RecentFile1" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile2" mnemonicParsing="false" text="RecentFile2" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile3" mnemonicParsing="false" text="RecentFile3" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile4" mnemonicParsing="false" text="RecentFile4" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile5" mnemonicParsing="false" text="RecentFile5" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile6" mnemonicParsing="false" text="RecentFile6" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile7" mnemonicParsing="false" text="RecentFile7" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile8" mnemonicParsing="false" text="RecentFile8" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile9" mnemonicParsing="false" text="RecentFile9" visible="false" />
+                        <MenuItem fx:id="menuFileRecentFile10" mnemonicParsing="false" text="RecentFile10" visible="false" />
+                    </items>
+                </Menu>
+            <Menu fx:id="menuView" mnemonicParsing="false" text="View">
+              <items>
+                  <MenuItem fx:id="menuViewControlPanel" mnemonicParsing="false" text="Control Panel" />
+                <MenuItem fx:id="menuViewConsole" mnemonicParsing="false" text="Console" />
+              </items>
+            </Menu>
+                <Menu fx:id="menuExtension" mnemonicParsing="false" text="Extension">
+                    <items>
+                        <MenuItem fx:id="menuExtensionWeb" mnemonicParsing="false" text="Web" />
+                  <MenuItem fx:id="menuExtensionLadder" mnemonicParsing="false" text="Ladder" />
+                    </items>
+                </Menu>
+                <Menu fx:id="menuSettings" mnemonicParsing="false" text="Settings">
+                    <items>
+                        <MenuItem fx:id="menuSettingsVirtualMachine" mnemonicParsing="false" text="Virtual Machine" />
+                    </items>
+                </Menu>
+                <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem fx:id="menuHelpLanguage" mnemonicParsing="false" text="Language" />
+                        <MenuItem fx:id="menuHelpShowLicenses" mnemonicParsing="false" text="Licenses" />
+                        <MenuItem fx:id="menuHelpShowVersion" mnemonicParsing="false" text="Version" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+            <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                <children>
+                    <AnchorPane fx:id="anchorControlPanel">
+                        <children>
+                  <VBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                                  <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                      <children>
+                                          <TextField fx:id="txtProgramNumber" prefWidth="100.0" />
+                                          <CheckBox fx:id="chkOptionalSkip0" mnemonicParsing="false" text="/" />
+                                          <CheckBox fx:id="chkOptionalSkip2" mnemonicParsing="false" text="/2" />
+                                          <CheckBox fx:id="chkOptionalSkip3" mnemonicParsing="false" text="/3" />
+                                          <CheckBox fx:id="chkOptionalSkip4" mnemonicParsing="false" text="/4" />
+                                          <CheckBox fx:id="chkOptionalSkip5" mnemonicParsing="false" text="/5" />
+                                          <CheckBox fx:id="chkOptionalSkip6" mnemonicParsing="false" text="/6" />
+                                          <CheckBox fx:id="chkOptionalSkip7" mnemonicParsing="false" text="/7" />
+                                          <CheckBox fx:id="chkOptionalSkip8" mnemonicParsing="false" text="/8" />
+                                          <CheckBox fx:id="chkOptionalSkip9" mnemonicParsing="false" text="/9" />
+                                      </children>
+                                  </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <TextField fx:id="txtVirtualMachineName" prefWidth="300.0" />
+                              <Button fx:id="btnVirtualMachineLoad" mnemonicParsing="false" text="Load" />
+                              <TextField fx:id="txtSerialPort" prefWidth="100.0" />
+                              <Button fx:id="btnSerialOpen" mnemonicParsing="false" text="Connect" />
+                              <Button fx:id="btnSerialClose" mnemonicParsing="false" text="Disconnect" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                            <Button fx:id="btnAddEditor" mnemonicParsing="false" text="+" AnchorPane.rightAnchor="0.0" />
+                        </children>
+                    </AnchorPane>
+                      <SplitPane fx:id="splitWebviewConsole" dividerPositions="0.618" focusTraversable="true" orientation="VERTICAL" VBox.vgrow="ALWAYS">
+                          <items>
+                              <WebView fx:id="webView" />
+                              <TextArea fx:id="txtConsole" />
+                          </items>
+                      </SplitPane>
+                </children>
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </padding>
+            </VBox>
+    </children>
+</VBox>

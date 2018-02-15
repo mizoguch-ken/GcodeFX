@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.web.WebView?>
+
+<VBox fx:id="paneRoot" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ken.mizoguch.gcodefx.DesignEditorController">
+    <children>
+        <MenuBar fx:id="menuBar">
+            <menus>
+                <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="menuFileNew" mnemonicParsing="false" text="New">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileOpen" mnemonicParsing="false" text="Open">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileSave" mnemonicParsing="false" text="Save">
+                            <accelerator>
+                                <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="menuFileSaveAs" mnemonicParsing="false" text="Save As..">
+                            <accelerator>
+                                <KeyCodeCombination alt="DOWN" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                            </accelerator>
+                        </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="menuFileRecentFile1" mnemonicParsing="false" text="RecentFile1" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile2" mnemonicParsing="false" text="RecentFile2" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile3" mnemonicParsing="false" text="RecentFile3" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile4" mnemonicParsing="false" text="RecentFile4" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile5" mnemonicParsing="false" text="RecentFile5" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile6" mnemonicParsing="false" text="RecentFile6" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile7" mnemonicParsing="false" text="RecentFile7" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile8" mnemonicParsing="false" text="RecentFile8" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile9" mnemonicParsing="false" text="RecentFile9" visible="false" />
+                  <MenuItem fx:id="menuFileRecentFile10" mnemonicParsing="false" text="RecentFile10" visible="false" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+          <WebView fx:id="webView" VBox.vgrow="ALWAYS" />
+    </children>
+</VBox>

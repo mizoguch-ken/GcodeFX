@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>GcodeFX</title>
+	<style type="text/css" media="screen">
+		html {
+			overflow: hidden;
+			height: 100%;
+			width: 100%;
+		}
+
+		body {
+			overflow: hidden;
+			height: 100%;
+			width: 100%;
+		}
+
+		.gutter {
+			background-color: transparent;
+			background-repeat: no-repeat;
+			background-position: 50%;
+		}
+
+		.gutter.gutter-horizontal {
+			cursor: col-resize;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+		}
+
+		.gutter.gutter-vertical {
+			cursor: row-resize;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAYAAABSIVz6AAAKQWlDQ1BJQ0MgUHJvZmlsZQAASA2dlndUU9kWh8+9N73QEiIgJfQaegkg0jtIFQRRiUmAUAKGhCZ2RAVGFBEpVmRUwAFHhyJjRRQLg4Ji1wnyEFDGwVFEReXdjGsJ7601896a/cdZ39nnt9fZZ+9917oAUPyCBMJ0WAGANKFYFO7rwVwSE8vE9wIYEAEOWAHA4WZmBEf4RALU/L09mZmoSMaz9u4ugGS72yy/UCZz1v9/kSI3QyQGAApF1TY8fiYX5QKUU7PFGTL/BMr0lSkyhjEyFqEJoqwi48SvbPan5iu7yZiXJuShGlnOGbw0noy7UN6aJeGjjAShXJgl4GejfAdlvVRJmgDl9yjT0/icTAAwFJlfzOcmoWyJMkUUGe6J8gIACJTEObxyDov5OWieAHimZ+SKBIlJYqYR15hp5ejIZvrxs1P5YjErlMNN4Yh4TM/0tAyOMBeAr2+WRQElWW2ZaJHtrRzt7VnW5mj5v9nfHn5T/T3IevtV8Sbsz55BjJ5Z32zsrC+9FgD2JFqbHbO+lVUAtG0GQOXhrE/vIADyBQC03pzzHoZsXpLE4gwnC4vs7GxzAZ9rLivoN/ufgm/Kv4Y595nL7vtWO6YXP4EjSRUzZUXlpqemS0TMzAwOl89k/fcQ/+PAOWnNycMsnJ/AF/GF6FVR6JQJhIlou4U8gViQLmQKhH/V4X8YNicHGX6daxRodV8AfYU5ULhJB8hvPQBDIwMkbj96An3rWxAxCsi+vGitka9zjzJ6/uf6Hwtcim7hTEEiU+b2DI9kciWiLBmj34RswQISkAd0oAo0gS4wAixgDRyAM3AD3iAAhIBIEAOWAy5IAmlABLJBPtgACkEx2AF2g2pwANSBetAEToI2cAZcBFfADXALDIBHQAqGwUswAd6BaQiC8BAVokGqkBakD5lC1hAbWgh5Q0FQOBQDxUOJkBCSQPnQJqgYKoOqoUNQPfQjdBq6CF2D+qAH0CA0Bv0BfYQRmALTYQ3YALaA2bA7HAhHwsvgRHgVnAcXwNvhSrgWPg63whfhG/AALIVfwpMIQMgIA9FGWAgb8URCkFgkAREha5EipAKpRZqQDqQbuY1IkXHkAwaHoWGYGBbGGeOHWYzhYlZh1mJKMNWYY5hWTBfmNmYQM4H5gqVi1bGmWCesP3YJNhGbjS3EVmCPYFuwl7ED2GHsOxwOx8AZ4hxwfrgYXDJuNa4Etw/XjLuA68MN4SbxeLwq3hTvgg/Bc/BifCG+Cn8cfx7fjx/GvyeQCVoEa4IPIZYgJGwkVBAaCOcI/YQRwjRRgahPdCKGEHnEXGIpsY7YQbxJHCZOkxRJhiQXUiQpmbSBVElqIl0mPSa9IZPJOmRHchhZQF5PriSfIF8lD5I/UJQoJhRPShxFQtlOOUq5QHlAeUOlUg2obtRYqpi6nVpPvUR9Sn0vR5Mzl/OX48mtk6uRa5Xrl3slT5TXl3eXXy6fJ18hf0r+pvy4AlHBQMFTgaOwVqFG4bTCPYVJRZqilWKIYppiiWKD4jXFUSW8koGStxJPqUDpsNIlpSEaQtOledK4tE20Otpl2jAdRzek+9OT6cX0H+i99AllJWVb5SjlHOUa5bPKUgbCMGD4M1IZpYyTjLuMj/M05rnP48/bNq9pXv+8KZX5Km4qfJUilWaVAZWPqkxVb9UU1Z2qbapP1DBqJmphatlq+9Uuq43Pp893ns+dXzT/5PyH6rC6iXq4+mr1w+o96pMamhq+GhkaVRqXNMY1GZpumsma5ZrnNMe0aFoLtQRa5VrntV4wlZnuzFRmJbOLOaGtru2nLdE+pN2rPa1jqLNYZ6NOs84TXZIuWzdBt1y3U3dCT0svWC9fr1HvoT5Rn62fpL9Hv1t/ysDQINpgi0GbwaihiqG/YZ5ho+FjI6qRq9Eqo1qjO8Y4Y7ZxivE+41smsImdSZJJjclNU9jU3lRgus+0zwxr5mgmNKs1u8eisNxZWaxG1qA5wzzIfKN5m/krCz2LWIudFt0WXyztLFMt6ywfWSlZBVhttOqw+sPaxJprXWN9x4Zq42Ozzqbd5rWtqS3fdr/tfTuaXbDdFrtOu8/2DvYi+yb7MQc9h3iHvQ732HR2KLuEfdUR6+jhuM7xjOMHJ3snsdNJp9+dWc4pzg3OowsMF/AX1C0YctFx4bgccpEuZC6MX3hwodRV25XjWuv6zE3Xjed2xG3E3dg92f24+ysPSw+RR4vHlKeT5xrPC16Il69XkVevt5L3Yu9q76c+Oj6JPo0+E752vqt9L/hh/QL9dvrd89fw5/rX+08EOASsCegKpARGBFYHPgsyCRIFdQTDwQHBu4IfL9JfJFzUFgJC/EN2hTwJNQxdFfpzGC4sNKwm7Hm4VXh+eHcELWJFREPEu0iPyNLIR4uNFksWd0bJR8VF1UdNRXtFl0VLl1gsWbPkRoxajCCmPRYfGxV7JHZyqffS3UuH4+ziCuPuLjNclrPs2nK15anLz66QX8FZcSoeGx8d3xD/iRPCqeVMrvRfuXflBNeTu4f7kufGK+eN8V34ZfyRBJeEsoTRRJfEXYljSa5JFUnjAk9BteB1sl/ygeSplJCUoykzqdGpzWmEtPi000IlYYqwK10zPSe9L8M0ozBDuspp1e5VE6JA0ZFMKHNZZruYjv5M9UiMJJslg1kLs2qy3mdHZZ/KUcwR5vTkmuRuyx3J88n7fjVmNXd1Z752/ob8wTXuaw6thdauXNu5Tnddwbrh9b7rj20gbUjZ8MtGy41lG99uit7UUaBRsL5gaLPv5sZCuUJR4b0tzlsObMVsFWzt3WazrWrblyJe0fViy+KK4k8l3JLr31l9V/ndzPaE7b2l9qX7d+B2CHfc3em681iZYlle2dCu4F2t5czyovK3u1fsvlZhW3FgD2mPZI+0MqiyvUqvakfVp+qk6oEaj5rmvep7t+2d2sfb17/fbX/TAY0DxQc+HhQcvH/I91BrrUFtxWHc4azDz+ui6rq/Z39ff0TtSPGRz0eFR6XHwo911TvU1zeoN5Q2wo2SxrHjccdv/eD1Q3sTq+lQM6O5+AQ4ITnx4sf4H++eDDzZeYp9qukn/Z/2ttBailqh1tzWibakNml7THvf6YDTnR3OHS0/m/989Iz2mZqzymdLz5HOFZybOZ93fvJCxoXxi4kXhzpXdD66tOTSna6wrt7LgZevXvG5cqnbvfv8VZerZ645XTt9nX297Yb9jdYeu56WX+x+aem172296XCz/ZbjrY6+BX3n+l37L972un3ljv+dGwOLBvruLr57/17cPel93v3RB6kPXj/Mejj9aP1j7OOiJwpPKp6qP6391fjXZqm99Oyg12DPs4hnj4a4Qy//lfmvT8MFz6nPK0a0RupHrUfPjPmM3Xqx9MXwy4yX0+OFvyn+tveV0auffnf7vWdiycTwa9HrmT9K3qi+OfrW9m3nZOjk03dp76anit6rvj/2gf2h+2P0x5Hp7E/4T5WfjT93fAn88ngmbWbm3/eE8/syOll+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAJklEQVQoFWM8c+bMfwYgMDExYQTR9OIzgSwbUYCRXkGLHpUDFtQAj1I+zTCPS2YAAAAASUVORK5CYII=');
+		}
+
+		.split.split-horizontal, .gutter.gutter-horizontal {
+			height: 100%;
+			float: left;
+		}
+
+		.programs {
+			font-family: Arial, Helvetica, sans-serif, Tahoma, Verdana, sans-serif;
+			font-size: 13px;
+			background: rgb(14, 98, 165);
+			color: white;
+		}
+
+		#treeProgram {
+			overflow: auto;
+		}
+
+		#webEditor{
+			position: relative;
+		}
+
+		.toolbox {
+			padding: 3px;
+			margin: 3px;
+		}
+
+		#mode,#split,#theme,#fontsize,#keybinding {
+			color: black;
+		}
+
+		#editor-container {
+			bottom: 20px;
+			background: white;
+		}
+
+		.ace_status-indicator {
+			color: gray;
+			position: absolute;
+			right: 0;
+			border-left: 1px solid;
+		}
+	</style>
+	<link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="./js/jstree/themes/default/style.min.css" />
+	<script type="text/javascript" src="./js/jquery/jquery-3.3.1.min.js"></script>
+	<script type="text/javascript" src="./js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./js/split.js/split.min.js"></script>
+	<script type="text/javascript" src="./js/jstree/jstree.min.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(window).on('load', function() {
+			var sizes = localStorage.getItem('split-sizes');
+			if (sizes) {
+				sizes = JSON.parse(sizes);
+			} else {
+				sizes = [38.2, 61.8];
+			}
+			window.split = Split(
+				['#treeProgram', '#webProgram'],
+				{
+					sizes: sizes,
+					minSize: [1, 1],
+					onDrag: function() {
+						window.onresize();
+					},
+					onDragEnd: function() {
+						localStorage && localStorage.setItem('split-sizes', JSON.stringify(window.split.getSizes()));
+					}
+				}
+			);
+			env.editor.commands.addCommands([{
+				name: "fileNew",
+				bindKey: {win: "Ctrl-N", mac: "Command-N"},
+				exec: function(editor) {
+					window.gcodefx.execFileNew();
+				},
+				readOnly: false
+			}, {
+				name: "fileOpen",
+				bindKey: {win: "Ctrl-O", mac: "Command-O"},
+				exec: function(editor) {
+					window.gcodefx.execFileOpen();
+				},
+				readOnly: false
+			}, {
+				name: "fileSave",
+				bindKey: {win: "Ctrl-S", mac: "Command-S"},
+				exec: function(editor) {
+					window.gcodefx.execFileSave();
+				},
+				readOnly: false
+			}, {
+				name: "fileSaveAs",
+				bindKey: {win: "Ctrl-Alt-S", mac: "Command-Alt-S"},
+				exec: function(editor) {
+					window.gcodefx.execFileSaveAs();
+				},
+				readOnly: false
+			}, {
+				name: "ngc",
+				bindKey: {win: "Ctrl-R", mac: "Command-R"},
+				exec: function(editor) {
+					window.gcodefx.execNextGenerationController();
+				},
+				readOnly: false
+			}]);
+			env.editor.on("change", function(e) {
+				if (window.gcodefxOnChange) {
+					window.clearTimeout(window.gcodefxOnChange);
+				}
+				window.gcodefxOnChange = window.setTimeout(notifyChange, 100);
+			});
+			window.onresize();
+		});
+
+		function getEditor() {
+			return env.editor;
+		}
+
+		function notifyChange() {
+			var text = env.editor.getValue();
+			if (window.gcodefx) {
+				window.gcodefx.notifyChange(text, env.editor.session.getUndoManager().isClean());
+			}
+			var data = [];
+			var lines = text.split(/\r\n|\n|\r/);
+			var re = new RegExp("^(?:\\s|/\\d+|\\([\\s\"#&'\\*\\+,\\-\\./\\d:;<=>\\?@A-Z\\[\\]_a-z\\$]*\\))*(?:([O:]\\d+)|(<[\\w\\+\\-_\\.]+>)|(N\\d+))");
+			var parent = null;
+			if (window.gcodefxJsTree) {
+				window.gcodefxJsTree.destroy(true);
+			}
+			for (var i = 0; i < lines.length; i++) {
+				var m = lines[i].match(re);
+				if (m) {
+					if (m[1] || m[2]) {
+						parent = String(i);
+						data.push({
+							'id' : parent,
+							'parent' : '#',
+							'text' : escape_html(lines[i])
+						});
+					} else if (m[3]) {
+						if (parent) {
+							data.push({
+								'id' : String(i),
+								'parent' : parent,
+								'text' : escape_html(lines[i])
+							});
+						}
+					}
+				}
+			}
+			$('#jstree')
+				.on('changed.jstree', jsTreeChanged)
+				.jstree({
+					'core':{
+						'data' : data,
+						'themes' : {
+							'dots' : false,
+							'icons' : false
+						},
+						'check_callback' : true,
+						"animation": 0
+					},
+					'plugins' : ['changed']
+			});
+			window.gcodefxJsTree = $('#jstree').jstree(true);
+			window.gcodefxJsTree.refresh(false, false);
+		}
+
+		function escape_html (string) {
+			if (typeof string !== 'string') {
+				return string;
+			}
+			return string.replace(/[&'`"<>]/g, function(match) {
+				return {
+				'&': '&amp;',
+				"'": '&#x27;',
+				'`': '&#x60;',
+				'"': '&quot;',
+				'<': '&lt;',
+				'>': '&gt;',
+				}[match];
+			});
+		}
+
+		function jsTreeChanged(e, data) {
+			if (data.selected.length) {
+				var id = Number(data.instance.get_node(data.selected[0]).id);
+				gotoLine(id + 1, 0, false, false);
+			}
+		}
+
+		function setValue(text) {
+			env.editor.setValue(text || '');
+			if (!text || !window.gcodefxOnChange) {
+				window.gcodefxOnChange = window.setTimeout(notifyChange, 100);
+			}
+		}
+
+		function insert(text) {
+			env.editor.insert(text);
+		}
+
+		function undoManager_reset() {
+			env.editor.session.getUndoManager().reset();
+		}
+
+		function undoManager_markClean() {
+			env.editor.session.getUndoManager().markClean();
+		}
+
+		function setReadOnly(readOnly) {
+			env.split.forEach(function(editor) {
+				editor.setReadOnly(readOnly);
+			});
+		}
+
+		function gotoLine(lineNumber, column, center, animate) {
+			var editor = env.split.getEditor(0);
+			editor.selection.clearSelection();
+			editor.session.unfold({row: lineNumber - 1, column: column || 0});
+
+			editor.$blockScrolling += 1;
+			editor.exitMultiSelectMode && editor.exitMultiSelectMode();
+			editor.moveCursorTo(lineNumber - 1, column || 0);
+			editor.$blockScrolling -= 1;
+
+//			if (!editor.isRowFullyVisible(lineNumber - 1))
+				editor.scrollToLine(lineNumber - 1, center, animate);
+		}
+
+		function setLanguage(lang) {
+			switch (lang) {
+				case 'EN':
+					document.getElementById('label_live_autocompletion').innerHTML = 'Live Autocompletion';
+					document.getElementById('menu_edit').innerHTML = 'Edit';
+					document.getElementById('menu_edit_undo').innerHTML = 'Undo';
+					document.getElementById('menu_edit_redo').innerHTML = 'Redo';
+					document.getElementById('menu_edit_select_all').innerHTML = 'Select All';
+					document.getElementById('menu_edit_remove_line').innerHTML = 'Remove Line';
+					document.getElementById('menu_edit_toggle_comment').innerHTML = 'Toggle Comment';
+					document.getElementById('menu_edit_remove_word_left').innerHTML = 'Remove Word Left';
+					document.getElementById('menu_edit_remove_word_right').innerHTML = 'Remove Word Right';
+					document.getElementById('menu_edit_transpose_letters').innerHTML = 'Transpose Letters';
+					document.getElementById('menu_edit_to_upper_case').innerHTML = 'To Upper Case';
+					document.getElementById('menu_edit_to_lower_case').innerHTML = 'To Lower Case';
+					document.getElementById('menu_edit_move_lines_up').innerHTML = 'Move Lines Up';
+					document.getElementById('menu_edit_move_lines_down').innerHTML = 'Move Lines Down';
+					document.getElementById('menu_edit_remove_to_line_start').innerHTML = 'Remove To Line Start';
+					document.getElementById('menu_edit_remove_to_line_end').innerHTML = 'Remove To Line End';
+					document.getElementById('menu_edit_select_to_line_start').innerHTML = 'Select To Line Start';
+					document.getElementById('menu_edit_select_to_line_end').innerHTML = 'Select To Line End';
+					document.getElementById('menu_edit_copy_lines_up').innerHTML = 'Copy Lines Up';
+					document.getElementById('menu_edit_copy_lines_down').innerHTML = 'Copy Lines Down';
+					document.getElementById('menu_edit_modify_number_up').innerHTML = 'Modify Number Up';
+					document.getElementById('menu_edit_modify_number_down').innerHTML = 'Modify Number Down';
+					document.getElementById('menu_view').innerHTML = 'View';
+					document.getElementById('menu_view_inline_editor').innerHTML = 'Inline Editor';
+					document.getElementById('menu_view_autocomplete').innerHTML = 'Autocomplete';
+					document.getElementById('menu_view_scroll_up').innerHTML = 'Scroll Up';
+					document.getElementById('menu_view_scroll_down').innerHTML = 'Scroll Down';
+					document.getElementById('menu_view_fold').innerHTML = 'Fold';
+					document.getElementById('menu_view_toggle_parent_fold_widget').innerHTML = 'Toggle Parent Fold Widget';
+					document.getElementById('menu_view_fold_other').innerHTML = 'Fold Other';
+					document.getElementById('menu_view_un_fold_all').innerHTML = 'Un Fold All';
+					document.getElementById('menu_view_goto_start').innerHTML = 'Goto Start';
+					document.getElementById('menu_view_goto_end').innerHTML = 'Goto End';
+					document.getElementById('menu_view_goto_line_start').innerHTML = 'Goto Line Start';
+					document.getElementById('menu_view_goto_line_end').innerHTML = 'Goto Line End';
+					document.getElementById('menu_view_jump_to_matching').innerHTML = 'Jump To Matching';
+					document.getElementById('menu_view_goto_word_left').innerHTML = 'Goto Word Left';
+					document.getElementById('menu_view_goto_word_right').innerHTML = 'Goto Word Right';
+					document.getElementById('menu_search').innerHTML = 'Search';
+					document.getElementById('menu_search_find').innerHTML = 'Find';
+					document.getElementById('menu_search_find_all').innerHTML = 'Find All';
+					document.getElementById('menu_search_replace').innerHTML = 'Replace';
+					document.getElementById('menu_search_find_next').innerHTML = 'Find Next';
+					document.getElementById('menu_search_find_previous').innerHTML = 'Find Previous';
+					document.getElementById('menu_search_select_or_find_next').innerHTML = 'Select Or Find Next';
+					document.getElementById('menu_search_select_or_find_previous').innerHTML = 'Select Or Find Previous';
+					document.getElementById('menu_search_goto_line').innerHTML = 'Goto Line';
+					document.getElementById('menu_help').innerHTML = 'Help';
+					document.getElementById('menu_help_show_settings_menu').innerHTML = 'Settings Menu';
+					document.getElementById('menu_help_show_keyboard_shortcuts').innerHTML = 'Keyboard Shortcuts';
+					break;
+				case 'JA':
+					document.getElementById('label_live_autocompletion').innerHTML = '自動補完';
+					document.getElementById('menu_edit').innerHTML = '編集';
+					document.getElementById('menu_edit_undo').innerHTML = '元に戻す';
+					document.getElementById('menu_edit_redo').innerHTML = 'やり直す';
+					document.getElementById('menu_edit_select_all').innerHTML = 'すべて選択';
+					document.getElementById('menu_edit_remove_line').innerHTML = '行を削除';
+					document.getElementById('menu_edit_toggle_comment').innerHTML = 'コメントの挿入/削除';
+					document.getElementById('menu_edit_remove_word_left').innerHTML = '左の単語を削除';
+					document.getElementById('menu_edit_remove_word_right').innerHTML = '右の単語を削除';
+					document.getElementById('menu_edit_transpose_letters').innerHTML = '左右の文字を入れ替え';
+					document.getElementById('menu_edit_to_upper_case').innerHTML = '大文字へ';
+					document.getElementById('menu_edit_to_lower_case').innerHTML = '小文字へ';
+					document.getElementById('menu_edit_move_lines_up').innerHTML = '上の行に移動';
+					document.getElementById('menu_edit_move_lines_down').innerHTML = '下の行に移動';
+					document.getElementById('menu_edit_remove_to_line_start').innerHTML = '行の始端まで削除';
+					document.getElementById('menu_edit_remove_to_line_end').innerHTML = '行の終端まで削除';
+					document.getElementById('menu_edit_select_to_line_start').innerHTML = '行の始端まで選択';
+					document.getElementById('menu_edit_select_to_line_end').innerHTML = '行の終端まで選択';
+					document.getElementById('menu_edit_copy_lines_up').innerHTML = '行のコピーを上に挿入';
+					document.getElementById('menu_edit_copy_lines_down').innerHTML = '行のコピーを下に挿入';
+					document.getElementById('menu_edit_modify_number_up').innerHTML = '数値をインクリメント';
+					document.getElementById('menu_edit_modify_number_down').innerHTML = '数値をデクリメント';
+					document.getElementById('menu_view').innerHTML = '表示';
+					document.getElementById('menu_view_inline_editor').innerHTML = 'インラインエディタ';
+					document.getElementById('menu_view_autocomplete').innerHTML = '自動補間';
+					document.getElementById('menu_view_scroll_up').innerHTML = '上スクロール';
+					document.getElementById('menu_view_scroll_down').innerHTML = '下スクロール';
+					document.getElementById('menu_view_fold').innerHTML = '畳む/展開';
+					document.getElementById('menu_view_toggle_parent_fold_widget').innerHTML = '括弧で畳む/展開';
+					document.getElementById('menu_view_fold_other').innerHTML = 'すべて畳む';
+					document.getElementById('menu_view_un_fold_all').innerHTML = 'すべて展開';
+					document.getElementById('menu_view_goto_start').innerHTML = '始端へジャンプ';
+					document.getElementById('menu_view_goto_end').innerHTML = '終端へジャンプ';
+					document.getElementById('menu_view_goto_line_start').innerHTML = '行の始端へジャンプ';
+					document.getElementById('menu_view_goto_line_end').innerHTML = '行の終端へジャンプ';
+					document.getElementById('menu_view_jump_to_matching').innerHTML = '対応する括弧へジャンプ';
+					document.getElementById('menu_view_goto_word_left').innerHTML = '単語の左へジャンプ';
+					document.getElementById('menu_view_goto_word_right').innerHTML = '単語の右へジャンプ';
+					document.getElementById('menu_search').innerHTML = '検索';
+					document.getElementById('menu_search_find').innerHTML = '検索';
+					document.getElementById('menu_search_find_all').innerHTML = '全検索';
+					document.getElementById('menu_search_replace').innerHTML = '置換';
+					document.getElementById('menu_search_find_next').innerHTML = '次を検索';
+					document.getElementById('menu_search_find_previous').innerHTML = '前を検索';
+					document.getElementById('menu_search_select_or_find_next').innerHTML = '単語の選択/次を検索';
+					document.getElementById('menu_search_select_or_find_previous').innerHTML = '単語の選択/前を検索';
+					document.getElementById('menu_search_goto_line').innerHTML = '指定行へジャンプ';
+					document.getElementById('menu_help').innerHTML = 'ヘルプ';
+					document.getElementById('menu_help_show_settings_menu').innerHTML = '設定メニュー';
+					document.getElementById('menu_help_show_keyboard_shortcuts').innerHTML = 'キーボードショートカット';
+					break;
+			}
+		}
+
+		$(document).on('click','.navbar-collapse.in',function(e) {
+			if( $(e.target).is('a') && $(e.target).attr('class') != 'dropdown-toggle' ) {
+				$(this).collapse('hide');
+			}
+		});
+	</script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark py-0">
+		<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#edit_menu" aria-controls="edit_menu" aria-label="Menu">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div id="edit_menu" class="collapse navbar-collapse">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item dropdown">
+					<a id="menu_edit" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Edit<span class="caret"></span></a>
+					<div class="dropdown-menu" aria-labelledby="menu_edit">
+						<a id="menu_edit_undo" class="dropdown-item" href="javascript:env.editor.execCommand('undo');">Undo</a>
+						<a id="menu_edit_redo" class="dropdown-item" href="javascript:env.editor.execCommand('redo');">Redo</a>
+						<a id="menu_edit_select_all" class="dropdown-item" href="javascript:env.editor.execCommand('selectall');">Select All</a>
+						<a id="menu_edit_remove_line" class="dropdown-item" href="javascript:env.editor.execCommand('removeline');">Remove Line</a>
+						<a id="menu_edit_toggle_comment" class="dropdown-item" href="javascript:env.editor.execCommand('togglecomment');">Toggle Comment</a>
+						<a id="menu_edit_remove_word_left" class="dropdown-item" href="javascript:env.editor.execCommand('removewordleft');">Remove Word Left</a>
+						<a id="menu_edit_remove_word_right" class="dropdown-item" href="javascript:env.editor.execCommand('removewordright');">Remove Word Right</a>
+						<a id="menu_edit_transpose_letters" class="dropdown-item" href="javascript:env.editor.execCommand('transposeletters');">Transpose Letters</a>
+						<a id="menu_edit_to_upper_case" class="dropdown-item" href="javascript:env.editor.execCommand('touppercase');">To Upper Case</a>
+						<a id="menu_edit_to_lower_case" class="dropdown-item" href="javascript:env.editor.execCommand('tolowercase');">To Lower Case</a>
+						<a id="menu_edit_move_lines_up" class="dropdown-item" href="javascript:env.editor.execCommand('movelinesup');">Move Lines Up</a>
+						<a id="menu_edit_move_lines_down" class="dropdown-item" href="javascript:env.editor.execCommand('movelinesdown');">Move Lines Down</a>
+						<a id="menu_edit_remove_to_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('removetolinestart');">Remove To Line Start</a>
+						<a id="menu_edit_remove_to_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('removetolineend');">Remove To Line End</a>
+						<a id="menu_edit_select_to_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('selecttolinestart');">Select To Line Start</a>
+						<a id="menu_edit_select_to_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('selecttolineend');">Select To Line End</a>
+						<a id="menu_edit_copy_lines_up" class="dropdown-item" href="javascript:env.editor.execCommand('copylinesup');">Copy Lines Up</a>
+						<a id="menu_edit_copy_lines_down" class="dropdown-item" href="javascript:env.editor.execCommand('copylinesdown');">Copy Lines Down</a>
+						<a id="menu_edit_modify_number_up" class="dropdown-item" href="javascript:env.editor.execCommand('modifyNumberUp');">Modify Number Up</a>
+						<a id="menu_edit_modify_number_down" class="dropdown-item" href="javascript:env.editor.execCommand('modifyNumberDown');">Modify Number Down</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a id="menu_view" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View<span class="caret"></span></a>
+					<div class="dropdown-menu" aria-labelledby="menu_view">
+						<a id="menu_view_inline_editor" class="dropdown-item" href="javascript:env.editor.execCommand('openInlineEditor');">Inline Editor</a>
+						<a id="menu_view_autocomplete" class="dropdown-item" href="javascript:env.editor.execCommand('startAutocomplete');">Autocomplete</a>
+						<a id="menu_view_scroll_up" class="dropdown-item" href="javascript:env.editor.execCommand('scrollup');">Scroll Up</a>
+						<a id="menu_view_scroll_down" class="dropdown-item" href="javascript:env.editor.execCommand('scrolldown');">Scroll Down</a>
+						<a id="menu_view_fold" class="dropdown-item" href="javascript:env.editor.execCommand('fold');">Fold</a>
+						<a id="menu_view_toggle_parent_fold_widget" class="dropdown-item" href="javascript:env.editor.execCommand('toggleParentFoldWidget');">Toggle Parent Fold Widget</a>
+						<a id="menu_view_fold_other" class="dropdown-item" href="javascript:env.editor.execCommand('foldOther');">Fold Other</a>
+						<a id="menu_view_un_fold_all" class="dropdown-item" href="javascript:env.editor.execCommand('unfoldall');">Un Fold All</a>
+						<a id="menu_view_goto_start" class="dropdown-item" href="javascript:env.editor.execCommand('gotostart');">Goto Start</a>
+						<a id="menu_view_goto_end" class="dropdown-item" href="javascript:env.editor.execCommand('gotoend');">Goto End</a>
+						<a id="menu_view_goto_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('gotolinestart');">Goto Line Start</a>
+						<a id="menu_view_goto_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('gotolineend');">Goto Line End</a>
+						<a id="menu_view_jump_to_matching" class="dropdown-item" href="javascript:env.editor.execCommand('jumptomatching');">Jump To Matching</a>
+						<a id="menu_view_goto_word_left" class="dropdown-item" href="javascript:env.editor.execCommand('gotowordleft');">Goto Word Left</a>
+						<a id="menu_view_goto_word_right" class="dropdown-item" href="javascript:env.editor.execCommand('gotowordright');">Goto Word Right</a>
+					</div>
+				</li>
+				<li class="dropdown">
+					<a id="menu_search" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Search<span class="caret"></span></a>
+					<div class="dropdown-menu" aria-labelledby="menu_search">
+						<a id="menu_search_find" class="dropdown-item" href="javascript:env.editor.execCommand('find');">Find</a>
+						<a id="menu_search_find_all" class="dropdown-item" href="javascript:env.editor.execCommand('findAll');">Find All</a>
+						<a id="menu_search_replace" class="dropdown-item" href="javascript:env.editor.execCommand('findnext');">Replace</a>
+						<a id="menu_search_find_next" class="dropdown-item" href="javascript:env.editor.execCommand('replace');">Find Next</a>
+						<a id="menu_search_find_previous" class="dropdown-item" href="javascript:env.editor.execCommand('findprevious');">Find Previous</a>
+						<a id="menu_search_select_or_find_next" class="dropdown-item" href="javascript:env.editor.execCommand('selectOrFindNext');">Select Or Find Next</a>
+						<a id="menu_search_select_or_find_previous" class="dropdown-item" href="javascript:env.editor.execCommand('selectOrFindPrevious');">Select Or Find Previous</a>
+						<a id="menu_search_goto_line" class="dropdown-item" href="javascript:env.editor.execCommand('gotoline');">Goto Line</a>
+					</div>
+				</li>
+				<li class="dropdown">
+					<a id="menu_help" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help<span class="caret"></span></a>
+					<div class="dropdown-menu" aria-labelledby="menu_help">
+						<a id="menu_help_show_settings_menu" class="dropdown-item" href="javascript:env.editor.execCommand('showSettingsMenu');">Settings Menu</a>
+						<a id="menu_help_show_keyboard_shortcuts" class="dropdown-item" href="javascript:env.editor.execCommand('showKeyboardShortcuts');">Keyboard Shortcuts</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	<div id="treeProgram" class="programs split split-horizontal">
+		<div id="jstree"></div>
+	</div>
+	<div id="webProgram" class="programs split split-horizontal">
+		<div id="optionsPanel">
+			<table>
+				<tr>
+					<td>
+						<select id="mode" class="toolbox" size="1">
+						</select>
+					</td>
+					<td>
+						<select id="split" class="toolbox" size="1">
+							<option value="none">None</option>
+							<option value="below">Below</option>
+							<option value="beside">Beside</option>
+						</select>
+					</td>
+					<td>
+						<select id="theme" class="toolbox" size="1">
+						</select>
+					</td>
+					<td>
+						<select id="fontsize" class="toolbox" size="1">
+							<option value="6px">6</option>
+							<option value="7px">7</option>
+							<option value="8px">8</option>
+							<option value="9px">9</option>
+							<option value="10px">10</option>
+							<option value="11px">11</option>
+							<option value="12px" selected="selected">12</option>
+							<option value="13px">13</option>
+							<option value="14px">14</option>
+							<option value="15px">15</option>
+							<option value="16px">16</option>
+							<option value="18px">18</option>
+							<option value="20px">20</option>
+							<option value="24px">24</option>
+							<option value="26px">26</option>
+							<option value="28px">28</option>
+							<option value="32px">32</option>
+							<option value="36px">36</option>
+							<option value="40px">40</option>
+							<option value="44px">44</option>
+							<option value="48px">48</option>
+							<option value="54px">54</option>
+							<option value="60px">60</option>
+							<option value="66px">66</option>
+							<option value="72px">72</option>
+							<option value="80px">80</option>
+							<option value="88px">88</option>
+							<option value="96px">96</option>
+						</select>
+					</td>
+					<td>
+						<select id="keybinding" class="toolbox" size="1">
+							<option value="ace">Ace</option>
+							<option value="vim">Vim</option>
+							<option value="emacs">Emacs</option>
+							<option value="custom">Custom</option>
+						</select>
+					</td>
+					<td>
+						<td>
+							<input type="checkbox" name="live_autocompletion" id="live_autocompletion" class="toolbox">
+						</td>
+						<td>
+							<label id="label_live_autocompletion" for="live_autocompletion">Live Autocompletion</label>
+						</td>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="webEditor">
+			<div id="editor-container"></div>
+		</div>
+	</div>
+	<script src="src/ace.js" data-ace-base="src" type="text/javascript" charset="utf-8"></script>
+	<script src="src/ext-beautify.js"></script>
+	<script src="src/ext-elastic_tabstops_lite.js"></script>
+	<script src="src/ext-language_tools.js"></script>
+	<script src="src/ext-modelist.js"></script>
+	<script src="src/ext-split.js"></script>
+	<script src="src/ext-statusbar.js"></script>
+	<script src="src/ext-themelist.js"></script>
+	<script src="src/ext-whitespace.js"></script>
+	<script src="src/keybinding-vim.js"></script>
+	<script src="src/keybinding-emacs.js"></script>
+	<script src="gcodefx.js"></script>
+	<script type="text/javascript" charset="utf-8">
+		require('gcodefx/gcodefx');
+	</script>
+</body>
+</html>

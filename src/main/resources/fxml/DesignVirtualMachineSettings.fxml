@@ -1,0 +1,1464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<TabPane fx:id="mainTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ken.mizoguch.gcodefx.DesignVirtualMachineSettingsController">
+    <tabs>
+      <Tab fx:id="tabBase" text="Base">
+         <content>
+            <ScrollPane fitToHeight="true" fitToWidth="true">
+               <content>
+                  <VBox spacing="5.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="lblVirtualMachine" text="Virtual Machine" />
+                                    <TextField fx:id="txtVirtualMachineName" prefWidth="300.0" />
+                                 </children>
+                              </VBox>
+                              <Button fx:id="btnVirtualMachineLoad" mnemonicParsing="false" text="Load" />
+                              <Button fx:id="btnVirtualMachineSave" mnemonicParsing="false" text="Save" />
+                              <CheckBox fx:id="chkLog" mnemonicParsing="false" text="Log" />
+                              <CheckBox fx:id="chkDebug" mnemonicParsing="false" text="Debug" />
+                           </children>
+                        </HBox>
+                        <Separator />
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <VBox>
+                                 <children>
+                                    <Label fx:id="lblSerialPort" text="Serial Port" />
+                                    <TextField fx:id="txtSerialPort" prefWidth="100.0" />
+                                 </children>
+                              </VBox>
+                              <Button fx:id="btnSerialPortList" mnemonicParsing="false" text="List" />
+                              <Button fx:id="btnSerialOpen" mnemonicParsing="false" text="Connect" />
+                              <Button fx:id="btnSerialClose" mnemonicParsing="false" text="Disconnect" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialBaudrate" text="Baudrate" />
+                                    <TextField fx:id="txtSerialBaudrate" prefWidth="100.0" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialDataBits" text="Data Bits" />
+                                    <ComboBox fx:id="cmbSerialDataBits" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialStopBits" text="Stop Bits" />
+                                    <ComboBox fx:id="cmbSerialStopBits" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialParity" text="Parity" />
+                                    <ComboBox fx:id="cmbSerialParity" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialEOB" text="Serial EOB" />
+                                    <ComboBox fx:id="cmbSerialEOB" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialBufferLimit" text="Buffer Limit" />
+                                    <TextField fx:id="txtSerialBufferLimit" prefWidth="100.0" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialDelay" text="Delay" />
+                                    <TextField fx:id="txtSerialDelay" prefWidth="100.0" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialStartCode" text="Start Code" />
+                                    <ComboBox fx:id="cmbSerialStartCode" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="lblSerialEndCode" text="End Code" />
+                                    <ComboBox fx:id="cmbSerialEndCode" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <CheckBox fx:id="chkSerialCharacter" mnemonicParsing="false" text="1 character send" />
+                              <CheckBox fx:id="chkSerialObserveCTS" mnemonicParsing="false" text="CTS Status Monitor" />
+                              <CheckBox fx:id="chkSerialObserveDSR" mnemonicParsing="false" text="DSR Status Monitor" />
+                           </children>
+                        </HBox>
+                        <Separator />
+                        <Label fx:id="lblBackGroundFile" text="Background File" />
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <TextField fx:id="txtBackGroundFile1" HBox.hgrow="SOMETIMES" />
+                              <Button fx:id="btnBackGroundFile1" mnemonicParsing="false" prefWidth="80.0" text="Browse" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <TextField fx:id="txtBackGroundFile2" HBox.hgrow="SOMETIMES" />
+                              <Button fx:id="btnBackGroundFile2" mnemonicParsing="false" prefWidth="80.0" text="Browse" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <TextField fx:id="txtBackGroundFile3" HBox.hgrow="SOMETIMES" />
+                              <Button fx:id="btnBackGroundFile3" mnemonicParsing="false" prefWidth="80.0" text="Browse" />
+                           </children>
+                        </HBox>
+                        <Separator prefWidth="200.0" />
+                        <Label fx:id="lblExternalSubProgramDirectory" text="External SubProgram Directory" />
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <TextField fx:id="txtExternalSubProgramDirectory" HBox.hgrow="SOMETIMES" />
+                              <Button fx:id="btnExternalSubProgramDirectory" mnemonicParsing="false" prefWidth="80.0" text="Browse" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </ScrollPane>
+         </content>
+      </Tab>
+        <Tab fx:id="tabGcodeGroup" text="G Code Group">
+            <content>
+                <GridPane hgap="5.0" vgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label fx:id="lblGcodeGroup0" text="Group 0" />
+                                <TextField fx:id="txtGcodeGroup0" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblGcodeGroup1" text="Group 1" />
+                                <TextField fx:id="txtGcodeGroup1" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblGcodeGroup2" text="Group 2" />
+                                <TextField fx:id="txtGcodeGroup2" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="3">
+                            <children>
+                                <Label fx:id="lblGcodeGroup3" text="Group 3" />
+                                <TextField fx:id="txtGcodeGroup3" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="4">
+                            <children>
+                                <Label fx:id="lblGcodeGroup4" text="Group 4" />
+                                <TextField fx:id="txtGcodeGroup4" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="5">
+                            <children>
+                                <Label fx:id="lblGcodeGroup5" text="Group 5" />
+                                <TextField fx:id="txtGcodeGroup5" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="6">
+                            <children>
+                                <Label fx:id="lblGcodeGroup6" text="Group 6" />
+                                <TextField fx:id="txtGcodeGroup6" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="7">
+                            <children>
+                                <Label fx:id="lblGcodeGroup7" text="Group 7" />
+                                <TextField fx:id="txtGcodeGroup7" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                            <children>
+                                <Label fx:id="lblGcodeGroup8" text="Group 8" />
+                                <TextField fx:id="txtGcodeGroup8" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblGcodeGroup9" text="Group 9" />
+                                <TextField fx:id="txtGcodeGroup9" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblGcodeGroup10" text="Group 10" />
+                                <TextField fx:id="txtGcodeGroup10" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <children>
+                                <Label fx:id="lblGcodeGroup11" text="Group 11" />
+                                <TextField fx:id="txtGcodeGroup11" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                            <children>
+                                <Label fx:id="lblGcodeGroup12" text="Group 12" />
+                                <TextField fx:id="txtGcodeGroup12" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                            <children>
+                                <Label fx:id="lblGcodeGroup13" text="Group 13" />
+                                <TextField fx:id="txtGcodeGroup13" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                            <children>
+                                <Label fx:id="lblGcodeGroup14" text="Group 14" />
+                                <TextField fx:id="txtGcodeGroup14" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                            <children>
+                                <Label fx:id="lblGcodeGroup15" text="Group 15" />
+                                <TextField fx:id="txtGcodeGroup15" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2">
+                            <children>
+                                <Label fx:id="lblGcodeGroup16" text="Group 16" />
+                                <TextField fx:id="txtGcodeGroup16" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblGcodeGroup17" text="Group 17" />
+                                <TextField fx:id="txtGcodeGroup17" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblGcodeGroup18" text="Group 18" />
+                                <TextField fx:id="txtGcodeGroup18" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                            <children>
+                                <Label fx:id="lblGcodeGroup19" text="Group 19" />
+                                <TextField fx:id="txtGcodeGroup19" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                            <children>
+                                <Label fx:id="lblGcodeGroup20" text="Group 20" />
+                                <TextField fx:id="txtGcodeGroup20" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                            <children>
+                                <Label fx:id="lblGcodeGroup21" text="Group 21" />
+                                <TextField fx:id="txtGcodeGroup21" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+                            <children>
+                                <Label fx:id="lblGcodeGroup22" text="Group 22" />
+                                <TextField fx:id="txtGcodeGroup22" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="2" GridPane.rowIndex="7">
+                            <children>
+                                <Label fx:id="lblGcodeGroup23" text="Group 23" />
+                                <TextField fx:id="txtGcodeGroup23" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="3">
+                            <children>
+                                <Label fx:id="lblGcodeGroup24" text="Group 24" />
+                                <TextField fx:id="txtGcodeGroup24" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblGcodeGroup25" text="Group 25" />
+                                <TextField fx:id="txtGcodeGroup25" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblGcodeGroup26" text="Group 26" />
+                                <TextField fx:id="txtGcodeGroup26" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                            <children>
+                                <Label fx:id="lblGcodeGroup27" text="Group 27" />
+                                <TextField fx:id="txtGcodeGroup27" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                            <children>
+                                <Label fx:id="lblGcodeGroup28" text="Group 28" />
+                                <TextField fx:id="txtGcodeGroup28" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                            <children>
+                                <Label fx:id="lblGcodeGroup29" text="Group 29" />
+                                <TextField fx:id="txtGcodeGroup29" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="3" GridPane.rowIndex="6">
+                            <children>
+                                <Label fx:id="lblGcodeGroup30" text="Group 30" />
+                                <TextField fx:id="txtGcodeGroup30" />
+                            </children>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </GridPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabCodeChange" text="Code Change">
+            <content>
+                <GridPane hgap="5.0" vgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label fx:id="lblCodeChangeProgramCall" text="Program Call" />
+                                <TextArea fx:id="txtCodeChangeProgramCall" VBox.vgrow="ALWAYS" />
+                            </children>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblCodeChangeG" text="G Code" />
+                                <TextArea fx:id="txtCodeChangeG" VBox.vgrow="ALWAYS" />
+                            </children>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblCodeChangeM" text="M Code" />
+                                <TextArea fx:id="txtCodeChangeM" VBox.vgrow="ALWAYS" />
+                            </children>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                            <children>
+                                <Label fx:id="lblCodeChangeT" text="T Code" />
+                                <TextArea fx:id="txtCodeChangeT" VBox.vgrow="ALWAYS" />
+                            </children>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblCodeChangeD" text="D Code" />
+                                <TextArea fx:id="txtCodeChangeD" VBox.vgrow="ALWAYS" />
+                            </children>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblCodeChangeH" text="H Code" />
+                                <TextArea fx:id="txtCodeChangeH" VBox.vgrow="ALWAYS" />
+                            </children>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </GridPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabMacroCall" text="Macro Call">
+            <content>
+                <GridPane hgap="5.0" vgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <VBox spacing="5.0">
+                            <children>
+                                <Label fx:id="lblMacroCallG" text="G Code" />
+                                <TextArea fx:id="txtMacroCallG" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblMacroCallM" text="M Code" />
+                                <TextArea fx:id="txtMacroCallM" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </GridPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabCoordinate" text="Coordinate">
+            <content>
+                <GridPane hgap="5.0" vgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblOriginMachine" text="Mechanical Origin" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineX" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtOriginMachineX" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineY" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtOriginMachineY" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineZ" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtOriginMachineZ" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineA" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtOriginMachineA" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineB" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtOriginMachineB" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineC" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtOriginMachineC" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineU" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtOriginMachineU" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineV" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtOriginMachineV" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkOriginMachineW" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtOriginMachineW" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.rowIndex="1">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateExt" text="External" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtX" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateExtX" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtY" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateExtY" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtZ" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateExtZ" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtA" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateExtA" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtB" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateExtB" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtC" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateExtC" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtU" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateExtU" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtV" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateExtV" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateExtW" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateExtW" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.rowIndex="2">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateG92" text="G92" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92X" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateG92X" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92Y" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateG92Y" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92Z" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateG92Z" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92A" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateG92A" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92B" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateG92B" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92C" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateG92C" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92U" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateG92U" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92V" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateG92V" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG92W" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateG92W" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="1">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateExtension" text="Extension" />
+                                        <CheckBox fx:id="chkCoordinateTool" mnemonicParsing="false" text="Tool" />
+                                        <CheckBox fx:id="chkCoordinateMirror" mnemonicParsing="false" text="Mirror" />
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="2">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateG54" text="G54" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54X" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateG54X" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54Y" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateG54Y" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54Z" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateG54Z" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54A" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateG54A" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54B" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateG54B" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54C" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateG54C" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54U" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateG54U" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54V" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateG54V" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG54W" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateG54W" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateG55" text="G55" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55X" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateG55X" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55Y" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateG55Y" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55Z" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateG55Z" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55A" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateG55A" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55B" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateG55B" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55C" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateG55C" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55U" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateG55U" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55V" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateG55V" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG55W" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateG55W" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateG56" text="G56" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56X" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateG56X" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56Y" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateG56Y" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56Z" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateG56Z" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56A" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateG56A" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56B" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateG56B" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56C" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateG56C" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56U" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateG56U" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56V" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateG56V" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG56W" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateG56W" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="3">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateG57" text="G57" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57X" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateG57X" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57Y" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateG57Y" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57Z" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateG57Z" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57A" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateG57A" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57B" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateG57B" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57C" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateG57C" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57U" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateG57U" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57V" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateG57V" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG57W" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateG57W" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateG58" text="G58" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58X" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateG58X" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58Y" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateG58Y" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58Z" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateG58Z" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58A" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateG58A" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58B" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateG58B" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58C" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateG58C" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58U" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateG58U" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58V" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateG58V" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG58W" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateG58W" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblCoordinateG59" text="G59" />
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59X" mnemonicParsing="false" text="X" />
+                                                <TextField fx:id="txtCoordinateG59X" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59Y" mnemonicParsing="false" text="Y" />
+                                                <TextField fx:id="txtCoordinateG59Y" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59Z" mnemonicParsing="false" text="Z" />
+                                                <TextField fx:id="txtCoordinateG59Z" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59A" mnemonicParsing="false" text="A" />
+                                                <TextField fx:id="txtCoordinateG59A" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59B" mnemonicParsing="false" text="B" />
+                                                <TextField fx:id="txtCoordinateG59B" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59C" mnemonicParsing="false" text="C" />
+                                                <TextField fx:id="txtCoordinateG59C" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59U" mnemonicParsing="false" text="U" />
+                                                <TextField fx:id="txtCoordinateG59U" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59V" mnemonicParsing="false" text="V" />
+                                                <TextField fx:id="txtCoordinateG59V" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                            <children>
+                                                <CheckBox fx:id="chkCoordinateG59W" mnemonicParsing="false" text="W" />
+                                                <TextField fx:id="txtCoordinateG59W" HBox.hgrow="ALWAYS" />
+                                            </children>
+                                        </HBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </GridPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabToolOffset" text="Tool Offset">
+            <content>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label fx:id="lblToolOffset" text="Tool" />
+                        <TextArea fx:id="txtToolOffset" VBox.vgrow="ALWAYS" />
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </VBox>
+            </content>
+        </Tab>
+        <Tab fx:id="tabVariables" text="Variables">
+            <content>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label fx:id="lblVariables" text="Variables" />
+                        <TextArea fx:id="txtVariables" VBox.vgrow="ALWAYS" />
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </VBox>
+            </content>
+        </Tab>
+        <Tab fx:id="tabToolChange" text="Tool Change">
+            <content>
+                <VBox spacing="5.0">
+                    <children>
+                        <CheckBox fx:id="chkToolChangeProgram" mnemonicParsing="false" text="Tool Change Program Call" />
+                        <CheckBox fx:id="chkToolChangeXY" mnemonicParsing="false" text="Includes XY" />
+                        <Group>
+                            <children>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblToolChangeProgram" text="Program Number" />
+                                        <TextField fx:id="txtToolChangeProgram" prefWidth="100.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </Group>
+                        <Separator prefWidth="200.0" />
+                        <CheckBox fx:id="chkToolChangeMCode" mnemonicParsing="false" text="Enable Tool Change M Code" />
+                        <Group>
+                            <children>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblToolChangeMCode" text="M code number" />
+                                        <TextField fx:id="txtToolChangeMCode" prefWidth="100.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </Group>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </VBox>
+            </content>
+        </Tab>
+        <Tab fx:id="tabSkipFunction" text="Skip Function">
+            <content>
+                <VBox spacing="5.0">
+                    <children>
+                        <CheckBox fx:id="chkSkipFunctionProgram" mnemonicParsing="false" text="Skip Function Program Call" />
+                        <Group>
+                            <children>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <Label fx:id="lblSkipFunctionProgram" text="Program Number" />
+                                        <TextField fx:id="txtSkipFunctionProgram" prefWidth="100.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </Group>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </VBox>
+            </content>
+        </Tab>
+      <Tab fx:id="tabLadder" text="Ladder">
+         <content>
+            <HBox spacing="5.0">
+               <children>
+                  <VBox spacing="5.0">
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblLadderSequenceCode" text="Sequence Code" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderN" text="N" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderN1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderN2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblLadderPreparatoryCode" text="Preparatory Code" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderG" text="G" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderG1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderG2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblLadderDimensionCode" text="Dimension Code" />
+                              <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+                                 <content>
+                                    <VBox spacing="5.0">
+                                       <children>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderX" text="X" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderX1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderX2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderY" text="Y" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderY1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderY2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderZ" text="Z" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderZ1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderZ2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderA" text="A" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderA1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderA2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderB" text="B" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderB1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderB2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderC" text="C" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderC1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderC2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderU" text="U" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderU1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderU2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderV" text="V" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderV1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderV2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                             <children>
+                                                <Label fx:id="lblLadderW" text="W" textOverrun="CLIP" />
+                                                <TextField fx:id="txtLadderW1" HBox.hgrow="SOMETIMES" />
+                                                <TextField fx:id="txtLadderW2" HBox.hgrow="SOMETIMES" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0">
+                     <children>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblLadderAuxiliaryCode" text="Auxiliary Code" />
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderM" text="M" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderM1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderM2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderR" text="R" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderR1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderR2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderI" text="I" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderI1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderI2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderJ" text="J" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderJ1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderJ2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderK" text="K" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderK1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderK2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblLadderFeedrateCode" text="Feedrate Code" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderF" text="F" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderF1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderF2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblLadderSpindleCode" text="Spindle Code" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderS" text="S" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderS1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderS2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                        <VBox spacing="5.0">
+                           <children>
+                              <Label fx:id="lblLadderToolCode" text="Tool Code" />
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0">
+                                       <children>
+                                          <Label fx:id="lblLadderT" text="T" textOverrun="CLIP" />
+                                          <TextField fx:id="txtLadderT1" HBox.hgrow="SOMETIMES" />
+                                          <TextField fx:id="txtLadderT2" HBox.hgrow="SOMETIMES" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+         </content>
+      </Tab>
+        <Tab fx:id="tabOption" text="Option">
+            <content>
+                <GridPane hgap="5.0" vgap="5.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true">
+                            <content>
+                                <VBox spacing="5.0">
+                                    <children>
+                                        <CheckBox fx:id="chkOptionOptimization" mnemonicParsing="false" text="Optimization" />
+                                        <CheckBox fx:id="chkOptionExComment" mnemonicParsing="false" text="Expanded Comments" />
+                                        <CheckBox fx:id="chkOptionDisable30033004" mnemonicParsing="false" text="Disable #3003 And #3004" />
+                                        <CheckBox fx:id="chkOptionReplace3006M0" mnemonicParsing="false" text="Replace #3006 To M0" />
+                                        <CheckBox fx:id="chkOptionOnlyS" mnemonicParsing="false" text="M3 Added When S Instruction Only" />
+                                        <CheckBox fx:id="chkOptionRS274NGC" mnemonicParsing="false" text="RS274/NGC" />
+                                        <CheckBox fx:id="chkOptionDebugJson" mnemonicParsing="false" text="Debug JSON" />
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+                        <VBox spacing="5.0" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblOptionMaxFeedRate" text="Maximum Feed Rate" />
+                                <TextArea fx:id="txtOptionMaxFeedRate" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblOptionMaxRevolution" text="Maximum Revolutions" />
+                                <TextArea fx:id="txtOptionMaxRevolution" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                            <children>
+                                <Label fx:id="lblOptionStartProgram" text="Start Execution" />
+                                <TextArea fx:id="txtOptionStartProgram" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <children>
+                                <Label fx:id="lblOptionBlockProgram" text="Block Execution" />
+                                <TextArea fx:id="txtOptionBlockProgram" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <children>
+                                <Label fx:id="lblOptionEndProgram" text="End Execution" />
+                                <TextArea fx:id="txtOptionEndProgram" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                </GridPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
