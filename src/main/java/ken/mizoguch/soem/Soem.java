@@ -147,7 +147,7 @@ public class Soem implements SoemPlugin {
 
             Integer Index;
             String Name;
-            Integer OoutputBits;
+            Integer OutputBits;
             Integer InputBits;
             Integer State;
             Integer ALStatusCode;
@@ -485,7 +485,7 @@ public class Soem implements SoemPlugin {
                             slave = info.newSlave();
                             slave.Index = cnt;
                             slave.Name = context.slavelist[cnt].name.get();
-                            slave.OoutputBits = context.slavelist[cnt].Obits.get();
+                            slave.OutputBits = context.slavelist[cnt].Obits.get();
                             slave.InputBits = context.slavelist[cnt].Ibits.get();
                             slave.State = context.slavelist[cnt].state.get();
                             slave.PropagationDelay = context.slavelist[cnt].pdelay.get();
