@@ -159,5 +159,5 @@ ex)
 [***.ngc] : 出力ファイル  
 8. Open [debugger] -> [index.html] in the [web] folder  
 [web] フォルダの中の [debugger]->[index.html] を開く  
-9. [***. dbg] Select file
-[***. dbg] ファイルを選択
+9. [***. dbg] Select file  
+[***. dbg] ファイルを選択  
