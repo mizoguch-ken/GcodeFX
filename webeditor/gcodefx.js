@@ -621,19 +621,6 @@ env.editor.commands.addCommands([{
 	exec: function(editor) {
 		editor.setFontSize(12);
 	}
-}, {
-	name: "find2",
-	bindKey: {win: "Ctrl-Shift-F", mac: "Command-Shift-F"},
-	exec: function(editor) {
-		config.loadModule("ace/ext/searchbox2", function(e) {e.Search2(editor)});
-	},
-    readOnly: true
-}, {
-    name: "replace2",
-    bindKey: {win: "Ctrl-Shift-H", mac: "Command-Shift-H"},
-    exec: function(editor) {
-        config.loadModule("ace/ext/searchbox2", function(e) {e.Search2(editor, true)});
-    }
 }]);
 
 
