@@ -377,6 +377,7 @@ public class LadderGrid {
     public boolean setBlock(Ladders.LADDER_BLOCK block) {
         if (block_ != block) {
             block_ = block;
+            blockScript_ = LADDER_GRID_INITIAL_BLOCK_SCRIPT;
             return true;
         }
         return false;
