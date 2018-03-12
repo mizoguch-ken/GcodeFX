@@ -18,11 +18,12 @@ public class LadderJsonLadder {
     private final String name;
     private final Integer column;
     private final Integer row;
-    private final String address;           // *
-    private final String comment;           // *
-    private final Integer columnIndex;      // *
-    private final Integer rowIndex;         // *
+    private final String address;           // *history
+    private final String comment;           // *history
+    private final Integer columnIndex;      // *history
+    private final Integer rowIndex;         // *history
     private List<LadderJsonBlock> blocks;
+    private List<LadderJsonComment> comments;   // local comments
 
     /**
      *
@@ -41,6 +42,7 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
+        this.comments = null;
     }
 
     /**
@@ -57,6 +59,7 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
+        this.comments = null;
     }
 
     /**
@@ -74,6 +77,7 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
+        this.comments = null;
     }
 
     /**
@@ -92,6 +96,7 @@ public class LadderJsonLadder {
         this.columnIndex = columnIndex;
         this.rowIndex = rowIndex;
         this.blocks = null;
+        this.comments = null;
     }
 
     /**
@@ -109,6 +114,7 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
+        this.comments = null;
     }
 
     /**
@@ -205,6 +211,36 @@ public class LadderJsonLadder {
         if (blocks != null) {
             blocks.sort((o1, o2) -> {
                 return (o1.getColumnIndex() + (o1.getRowIndex() * column)) - (o2.getColumnIndex() + (o2.getRowIndex() * column));
+            });
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<LadderJsonComment> getComments() {
+        return comments;
+    }
+
+    /**
+     *
+     * @param comment
+     */
+    public void addComment(LadderJsonComment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
+
+    /**
+     *
+     */
+    public void sortComments() {
+        if (comments != null) {
+            comments.sort((o1, o2) -> {
+                return o1.getAddress().compareTo(o2.getAddress());
             });
         }
     }
