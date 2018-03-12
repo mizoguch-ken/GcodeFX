@@ -23,6 +23,7 @@ import static javafx.scene.layout.GridPane.setColumnIndex;
 import static javafx.scene.layout.GridPane.setRowIndex;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import static ken.mizoguch.ladders.LadderGrid.LADDER_GRID_INITIAL_COMMENT;
 
 /**
  *
@@ -1992,6 +1993,8 @@ public class LadderPane extends GridPane {
                                 // comment
                                 if (ladders_.isComment(mBlock[1])) {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                } else {
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
 
                                 // select
@@ -2021,6 +2024,8 @@ public class LadderPane extends GridPane {
                                 // comment
                                 if (ladders_.isComment(mBlock[1])) {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                } else {
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
 
                                 // function value
@@ -2067,6 +2072,8 @@ public class LadderPane extends GridPane {
                                     // comment
                                     if (ladders_.isComment(mBlock[1])) {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                    } else {
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                     }
                                 }
                                 break;
@@ -2109,6 +2116,8 @@ public class LadderPane extends GridPane {
                                     // comment
                                     if (ladders_.isComment(mBlock[1])) {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                    } else {
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                     }
 
                                     // function value
@@ -2152,6 +2161,8 @@ public class LadderPane extends GridPane {
                                     // comment
                                     if (ladders_.isComment(mBlock[1])) {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                    } else {
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                     }
 
                                     // function value
@@ -2206,6 +2217,8 @@ public class LadderPane extends GridPane {
                                 // comment
                                 if (ladderCommand_.blockChangeComment(ladder_, grid, gridPane, mInput[cInput])) {
                                     ladders_.changeComment(grid.getAddress(), mInput[cInput]);
+                                } else {
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
                                 break;
                             case SCRIPT:
@@ -2220,6 +2233,8 @@ public class LadderPane extends GridPane {
                                 // comment
                                 if (ladderCommand_.blockChangeComment(ladder_, grid, gridPane, mInput[cInput])) {
                                     ladders_.changeComment(grid.getAddress(), mInput[cInput]);
+                                } else {
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
                                 break;
                         }
