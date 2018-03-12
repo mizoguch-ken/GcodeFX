@@ -44,7 +44,6 @@ import javafx.stage.StageStyle;
 import ken.mizoguch.console.Console;
 import ken.mizoguch.soem.Soem;
 import ken.mizoguch.webviewer.plugin.gcodefx.LaddersPlugin;
-import ken.mizoguch.webviewer.plugin.WebViewerPlugin;
 import netscape.javascript.JSException;
 
 /**
@@ -52,9 +51,6 @@ import netscape.javascript.JSException;
  * @author mizoguch-ken
  */
 public class Ladders extends Service<Void> implements LaddersPlugin {
-
-    private WebViewerPlugin webViewer_;
-    private static final String FUNCTION_NAME = "ladder";
 
     public static final long LADDER_VIEW_REFRESH_CYCLE_TIME = TimeUnit.MILLISECONDS.toNanos(100);
     public static final int LADDER_DEFAULT_GRID_COLUMN = 10;
@@ -480,9 +476,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
     private void fileNotFound(Path file) {
         if (file != null) {
-            webViewer_.write(FUNCTION_NAME, LadderEnums.FILE_NOT_FOUND.toString() + ": " + file.toString(), true);
+            writeLog(LadderEnums.FILE_NOT_FOUND.toString() + ": " + file.toString(), true);
         } else {
-            webViewer_.write(FUNCTION_NAME, LadderEnums.FILE_NOT_FOUND.toString(), true);
+            writeLog(LadderEnums.FILE_NOT_FOUND.toString(), true);
         }
     }
 
@@ -675,7 +671,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      */
     public void ladderNew() {
         allClear();
-        ladderCommand_.ladderCreate(0, LadderEnums.LADDER.toString(), Ladders.LADDER_DEFAULT_GRID_COLUMN, Ladders.LADDER_DEFAULT_GRID_ROW, Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
+        ladderCommand_.ladderCreate(0, LadderEnums.LADDERS.toString(), Ladders.LADDER_DEFAULT_GRID_COLUMN, Ladders.LADDER_DEFAULT_GRID_ROW, Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
     }
 
     /**
@@ -683,7 +679,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @return
      */
     public boolean ladderNewTab() {
-        StringBuilder name = new StringBuilder(LadderEnums.LADDER.toString());
+        StringBuilder name = new StringBuilder(LadderEnums.LADDERS.toString());
         int index, size;
 
         for (index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
@@ -691,7 +687,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 break;
             }
             name.delete(0, name.length());
-            name.append(LadderEnums.LADDER.toString()).append(" ").append(index + 1);
+            name.append(LadderEnums.LADDERS.toString()).append(" ").append(index + 1);
         }
         LadderPane pane = ladderCommand_.ladderCreate(tabLadder.getTabs().size(), name.toString(), Ladders.LADDER_DEFAULT_GRID_COLUMN, Ladders.LADDER_DEFAULT_GRID_ROW, Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
         tabLadder.getSelectionModel().select(pane.getLadder().getIndex());
@@ -745,7 +741,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 setTitle();
                 return true;
             } else {
-                webViewer_.write(FUNCTION_NAME, LadderEnums.DUPLICATE_NAMES_ERROR.toString(), true);
+                writeLog(LadderEnums.DUPLICATE_NAMES_ERROR.toString(), true);
             }
         }
         return false;
@@ -1216,6 +1212,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         ladderCommand_ = new LadderCommand(stage_, icons_, this);
         ladderCommand_.setHistoryGeneration(historyGeneration_);
 
+        filePath_ = ladderPath;
         ladderPath = Paths.get(ladderPath.toUri().resolve("ladder.json"));
         if (Files.exists(ladderPath)) {
             // load and start
@@ -1502,5 +1499,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             scriptIoMap_.get(address).setValue(value);
             scriptIoMap_.get(address).setCycled(false);
         }
+    }
+
+    private void writeLog(final String msg, final boolean err) {
+        Console.write(LadderEnums.LADDER.toString(), msg, err);
     }
 }
