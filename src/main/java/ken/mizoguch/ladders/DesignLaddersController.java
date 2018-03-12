@@ -1050,7 +1050,7 @@ public class DesignLaddersController implements Initializable {
                 properties.setProperty("MENU_RECENT_FILE_9", menuFileRecentFile9.getText());
                 properties.setProperty("MENU_RECENT_FILE_10", menuFileRecentFile10.getText());
 
-                properties.storeToXML(Files.newOutputStream(propertyFile), LadderEnums.LADDER.toString());
+                properties.storeToXML(Files.newOutputStream(propertyFile), LadderEnums.LADDERS.toString());
                 return true;
             }
         } catch (IOException ex) {
