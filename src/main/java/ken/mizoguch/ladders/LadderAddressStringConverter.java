@@ -5,7 +5,6 @@
  */
 package ken.mizoguch.ladders;
 
-import java.util.concurrent.ConcurrentHashMap;
 import javafx.util.StringConverter;
 
 /**
@@ -14,15 +13,12 @@ import javafx.util.StringConverter;
  */
 public class LadderAddressStringConverter extends StringConverter<String> {
 
-    private final ConcurrentHashMap<String, LadderIo> ioMap_;
     private String value;
 
     /**
      *
-     * @param ioMap
      */
-    public LadderAddressStringConverter(ConcurrentHashMap<String, LadderIo> ioMap) {
-        ioMap_ = ioMap;
+    public LadderAddressStringConverter() {
         value = "";
     }
 
@@ -42,7 +38,7 @@ public class LadderAddressStringConverter extends StringConverter<String> {
         if (string != null) {
             string = string.trim();
             if ((!string.isEmpty()) && (!string.contains(" "))) {
-                if (!ioMap_.containsKey(string)) {
+                if (!(value.startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX) ^ string.startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX))) {
                     value = string;
                 }
             }
