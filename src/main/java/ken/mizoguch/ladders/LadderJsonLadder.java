@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class LadderJsonLadder {
 
-    private final Integer index;
+    private final Integer idx;
     private final String name;
     private final Integer column;
     private final Integer row;
@@ -23,17 +23,16 @@ public class LadderJsonLadder {
     private final Integer columnIndex;      // *history
     private final Integer rowIndex;         // *history
     private List<LadderJsonBlock> blocks;
-    private List<LadderJsonComment> comments;   // local comments
 
     /**
      *
-     * @param index
+     * @param idx
      * @param name
      * @param column
      * @param row
      */
-    public LadderJsonLadder(Integer index, String name, Integer column, Integer row) {
-        this.index = index;
+    public LadderJsonLadder(Integer idx, String name, Integer column, Integer row) {
+        this.idx = idx;
         this.name = name;
         this.column = column;
         this.row = row;
@@ -42,15 +41,14 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
-        this.comments = null;
     }
 
     /**
      *
-     * @param index
+     * @param idx
      */
-    public LadderJsonLadder(Integer index) {
-        this.index = index;
+    public LadderJsonLadder(Integer idx) {
+        this.idx = idx;
         this.name = null;
         this.column = null;
         this.row = null;
@@ -59,16 +57,15 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
-        this.comments = null;
     }
 
     /**
      *
-     * @param index
+     * @param idx
      * @param name
      */
-    public LadderJsonLadder(Integer index, String name) {
-        this.index = index;
+    public LadderJsonLadder(Integer idx, String name) {
+        this.idx = idx;
         this.name = name;
         this.column = null;
         this.row = null;
@@ -77,17 +74,16 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
-        this.comments = null;
     }
 
     /**
      *
-     * @param index
+     * @param idx
      * @param columnIndex
      * @param rowIndex
      */
-    public LadderJsonLadder(Integer index, Integer columnIndex, Integer rowIndex) {
-        this.index = index;
+    public LadderJsonLadder(Integer idx, Integer columnIndex, Integer rowIndex) {
+        this.idx = idx;
         this.name = null;
         this.column = null;
         this.row = null;
@@ -96,16 +92,16 @@ public class LadderJsonLadder {
         this.columnIndex = columnIndex;
         this.rowIndex = rowIndex;
         this.blocks = null;
-        this.comments = null;
     }
 
     /**
      *
+     * @param idx
      * @param address
      * @param comment
      */
-    public LadderJsonLadder(String address, String comment) {
-        this.index = null;
+    public LadderJsonLadder(Integer idx, String address, String comment) {
+        this.idx = idx;
         this.name = null;
         this.column = null;
         this.row = null;
@@ -114,15 +110,14 @@ public class LadderJsonLadder {
         this.columnIndex = null;
         this.rowIndex = null;
         this.blocks = null;
-        this.comments = null;
     }
 
     /**
      *
      * @return
      */
-    public Integer getIndex() {
-        return index;
+    public Integer getIdx() {
+        return idx;
     }
 
     /**
@@ -211,36 +206,6 @@ public class LadderJsonLadder {
         if (blocks != null) {
             blocks.sort((o1, o2) -> {
                 return (o1.getColumnIndex() + (o1.getRowIndex() * column)) - (o2.getColumnIndex() + (o2.getRowIndex() * column));
-            });
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public List<LadderJsonComment> getComments() {
-        return comments;
-    }
-
-    /**
-     *
-     * @param comment
-     */
-    public void addComment(LadderJsonComment comment) {
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
-        comments.add(comment);
-    }
-
-    /**
-     *
-     */
-    public void sortComments() {
-        if (comments != null) {
-            comments.sort((o1, o2) -> {
-                return o1.getAddress().compareTo(o2.getAddress());
             });
         }
     }
