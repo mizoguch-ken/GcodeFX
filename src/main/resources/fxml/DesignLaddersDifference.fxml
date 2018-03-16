@@ -4,8 +4,8 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
@@ -16,15 +16,15 @@
             <Label fx:id="labelIoLadderRevised" text="LadderRevised" textOverrun="CENTER_ELLIPSIS" />
             <SplitPane fx:id="splitIoLadderRevised" dividerPositions="0.382" VBox.vgrow="ALWAYS">
                <items>
-                  <TableView fx:id="tableIoRevised" editable="true" tableMenuButtonVisible="true">
-                     <columns>
-                        <TableColumn fx:id="tableIoAddressRevised" prefWidth="75.0" text="Address" />
-                        <TableColumn fx:id="tableIoCommentRevised" prefWidth="75.0" text="Comment" />
-                     </columns>
+                  <TreeTableView fx:id="treeTableIoRevised" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true">
+                    <columns>
+                      <TreeTableColumn fx:id="treeTableIoAddressRevised" prefWidth="75.0" text="Address" />
+                      <TreeTableColumn fx:id="treeTableIoCommentRevised" prefWidth="75.0" text="Comment" />
+                    </columns>
                      <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
-                  </TableView>
+                  </TreeTableView>
                   <TabPane fx:id="tabLadderRevised" tabClosingPolicy="UNAVAILABLE" />
                </items>
             </SplitPane>
@@ -36,15 +36,15 @@
             <Label fx:id="labelIoLadderOriginal" text="LadderOriginal" textOverrun="CENTER_ELLIPSIS" />
             <SplitPane fx:id="splitIoLadderOriginal" dividerPositions="0.382" VBox.vgrow="ALWAYS">
                <items>
-                  <TableView fx:id="tableIoOriginal" editable="true" tableMenuButtonVisible="true">
-                     <columns>
-                        <TableColumn fx:id="tableIoAddressOriginal" prefWidth="75.0" text="Address" />
-                        <TableColumn fx:id="tableIoCommentOriginal" prefWidth="75.0" text="Comment" />
-                     </columns>
+                  <TreeTableView fx:id="treeTableIoOriginal" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true">
+                    <columns>
+                      <TreeTableColumn fx:id="treeTableIoAddressOriginal" prefWidth="75.0" text="Address" />
+                      <TreeTableColumn fx:id="treeTableIoCommentOriginal" prefWidth="75.0" text="Comment" />
+                    </columns>
                      <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
-                  </TableView>
+                  </TreeTableView>
                   <TabPane fx:id="tabLadderOriginal" tabClosingPolicy="UNAVAILABLE" />
                </items>
             </SplitPane>
