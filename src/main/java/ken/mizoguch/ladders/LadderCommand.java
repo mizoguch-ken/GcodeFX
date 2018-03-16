@@ -9,15 +9,19 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -119,21 +123,21 @@ public class LadderCommand {
             try {
                 switch (history_.getCommand()) {
                     case CHANGE_ADDRESS:
-                        changeAddress(history_.getRevised().getAddress(), history_.getOriginal().getAddress());
+                        changeAddress(history_.getRevised().getIdx(), history_.getRevised().getAddress(), history_.getOriginal().getIdx(), history_.getOriginal().getAddress());
                         break;
                     case CHANGE_COMMENT:
-                        changeComment(history_.getOriginal().getAddress(), history_.getOriginal().getComment());
+                        changeComment(history_.getOriginal().getIdx(), history_.getOriginal().getAddress(), history_.getOriginal().getComment());
                         break;
                     case LADDER_CREATE:
-                        ladderRemove(history_.getRevised().getIndex());
+                        ladderRemove(history_.getRevised().getIdx() - 1);
                         break;
                     case LADDER_REMOVE:
-                        restoreBlocks(history_.getOriginal(), ladderCreate(history_.getOriginal().getIndex(), history_.getOriginal().getName(), history_.getOriginal().getColumn(), history_.getOriginal().getRow(), Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT), true);
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIndex());
+                        restoreBlocks(history_.getOriginal(), ladderCreate(history_.getOriginal().getIdx(), history_.getOriginal().getName(), history_.getOriginal().getColumn(), history_.getOriginal().getRow(), Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT), true);
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx());
                         break;
                     case LADDER_REMOVE_ROW:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIndex());
-                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIndex()).getContent();
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx());
+                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIdx() - 1).getContent();
                         pane = (LadderPane) scrollPane.getContent();
                         columnIndex = history_.getOriginal().getColumnIndex();
                         rowIndex = history_.getOriginal().getRowIndex();
@@ -150,8 +154,8 @@ public class LadderCommand {
                         }
                         break;
                     case LADDER_INSERT_ROW:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent();
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent();
                         pane = (LadderPane) scrollPane.getContent();
                         columnIndex = history_.getRevised().getColumnIndex();
                         rowIndex = history_.getRevised().getRowIndex();
@@ -167,28 +171,28 @@ public class LadderCommand {
                         }
                         break;
                     case LADDER_MOVE_LEFT:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                        ladderMoveRight(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent()).getContent()).getLadder());
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                        ladderMoveRight(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent()).getContent()).getLadder());
                         break;
                     case LADDER_MOVE_RIGHT:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                        ladderMoveLeft(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent()).getContent()).getLadder());
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                        ladderMoveLeft(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent()).getContent()).getLadder());
                         break;
                     case LADDER_CHANGE_NAME:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                        ladderChangeName((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent()).getContent(), history_.getOriginal().getName());
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                        ladderChangeName((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent()).getContent(), history_.getOriginal().getName());
                         break;
                     case BLOCK_CHANGE:
                         if (history_.getOriginal() != null) {
-                            ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIndex());
-                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIndex()).getContent();
+                            ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx() - 1);
+                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIdx() - 1).getContent();
                             pane = (LadderPane) scrollPane.getContent();
                             columnIndex = history_.getOriginal().getColumnIndex();
                             rowIndex = history_.getOriginal().getRowIndex();
                             grid = pane.getLadder().findGrid(columnIndex, rowIndex);
                         } else {
-                            ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent();
+                            ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent();
                             pane = (LadderPane) scrollPane.getContent();
                             columnIndex = history_.getRevised().getColumnIndex();
                             rowIndex = history_.getRevised().getRowIndex();
@@ -225,21 +229,21 @@ public class LadderCommand {
             try {
                 switch (history_.getCommand()) {
                     case CHANGE_ADDRESS:
-                        changeAddress(history_.getOriginal().getAddress(), history_.getRevised().getAddress());
+                        changeAddress(history_.getOriginal().getIdx(), history_.getOriginal().getAddress(), history_.getRevised().getIdx(), history_.getRevised().getAddress());
                         break;
                     case CHANGE_COMMENT:
-                        changeComment(history_.getRevised().getAddress(), history_.getRevised().getComment());
+                        changeComment(history_.getRevised().getIdx(), history_.getRevised().getAddress(), history_.getRevised().getComment());
                         break;
                     case LADDER_CREATE:
-                        restoreBlocks(history_.getRevised(), ladderCreate(history_.getRevised().getIndex(), history_.getRevised().getName(), history_.getRevised().getColumn(), history_.getRevised().getRow(), Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT), true);
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
+                        restoreBlocks(history_.getRevised(), ladderCreate(history_.getRevised().getIdx(), history_.getRevised().getName(), history_.getRevised().getColumn(), history_.getRevised().getRow(), Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT), true);
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
                         break;
                     case LADDER_REMOVE:
-                        ladderRemove(history_.getOriginal().getIndex());
+                        ladderRemove(history_.getOriginal().getIdx() - 1);
                         break;
                     case LADDER_REMOVE_ROW:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIndex());
-                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIndex()).getContent();
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx() - 1);
+                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIdx() - 1).getContent();
                         pane = (LadderPane) scrollPane.getContent();
                         columnIndex = history_.getOriginal().getColumnIndex();
                         rowIndex = history_.getOriginal().getRowIndex();
@@ -255,8 +259,8 @@ public class LadderCommand {
                         }
                         break;
                     case LADDER_INSERT_ROW:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent();
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                        scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent();
                         pane = (LadderPane) scrollPane.getContent();
                         columnIndex = history_.getRevised().getColumnIndex();
                         rowIndex = history_.getRevised().getRowIndex();
@@ -273,28 +277,28 @@ public class LadderCommand {
                         }
                         break;
                     case LADDER_MOVE_LEFT:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                        ladderMoveLeft(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent()).getContent()).getLadder());
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                        ladderMoveLeft(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent()).getContent()).getLadder());
                         break;
                     case LADDER_MOVE_RIGHT:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                        ladderMoveRight(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent()).getContent()).getLadder());
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                        ladderMoveRight(((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent()).getContent()).getLadder());
                         break;
                     case LADDER_CHANGE_NAME:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIndex());
-                        ladderChangeName((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIndex()).getContent()).getContent(), history_.getRevised().getName());
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx() - 1);
+                        ladderChangeName((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIdx() - 1).getContent()).getContent(), history_.getRevised().getName());
                         break;
                     case BLOCK_CHANGE:
                         if (history_.getRevised() != null) {
-                            ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIndex());
-                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIndex()).getContent();
+                            ladders_.getTabLadder().getSelectionModel().select(history_.getRevised().getIdx() - 1);
+                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getRevised().getIdx() - 1).getContent();
                             pane = (LadderPane) scrollPane.getContent();
                             columnIndex = history_.getRevised().getColumnIndex();
                             rowIndex = history_.getRevised().getRowIndex();
                             grid = pane.getLadder().findGrid(columnIndex, rowIndex);
                         } else {
-                            ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIndex());
-                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIndex()).getContent();
+                            ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx() - 1);
+                            scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIdx() - 1).getContent();
                             pane = (LadderPane) scrollPane.getContent();
                             columnIndex = history_.getOriginal().getColumnIndex();
                             rowIndex = history_.getOriginal().getRowIndex();
@@ -332,14 +336,16 @@ public class LadderCommand {
 
     /**
      *
+     * @param oldIdx
      * @param oldAddress
+     * @param newIdx
      * @param newAddress
      */
-    public void changeAddress(String oldAddress, String newAddress) {
+    public void changeAddress(int oldIdx, String oldAddress, int newIdx, String newAddress) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.CHANGE_ADDRESS);
-            history_.setOriginal(new LadderJsonLadder(oldAddress, null));
-            history_.setRevised(new LadderJsonLadder(newAddress, null));
+            history_.setOriginal(new LadderJsonLadder(oldIdx, oldAddress, null));
+            history_.setRevised(new LadderJsonLadder(newIdx, newAddress, null));
             if (checkDelta()) {
                 historyManager_.push(history_, historyGeneration_);
             }
@@ -351,18 +357,38 @@ public class LadderCommand {
         int index, size, index2, size2;
 
         synchronized (ladders_.getLock()) {
-            for (index = 0, size = ladders_.getLadders().length; index < size; index++) {
-                ladder = ladders_.getLadders()[index];
+            if (newIdx == Ladders.LADDER_GLOBAL_ADDRESS_INDEX) {
+                for (index = 0, size = ladders_.getLadders().length; index < size; index++) {
+                    ladder = ladders_.getLadders()[index];
+                    for (index2 = 0, size2 = ladder.getLadderGrids().size(); index2 < size2; index2++) {
+                        ladderGrid = ladder.getLadderGrids().get(index2);
+                        if (ladderGrid.getAddress().equals(oldAddress)) {
+                            ladderGrid.setAddress(newAddress);
+                        }
+                    }
+                }
+
+                for (index = 0, size = ladders_.getTabLadder().getTabs().size(); index < size; index++) {
+                    pane = ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(index).getContent()).getContent());
+                    ladder = pane.getLadder();
+                    for (index2 = 0, size2 = ladder.getLadderGrids().size(); index2 < size2; index2++) {
+                        ladderGrid = ladder.getLadderGrids().get(index2);
+                        if (ladderGrid.getAddress().equals(oldAddress)) {
+                            ladderGrid.setAddress(newAddress);
+                            pane.findGridPane(ladderGrid).changeAddress();
+                        }
+                    }
+                }
+            } else {
+                ladder = ladders_.getLadders()[newIdx - 1];
                 for (index2 = 0, size2 = ladder.getLadderGrids().size(); index2 < size2; index2++) {
                     ladderGrid = ladder.getLadderGrids().get(index2);
                     if (ladderGrid.getAddress().equals(oldAddress)) {
                         ladderGrid.setAddress(newAddress);
                     }
                 }
-            }
 
-            for (index = 0, size = ladders_.getTabLadder().getTabs().size(); index < size; index++) {
-                pane = ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(index).getContent()).getContent());
+                pane = ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(newIdx - 1).getContent()).getContent());
                 ladder = pane.getLadder();
                 for (index2 = 0, size2 = ladder.getLadderGrids().size(); index2 < size2; index2++) {
                     ladderGrid = ladder.getLadderGrids().get(index2);
@@ -373,52 +399,56 @@ public class LadderCommand {
                 }
             }
 
-            for (index = 0, size = ladders_.getTableIo().getItems().size(); index < size; index++) {
-                if (ladders_.getTableIo().getItems().get(index).getAddress().equals(oldAddress)) {
-                    ladders_.getTableIo().getItems().get(index).setAddress(newAddress);
+            ObservableList<TreeItem<LadderTreeTableIo>> ovNewLaddersAddress = ladders_.getTreeTableIo().getRoot().getChildren().get(newIdx).getChildren();
+            for (index = 0, size = ovNewLaddersAddress.size(); index < size; index++) {
+                if (ovNewLaddersAddress.get(index).getValue().getAddress().equals(oldAddress)) {
+                    ladders_.getTreeTableIo().getRoot().getChildren().get(newIdx).getChildren().get(index).getValue().setAddress(newAddress);
+                    break;
                 }
             }
 
-            if (ladders_.getIoMap().containsKey(oldAddress)) {
-                ladders_.getIoMap().get(oldAddress).setAddress(newAddress);
-                ladders_.getIoMap().put(newAddress, ladders_.getIoMap().get(oldAddress));
-                ladders_.getIoMap().remove(oldAddress);
+            if (ladders_.getIoMap().get(newIdx).containsKey(oldAddress)) {
+                ladders_.getIoMap().get(newIdx).get(oldAddress).setAddress(newAddress);
+                ladders_.getIoMap().get(newIdx).put(newAddress, ladders_.getIoMap().get(newIdx).get(oldAddress));
+                ladders_.getIoMap().get(newIdx).remove(oldAddress);
             }
 
-            if (ladders_.getCommentMap().containsKey(oldAddress)) {
-                ladders_.getCommentMap().put(newAddress, ladders_.getCommentMap().get(oldAddress));
-                ladders_.getCommentMap().remove(oldAddress);
+            if (ladders_.getCommentMap().get(newIdx).containsKey(oldAddress)) {
+                ladders_.getCommentMap().get(newIdx).put(newAddress, ladders_.getCommentMap().get(newIdx).get(oldAddress));
+                ladders_.getCommentMap().get(newIdx).remove(oldAddress);
             }
 
-            if (ladders_.getScriptIoMap().containsKey(oldAddress)) {
-                ladders_.getScriptIoMap().get(oldAddress).setAddress(newAddress);
-                ladders_.getScriptIoMap().put(newAddress, ladders_.getScriptIoMap().get(oldAddress));
-                ladders_.getScriptIoMap().remove(oldAddress);
+            if (ladders_.getScriptIoMap().get(newIdx).containsKey(oldAddress)) {
+                ladders_.getScriptIoMap().get(newIdx).get(oldAddress).setAddress(newAddress);
+                ladders_.getScriptIoMap().get(newIdx).put(newAddress, ladders_.getScriptIoMap().get(newIdx).get(oldAddress));
+                ladders_.getScriptIoMap().get(newIdx).remove(oldAddress);
             }
         }
     }
 
     /**
      *
+     * @param idx
      * @param address
      * @param comment
      * @return
      */
-    public boolean changeComment(String address, String comment) {
-        return changeComment(ladders_.getTabLadder(), ladders_.getTableIo(), ladders_.getIoMap(), ladders_.getCommentMap(), address, comment);
+    public boolean changeComment(int idx, String address, String comment) {
+        return changeComment(ladders_.getTabLadder(), ladders_.getTreeTableIo(), ladders_.getIoMap(), ladders_.getCommentMap(), idx, address, comment);
     }
 
     /**
      *
      * @param tabPane
-     * @param tableView
+     * @param treeTableView
      * @param ioMap
      * @param commentMap
+     * @param idx
      * @param address
      * @param comment
      * @return
      */
-    public boolean changeComment(TabPane tabPane, TableView<LadderTableIo> tableView, ConcurrentHashMap<String, LadderIo> ioMap, ConcurrentHashMap<String, String> commentMap, String address, String comment) {
+    public boolean changeComment(TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, int idx, String address, String comment) {
         String oldComment = "";
 
         if (comment == null) {
@@ -426,24 +456,24 @@ public class LadderCommand {
         }
 
         if (comment.isEmpty()) {
-            if (commentMap.containsKey(address)) {
-                oldComment = commentMap.get(address);
-                commentMap.remove(address);
+            if (commentMap.get(idx).containsKey(address)) {
+                oldComment = commentMap.get(idx).get(address);
+                commentMap.get(idx).remove(address);
             }
         } else {
-            if (commentMap.containsKey(address)) {
-                if (comment.equals(commentMap.get(address))) {
+            if (commentMap.get(idx).containsKey(address)) {
+                if (comment.equals(commentMap.get(idx).get(address))) {
                     return false;
                 }
-                oldComment = commentMap.get(address);
+                oldComment = commentMap.get(idx).get(address);
             }
-            commentMap.put(address, comment);
+            commentMap.get(idx).put(address, comment);
         }
 
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.CHANGE_COMMENT);
-            history_.setOriginal(new LadderJsonLadder(address, oldComment));
-            history_.setRevised(new LadderJsonLadder(address, comment));
+            history_.setOriginal(new LadderJsonLadder(idx, address, oldComment));
+            history_.setRevised(new LadderJsonLadder(idx, address, comment));
             if (checkDelta()) {
                 historyManager_.push(history_, historyGeneration_);
             }
@@ -451,19 +481,24 @@ public class LadderCommand {
 
         int index, size;
 
-        for (index = 0, size = tabPane.getTabs().size(); index < size; index++) {
-            ((LadderPane) ((ScrollPane) tabPane.getTabs().get(index).getContent()).getContent()).setComments(address, comment);
+        if (idx == Ladders.LADDER_GLOBAL_ADDRESS_INDEX) {
+            for (index = 0, size = tabPane.getTabs().size(); index < size; index++) {
+                ((LadderPane) ((ScrollPane) tabPane.getTabs().get(index).getContent()).getContent()).setComments(address, comment);
+            }
+        } else {
+            ((LadderPane) ((ScrollPane) tabPane.getTabs().get(idx - 1).getContent()).getContent()).setComments(address, comment);
         }
 
-        if (!ioMap.containsKey(address)) {
-            ioMap.put(address, new LadderIo(address));
-            tableView.getItems().add(new LadderTableIo(address, comment));
+        if (!ioMap.get(idx).containsKey(address)) {
+            ioMap.get(idx).put(address, new LadderIo(address));
+            treeTableView.getRoot().getChildren().get(idx).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address, comment)));
         }
-        ioMap.get(address).setComment(comment);
+        ioMap.get(idx).get(address).setComment(comment);
 
-        for (index = 0, size = tableView.getItems().size(); index < size; index++) {
-            if (tableView.getItems().get(index).getAddress().equals(address)) {
-                tableView.getItems().get(index).setComment(comment);
+        ObservableList<TreeItem<LadderTreeTableIo>> ovLaddersAddress = treeTableView.getRoot().getChildren().get(idx).getChildren();
+        for (index = 0, size = ovLaddersAddress.size(); index < size; index++) {
+            if (ovLaddersAddress.get(index).getValue().getAddress().equals(address)) {
+                ovLaddersAddress.get(index).getValue().setComment(comment);
             }
         }
         return true;
@@ -471,7 +506,7 @@ public class LadderCommand {
 
     /**
      *
-     * @param index
+     * @param idx
      * @param name
      * @param gridColumn
      * @param gridRow
@@ -481,15 +516,19 @@ public class LadderCommand {
      * @param gridContentsHight
      * @return
      */
-    public LadderPane ladderCreate(int index, String name, int gridColumn, int gridRow, double gridMinSize, double gridMaxSize, double gridContentsWidth, double gridContentsHight) {
-        return ladderCreate(ladders_, ladders_.getTabLadder(), index, name, gridColumn, gridRow, gridMinSize, gridMaxSize, gridContentsWidth, gridContentsHight);
+    public LadderPane ladderCreate(int idx, String name, int gridColumn, int gridRow, double gridMinSize, double gridMaxSize, double gridContentsWidth, double gridContentsHight) {
+        return ladderCreate(ladders_, ladders_.getTabLadder(), ladders_.getTreeTableIo(), ladders_.getIoMap(), ladders_.getCommentMap(), ladders_.getScriptIoMap(), idx, name, gridColumn, gridRow, gridMinSize, gridMaxSize, gridContentsWidth, gridContentsHight);
     }
 
     /**
      *
      * @param ladders
      * @param tabPane
-     * @param index
+     * @param treeTableView
+     * @param ioMap
+     * @param commentMap
+     * @param scriptIoMap
+     * @param idx
      * @param name
      * @param gridColumn
      * @param gridRow
@@ -499,14 +538,21 @@ public class LadderCommand {
      * @param gridContentsHight
      * @return
      */
-    public LadderPane ladderCreate(Ladders ladders, TabPane tabPane, int index, String name, int gridColumn, int gridRow, double gridMinSize, double gridMaxSize, double gridContentsWidth, double gridContentsHight) {
+    public LadderPane ladderCreate(Ladders ladders, TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> scriptIoMap, int idx, String name, int gridColumn, int gridRow, double gridMinSize, double gridMaxSize, double gridContentsWidth, double gridContentsHight) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_CREATE);
-            history_.setRevised(new LadderJsonLadder(index, name, gridColumn, gridRow));
+            history_.setRevised(new LadderJsonLadder(idx, name, gridColumn, gridRow));
             historyManager_.push(history_, historyGeneration_);
         }
 
-        LadderPane pane = new LadderPane(ladders, index, name, gridColumn, gridRow, gridMinSize, gridMaxSize, gridContentsWidth, gridContentsHight);
+        treeTableView.getRoot().getChildren().add(idx, new TreeItem<>(new LadderTreeTableIo(name.replace(" ", "_"), idx)));
+        ioMap.add(idx, new ConcurrentHashMap<>());
+        commentMap.add(idx, new ConcurrentHashMap<>());
+        if (scriptIoMap != null) {
+            scriptIoMap.add(idx, new ConcurrentHashMap<>());
+        }
+
+        LadderPane pane = new LadderPane(ladders, idx, name, gridColumn, gridRow, gridMinSize, gridMaxSize, gridContentsWidth, gridContentsHight);
         ScrollPane scrollPane = new ScrollPane(pane);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
@@ -523,7 +569,7 @@ public class LadderCommand {
                 ladders.onKeyPressed(pane, event, scrollPane);
             }
         });
-        tabPane.getTabs().add(index, new Tab(name, scrollPane));
+        tabPane.getTabs().add(idx - 1, new Tab(name, scrollPane));
         pane.startUp(stage_, icons_);
         return pane;
     }
@@ -536,17 +582,22 @@ public class LadderCommand {
         if (!isDisableHistory_ && !isBlockChanging_) {
             LadderPane pane = (LadderPane) ((ScrollPane) ladders_.getTabLadder().getSelectionModel().getSelectedItem().getContent()).getContent();
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_REMOVE);
-            history_.setOriginal(new LadderJsonLadder(pane.getLadder().getIndex(), pane.getLadder().getName(), pane.getLadder().getColumn(), pane.getLadder().getRow()));
+            history_.setOriginal(new LadderJsonLadder(pane.getLadder().getIdx(), pane.getLadder().getName(), pane.getLadder().getColumn(), pane.getLadder().getRow()));
             backupBlocks(history_.getOriginal(), pane);
             if (checkDelta()) {
                 historyManager_.push(history_, historyGeneration_);
             }
         }
 
+        ladders_.getTreeTableIo().getRoot().getChildren().remove(tabIndex + 1);
+        ladders_.getIoMap().remove(tabIndex + 1);
+        ladders_.getCommentMap().remove(tabIndex + 1);
+        ladders_.getScriptIoMap().remove(tabIndex + 1);
+
         int index, size;
 
         for (index = ladders_.getTabLadder().getSelectionModel().getSelectedIndex() + 1, size = ladders_.getTabLadder().getTabs().size(); index < size; index++) {
-            ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(index).getContent()).getContent()).getLadder().setIndex(index - 1);
+            ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(index).getContent()).getContent()).getLadder().setIdx(index);
         }
         ladders_.getTabLadder().getTabs().remove(tabIndex);
     }
@@ -563,7 +614,7 @@ public class LadderCommand {
         if (ladder.getRow() > 2) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_REMOVE_ROW);
-                history_.setOriginal(new LadderJsonLadder(pane.getLadder().getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setOriginal(new LadderJsonLadder(pane.getLadder().getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 backupBlocksRow(history_.getOriginal(), pane, grid.getRowIndex());
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
@@ -645,7 +696,7 @@ public class LadderCommand {
 
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_INSERT_ROW);
-                history_.setRevised(new LadderJsonLadder(pane.getLadder().getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setRevised(new LadderJsonLadder(pane.getLadder().getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
                 }
@@ -700,7 +751,7 @@ public class LadderCommand {
         } else {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_INSERT_ROW);
-                history_.setRevised(new LadderJsonLadder(pane.getLadder().getIndex(), 0, ladder.getRow()));
+                history_.setRevised(new LadderJsonLadder(pane.getLadder().getIdx(), 0, ladder.getRow()));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
                 }
@@ -738,22 +789,22 @@ public class LadderCommand {
      * @param ladder
      */
     public void ladderMoveLeft(Ladder ladder) {
-        int index = ladder.getIndex();
+        int idx = ladder.getIdx();
 
-        if (index > 0) {
+        if (idx > 1) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_MOVE_LEFT);
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex()));
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx()));
             }
 
-            ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(index - 1).getContent()).getContent()).getLadder().setIndex(index);
-            ladder.setIndex(index - 1);
+            ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(idx - 2).getContent()).getContent()).getLadder().setIdx(idx);
+            ladder.setIdx(idx - 1);
             ladders_.getTabLadder().getTabs().sort((o1, o2) -> {
-                return ((LadderPane) ((ScrollPane) o1.getContent()).getContent()).getLadder().getIndex() - ((LadderPane) ((ScrollPane) o2.getContent()).getContent()).getLadder().getIndex();
+                return ((LadderPane) ((ScrollPane) o1.getContent()).getContent()).getLadder().getIdx() - ((LadderPane) ((ScrollPane) o2.getContent()).getContent()).getLadder().getIdx();
             });
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx()));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
                 }
@@ -766,24 +817,22 @@ public class LadderCommand {
      * @param ladder
      */
     public void ladderMoveRight(Ladder ladder) {
-        int index = ladder.getIndex();
-        int size = ladders_.getTabLadder().getTabs().size();
+        int idx = ladder.getIdx();
 
-        if (index < (size - 1)) {
+        if (idx < ladders_.getTabLadder().getTabs().size()) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_MOVE_RIGHT);
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex()));
-
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx()));
             }
 
-            ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(index + 1).getContent()).getContent()).getLadder().setIndex(index);
-            ladder.setIndex(index + 1);
+            ((LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(idx).getContent()).getContent()).getLadder().setIdx(idx);
+            ladder.setIdx(idx + 1);
             ladders_.getTabLadder().getTabs().sort((o1, o2) -> {
-                return ((LadderPane) ((ScrollPane) o1.getContent()).getContent()).getLadder().getIndex() - ((LadderPane) ((ScrollPane) o2.getContent()).getContent()).getLadder().getIndex();
+                return ((LadderPane) ((ScrollPane) o1.getContent()).getContent()).getLadder().getIdx() - ((LadderPane) ((ScrollPane) o2.getContent()).getContent()).getLadder().getIdx();
             });
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx()));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
                 }
@@ -800,22 +849,22 @@ public class LadderCommand {
         if (!pane.getLadder().getName().equals(name)) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.LADDER_CHANGE_NAME);
-                history_.setOriginal(new LadderJsonLadder(pane.getLadder().getIndex(), pane.getLadder().getName()));
+                history_.setOriginal(new LadderJsonLadder(pane.getLadder().getIdx(), pane.getLadder().getName()));
             }
 
             pane.getLadder().setName(name);
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(pane.getLadder().getIndex(), pane.getLadder().getName()));
+                history_.setRevised(new LadderJsonLadder(pane.getLadder().getIdx(), pane.getLadder().getName()));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
                 }
             }
         }
         if (pane.isChanged()) {
-            ladders_.getTabLadder().getTabs().get(pane.getLadder().getIndex()).setText(name + " *");
+            ladders_.getTabLadder().getTabs().get(pane.getLadder().getIdx() - 1).setText(name + " *");
         } else {
-            ladders_.getTabLadder().getTabs().get(pane.getLadder().getIndex()).setText(name);
+            ladders_.getTabLadder().getTabs().get(pane.getLadder().getIdx() - 1).setText(name);
         }
     }
 
@@ -838,7 +887,7 @@ public class LadderCommand {
         if (grid.getBlock() != Ladders.LADDER_BLOCK.CONTENTS) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getOriginal().addBlock(backupBlock(grid));
             }
 
@@ -852,7 +901,7 @@ public class LadderCommand {
             }
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getRevised().addBlock(backupBlock(grid));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
@@ -1560,7 +1609,7 @@ public class LadderCommand {
     public boolean blockChangeOriginal(Ladder ladder, LadderGrid grid) {
         if (!isDisableHistory_ && isBlockChanging_) {
             if (history_.getOriginal() == null) {
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             }
             history_.getOriginal().addBlock(backupBlock(grid));
             return true;
@@ -1577,7 +1626,7 @@ public class LadderCommand {
     public boolean blockChangeRevised(Ladder ladder, LadderGrid grid) {
         if (!isDisableHistory_ && isBlockChanging_) {
             if (history_.getRevised() == null) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             }
             history_.getRevised().addBlock(backupBlock(grid));
             return true;
@@ -1642,7 +1691,7 @@ public class LadderCommand {
     public void blockChangeVerticalOrVertical(Ladder ladder, LadderGrid previousGrid, LadderGridPane previousGridPane, LadderGrid grid, LadderGridPane gridPane, boolean isVertical) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
+            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
             history_.getOriginal().addBlock(backupBlock(grid));
             history_.getOriginal().addBlock(backupBlock(previousGrid));
         }
@@ -1661,7 +1710,7 @@ public class LadderCommand {
         }
 
         if (!isDisableHistory_ && !isBlockChanging_) {
-            history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getRevised().addBlock(backupBlock(grid));
             history_.getRevised().addBlock(backupBlock(previousGrid));
             if (checkDelta()) {
@@ -1682,7 +1731,7 @@ public class LadderCommand {
     public void blockChangeVerticalVerticalOr(Ladder ladder, LadderGrid previousGrid, LadderGridPane previousGridPane, LadderGrid grid, LadderGridPane gridPane, boolean isVertical) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
+            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
             history_.getOriginal().addBlock(backupBlock(grid));
             history_.getOriginal().addBlock(backupBlock(previousGrid));
         }
@@ -1701,7 +1750,7 @@ public class LadderCommand {
         }
 
         if (!isDisableHistory_ && !isBlockChanging_) {
-            history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getRevised().addBlock(backupBlock(grid));
             history_.getRevised().addBlock(backupBlock(previousGrid));
             if (checkDelta()) {
@@ -1720,7 +1769,7 @@ public class LadderCommand {
     public void blockChangeVertical(Ladder ladder, LadderGrid grid, LadderGridPane gridPane, boolean isVertical) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getOriginal().addBlock(backupBlock(grid));
         }
 
@@ -1734,7 +1783,7 @@ public class LadderCommand {
         }
 
         if (!isDisableHistory_ && !isBlockChanging_) {
-            history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getRevised().addBlock(backupBlock(grid));
             if (checkDelta()) {
                 historyManager_.push(history_, historyGeneration_);
@@ -1752,7 +1801,7 @@ public class LadderCommand {
     public void blockChangeVerticalOr(Ladder ladder, LadderGrid grid, LadderGridPane gridPane, boolean isVertical) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getOriginal().addBlock(backupBlock(grid));
         }
 
@@ -1766,7 +1815,7 @@ public class LadderCommand {
         }
 
         if (!isDisableHistory_ && !isBlockChanging_) {
-            history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getRevised().addBlock(backupBlock(grid));
             if (checkDelta()) {
                 historyManager_.push(history_, historyGeneration_);
@@ -1785,7 +1834,7 @@ public class LadderCommand {
     public void blockChangeConnectLineLeft(Ladder ladder, LadderGrid previousGrid, LadderGrid grid, LadderGridPane gridPane, boolean isConnect) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
+            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
             history_.getOriginal().addBlock(backupBlock(grid));
             history_.getOriginal().addBlock(backupBlock(previousGrid));
         }
@@ -1804,7 +1853,7 @@ public class LadderCommand {
         }
 
         if (!isDisableHistory_ && !isBlockChanging_) {
-            history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getRevised().addBlock(backupBlock(grid));
             history_.getRevised().addBlock(backupBlock(previousGrid));
             if (checkDelta()) {
@@ -1824,7 +1873,7 @@ public class LadderCommand {
     public void blockChangeConnectLineRight(Ladder ladder, LadderGrid previousGrid, LadderGrid grid, LadderGridPane previousGridPane, boolean isConnect) {
         if (!isDisableHistory_ && !isBlockChanging_) {
             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
+            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), previousGrid.getColumnIndex(), previousGrid.getRowIndex()));
             history_.getOriginal().addBlock(backupBlock(grid));
             history_.getOriginal().addBlock(backupBlock(previousGrid));
         }
@@ -1843,7 +1892,7 @@ public class LadderCommand {
         }
 
         if (!isDisableHistory_ && !isBlockChanging_) {
-            history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+            history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
             history_.getRevised().addBlock(backupBlock(grid));
             history_.getRevised().addBlock(backupBlock(previousGrid));
             if (checkDelta()) {
@@ -1864,7 +1913,7 @@ public class LadderCommand {
         if (!grid.getBlock().equals(block)) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getOriginal().addBlock(backupBlock(grid));
             }
 
@@ -1878,7 +1927,7 @@ public class LadderCommand {
             }
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getRevised().addBlock(backupBlock(grid));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
@@ -1901,7 +1950,7 @@ public class LadderCommand {
         if (!grid.getAddress().equals(address)) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getOriginal().addBlock(backupBlock(grid));
             }
 
@@ -1916,7 +1965,7 @@ public class LadderCommand {
             }
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getRevised().addBlock(backupBlock(grid));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
@@ -1939,7 +1988,7 @@ public class LadderCommand {
         if (!grid.getComment().equals(comment)) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getOriginal().addBlock(backupBlock(grid));
             }
 
@@ -1953,7 +2002,7 @@ public class LadderCommand {
             }
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getRevised().addBlock(backupBlock(grid));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
@@ -1984,7 +2033,7 @@ public class LadderCommand {
                     if (!blockFunctions.get(i).address.equals(grid.getBlockFunctions()[i].getAddress())) {
                         if (!changed && !isDisableHistory_ && !isBlockChanging_) {
                             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                             history_.getOriginal().addBlock(backupBlock(grid));
                         }
 
@@ -1998,7 +2047,7 @@ public class LadderCommand {
                     if ((blockFunctions.get(i).value != grid.getBlockFunctions()[i].getValue()) || (blockFunctions.get(i).radix != grid.getBlockFunctions()[i].getRadix())) {
                         if (!isDisableHistory_ && !isBlockChanging_) {
                             history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                            history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                            history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                             history_.getOriginal().addBlock(backupBlock(grid));
                         }
 
@@ -2023,7 +2072,7 @@ public class LadderCommand {
                 }
 
                 if (!isDisableHistory_ && !isBlockChanging_) {
-                    history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                    history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                     history_.getRevised().addBlock(backupBlock(grid));
                     if (checkDelta()) {
                         historyManager_.push(history_, historyGeneration_);
@@ -2051,7 +2100,7 @@ public class LadderCommand {
                 if ((grid.getBlockFunctions()[index].getValue() != Double.parseDouble(mRealNumber.group(1))) || (grid.getBlockFunctions()[index].getRadix() != 10)) {
                     if (!isDisableHistory_ && !isBlockChanging_) {
                         history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                        history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                        history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                         history_.getOriginal().addBlock(backupBlock(grid));
                     }
 
@@ -2067,7 +2116,7 @@ public class LadderCommand {
                     }
 
                     if (!isDisableHistory_ && !isBlockChanging_) {
-                        history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                        history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                         history_.getRevised().addBlock(backupBlock(grid));
                         if (checkDelta()) {
                             historyManager_.push(history_, historyGeneration_);
@@ -2079,7 +2128,7 @@ public class LadderCommand {
                 if ((grid.getBlockFunctions()[index].getValue() != Long.parseLong(mRealNumber.group(2), 16)) || (grid.getBlockFunctions()[index].getRadix() != 16)) {
                     if (!isDisableHistory_ && !isBlockChanging_) {
                         history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                        history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                        history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                         history_.getOriginal().addBlock(backupBlock(grid));
                     }
 
@@ -2095,7 +2144,7 @@ public class LadderCommand {
                     }
 
                     if (!isDisableHistory_ && !isBlockChanging_) {
-                        history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                        history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                         history_.getRevised().addBlock(backupBlock(grid));
                         if (checkDelta()) {
                             historyManager_.push(history_, historyGeneration_);
@@ -2107,7 +2156,7 @@ public class LadderCommand {
                 if ((grid.getBlockFunctions()[index].getValue() != Long.parseLong(mRealNumber.group(3), 2)) || (grid.getBlockFunctions()[index].getRadix() != 2)) {
                     if (!isDisableHistory_ && !isBlockChanging_) {
                         history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                        history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                        history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                         history_.getOriginal().addBlock(backupBlock(grid));
                     }
 
@@ -2123,7 +2172,7 @@ public class LadderCommand {
                     }
 
                     if (!isDisableHistory_ && !isBlockChanging_) {
-                        history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                        history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                         history_.getRevised().addBlock(backupBlock(grid));
                         if (checkDelta()) {
                             historyManager_.push(history_, historyGeneration_);
@@ -2136,7 +2185,7 @@ public class LadderCommand {
             if (!functionValue.equals(grid.getBlockFunctions()[index].getAddress())) {
                 if (!isDisableHistory_ && !isBlockChanging_) {
                     history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                    history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                    history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                     history_.getOriginal().addBlock(backupBlock(grid));
                 }
 
@@ -2151,7 +2200,7 @@ public class LadderCommand {
                 }
 
                 if (!isDisableHistory_ && !isBlockChanging_) {
-                    history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                    history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                     history_.getRevised().addBlock(backupBlock(grid));
                     if (checkDelta()) {
                         historyManager_.push(history_, historyGeneration_);
@@ -2175,7 +2224,7 @@ public class LadderCommand {
         if (!script.equals(grid.getBlockScript())) {
             if (!isDisableHistory_ && !isBlockChanging_) {
                 history_ = new LadderHistory(Ladders.LADDER_COMMAND.BLOCK_CHANGE);
-                history_.setOriginal(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setOriginal(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getOriginal().addBlock(backupBlock(grid));
             }
 
@@ -2189,7 +2238,7 @@ public class LadderCommand {
             }
 
             if (!isDisableHistory_ && !isBlockChanging_) {
-                history_.setRevised(new LadderJsonLadder(ladder.getIndex(), grid.getColumnIndex(), grid.getRowIndex()));
+                history_.setRevised(new LadderJsonLadder(ladder.getIdx(), grid.getColumnIndex(), grid.getRowIndex()));
                 history_.getRevised().addBlock(backupBlock(grid));
                 if (checkDelta()) {
                     historyManager_.push(history_, historyGeneration_);
@@ -2225,7 +2274,7 @@ public class LadderCommand {
      */
     public LadderJsonLadder backupLadder(LadderPane pane) {
         Ladder ladder = pane.getLadder();
-        LadderJsonLadder jsonLadder = new LadderJsonLadder(ladder.getIndex(), ladder.getName(), ladder.getColumn(), ladder.getRow());
+        LadderJsonLadder jsonLadder = new LadderJsonLadder(ladder.getIdx(), ladder.getName(), ladder.getColumn(), ladder.getRow());
         backupBlocks(jsonLadder, pane);
         return jsonLadder;
     }
@@ -2362,10 +2411,12 @@ public class LadderCommand {
      * @param ioMap
      * @param commentMap
      */
-    public void backupComments(LadderJson ladderJson, ConcurrentHashMap<String, LadderIo> ioMap, ConcurrentHashMap<String, String> commentMap) {
-        commentMap.entrySet().forEach((entry) -> {
-            ladderJson.addComment(new LadderJsonComment(entry.getKey(), entry.getValue(), ioMap.get(entry.getKey()).getValue()));
-        });
+    public void backupComments(LadderJson ladderJson, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap) {
+        for (int idx = 0; idx < commentMap.size(); idx++) {
+            for (Map.Entry<String, String> entry : commentMap.get(idx).entrySet()) {
+                ladderJson.addComment(new LadderJsonComment(idx, entry.getKey(), entry.getValue(), ioMap.get(idx).get(entry.getKey()).getValue()));
+            }
+        }
         ladderJson.sortComments();
     }
 
@@ -2376,18 +2427,22 @@ public class LadderCommand {
      * @return
      */
     public boolean restoreLadders(LadderJson ladderJson, boolean isEditing) {
-        return restoreLadders(ladders_, ladders_.getTabLadder(), ladderJson, isEditing);
+        return restoreLadders(ladders_, ladders_.getTabLadder(), ladders_.getTreeTableIo(), ladders_.getIoMap(), ladders_.getCommentMap(), ladders_.getScriptIoMap(), ladderJson, isEditing);
     }
 
     /**
      *
      * @param ladders
      * @param tabPane
+     * @param treeTableView
+     * @param ioMap
+     * @param commentMap
+     * @param scriptIoMap
      * @param ladderJson
      * @param isEditing
      * @return
      */
-    public boolean restoreLadders(Ladders ladders, TabPane tabPane, LadderJson ladderJson, boolean isEditing) {
+    public boolean restoreLadders(Ladders ladders, TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> scriptIoMap, LadderJson ladderJson, boolean isEditing) {
         if (ladderJson.getLadders() != null) {
             LadderJsonLadder jsonLadder;
             int index, size;
@@ -2395,7 +2450,7 @@ public class LadderCommand {
             for (index = 0, size = ladderJson.getLadders().size(); index < size; index++) {
                 jsonLadder = ladderJson.getLadders().get(index);
 
-                if (!restoreLadder(ladders, tabPane, jsonLadder, isEditing)) {
+                if (!restoreLadder(ladders, tabPane, treeTableView, ioMap, commentMap, scriptIoMap, jsonLadder, isEditing)) {
                     return false;
                 }
             }
@@ -2407,16 +2462,20 @@ public class LadderCommand {
      *
      * @param ladders
      * @param tabPane
+     * @param treeTableView
+     * @param ioMap
      * @param jsonLadder
+     * @param commentMap
+     * @param scriptIoMap
      * @param isEditing
      * @return
      */
-    public boolean restoreLadder(Ladders ladders, TabPane tabPane, LadderJsonLadder jsonLadder, boolean isEditing) {
-        if ((jsonLadder.getIndex() == null) || (jsonLadder.getName() == null) || (jsonLadder.getColumn() == null) || (jsonLadder.getRow() == null)) {
-            writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [index][name][column][row]", true);
+    public boolean restoreLadder(Ladders ladders, TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> scriptIoMap, LadderJsonLadder jsonLadder, boolean isEditing) {
+        if ((jsonLadder.getIdx() == null) || (jsonLadder.getName() == null) || (jsonLadder.getColumn() == null) || (jsonLadder.getRow() == null)) {
+            writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [idx][name][column][row]", true);
             return false;
         }
-        return restoreBlocks(jsonLadder, ladderCreate(ladders, tabPane, jsonLadder.getIndex(), jsonLadder.getName(), jsonLadder.getColumn(), jsonLadder.getRow(), Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT), isEditing);
+        return restoreBlocks(jsonLadder, ladderCreate(ladders, tabPane, treeTableView, ioMap, commentMap, scriptIoMap, jsonLadder.getIdx(), jsonLadder.getName(), jsonLadder.getColumn(), jsonLadder.getRow(), Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT), isEditing);
     }
 
     /**
@@ -2658,19 +2717,19 @@ public class LadderCommand {
      * @return
      */
     public boolean restoreComments(LadderJson ladderJson) {
-        return restoreComments(ladders_.getTabLadder(), ladders_.getTableIo(), ladders_.getIoMap(), ladders_.getCommentMap(), ladderJson);
+        return restoreComments(ladders_.getTabLadder(), ladders_.getTreeTableIo(), ladders_.getIoMap(), ladders_.getCommentMap(), ladderJson);
     }
 
     /**
      *
      * @param tabPane
-     * @param tableView
+     * @param treeTableView
      * @param ioMap
      * @param commentMap
      * @param ladderJson
      * @return
      */
-    public boolean restoreComments(TabPane tabPane, TableView<LadderTableIo> tableView, ConcurrentHashMap<String, LadderIo> ioMap, ConcurrentHashMap<String, String> commentMap, LadderJson ladderJson) {
+    public boolean restoreComments(TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, LadderJson ladderJson) {
         if (ladderJson.getComments() != null) {
             LadderJsonComment jsonComment;
             int index, size;
@@ -2678,12 +2737,12 @@ public class LadderCommand {
             for (index = 0, size = ladderJson.getComments().size(); index < size; index++) {
                 jsonComment = ladderJson.getComments().get(index);
 
-                if ((jsonComment.getAddress() == null) || (jsonComment.getComment() == null) || (jsonComment.getValue() == null)) {
-                    writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [address][comment][value]", true);
+                if ((jsonComment.getIdx() == null) || (jsonComment.getAddress() == null) || (jsonComment.getComment() == null) || (jsonComment.getValue() == null)) {
+                    writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [idx][address][comment][value]", true);
                     return false;
                 }
-                changeComment(tabPane, tableView, ioMap, commentMap, jsonComment.getAddress(), jsonComment.getComment());
-                ladders_.setValue(jsonComment.getAddress(), jsonComment.getValue());
+                changeComment(tabPane, treeTableView, ioMap, commentMap, jsonComment.getIdx(), jsonComment.getAddress(), jsonComment.getComment());
+                ladders_.setValue(jsonComment.getIdx(), jsonComment.getAddress(), jsonComment.getValue());
             }
         }
         return true;
