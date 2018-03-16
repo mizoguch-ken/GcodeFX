@@ -2231,8 +2231,6 @@ public class LadderPane extends GridPane {
                                 // comment
                                 if (ladderCommand_.blockChangeComment(ladder_, grid, gridPane, mInput[cInput])) {
                                     ladders_.changeComment(idx, grid.getAddress(), mInput[cInput]);
-                                } else {
-                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
                                 break;
                             case SCRIPT:
@@ -2247,8 +2245,6 @@ public class LadderPane extends GridPane {
                                 // comment
                                 if (ladderCommand_.blockChangeComment(ladder_, grid, gridPane, mInput[cInput])) {
                                     ladders_.changeComment(idx, grid.getAddress(), mInput[cInput]);
-                                } else {
-                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
                                 break;
                         }
