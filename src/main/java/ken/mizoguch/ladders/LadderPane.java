@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
@@ -51,7 +52,7 @@ public class LadderPane extends GridPane {
     /**
      *
      * @param ladders
-     * @param index
+     * @param idx
      * @param name
      * @param gridColumn
      * @param gridRow
@@ -60,14 +61,14 @@ public class LadderPane extends GridPane {
      * @param gridContentsWidth
      * @param gridContentsHight
      */
-    public LadderPane(Ladders ladders, int index, String name, int gridColumn, int gridRow, double gridMinSize, double gridMaxSize, double gridContentsWidth, double gridContentsHight) {
+    public LadderPane(Ladders ladders, int idx, String name, int gridColumn, int gridRow, double gridMinSize, double gridMaxSize, double gridContentsWidth, double gridContentsHight) {
         ladders_ = ladders;
         if (ladders_ == null) {
             ladderCommand_ = null;
         } else {
             ladderCommand_ = ladders_.getLadderCommand();
         }
-        ladder_ = new Ladder(index, name, gridColumn, gridRow);
+        ladder_ = new Ladder(idx, name, gridColumn, gridRow);
 
         previousGrids_ = new ArrayList<>();
         gridMinSize_ = gridMinSize;
@@ -166,12 +167,12 @@ public class LadderPane extends GridPane {
      * @param ioMap
      * @param scrollPane
      */
-    public void refreshView(ConcurrentHashMap<String, LadderIo> ioMap, ScrollPane scrollPane) {
+    public void refreshView(CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, ScrollPane scrollPane) {
         LadderGrid grid;
         LadderGridPane gridPane;
         double viewMinX, viewMinY, viewMaxX, viewMaxY;
         double gridMinX, gridMinY, gridMaxX, gridMaxY;
-        int index, size;
+        int idx, index, size;
 
         viewMinX = -scrollPane.getViewportBounds().getMinX();
         viewMinY = -scrollPane.getViewportBounds().getMinY();
@@ -182,7 +183,11 @@ public class LadderPane extends GridPane {
             grid = ladder_.getInGrids().get(index);
             if (grid != null) {
                 gridPane = findGridPane(grid);
-                LadderIo io = ioMap.get(grid.getAddress());
+                idx = Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
+                if (grid.getAddress().startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                    idx = ladder_.getIdx();
+                }
+                LadderIo io = ioMap.get(idx).get(grid.getAddress());
                 if ((gridPane != null) && (io != null)) {
                     gridMinX = gridPane.getBoundsInParent().getMinX() + gridPane.getWidth();
                     gridMinY = gridPane.getBoundsInParent().getMinY() + gridPane.getHeight();
@@ -211,8 +216,8 @@ public class LadderPane extends GridPane {
                             case COMPARISON_XOR_BITS:
                                 grid.setBlockValue(io.getValue());
                                 if (!grid.getBlockFunctions()[0].isNumber()) {
-                                    if (ioMap.containsKey(grid.getBlockFunctions()[0].getAddress())) {
-                                        grid.getBlockFunctions()[0].setValue(ioMap.get(grid.getBlockFunctions()[0].getAddress()).getValue());
+                                    if (ioMap.get(idx).containsKey(grid.getBlockFunctions()[0].getAddress())) {
+                                        grid.getBlockFunctions()[0].setValue(ioMap.get(idx).get(grid.getBlockFunctions()[0].getAddress()).getValue());
                                     }
                                 }
                                 gridPane.changeBlockIO();
@@ -228,7 +233,11 @@ public class LadderPane extends GridPane {
             grid = ladder_.getOutGrids().get(index);
             if (grid != null) {
                 gridPane = findGridPane(grid);
-                LadderIo io = ioMap.get(grid.getAddress());
+                idx = Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
+                if (grid.getAddress().startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                    idx = ladder_.getIdx();
+                }
+                LadderIo io = ioMap.get(idx).get(grid.getAddress());
                 if ((gridPane != null) && (io != null)) {
                     gridMinX = gridPane.getBoundsInParent().getMinX() + gridPane.getWidth();
                     gridMinY = gridPane.getBoundsInParent().getMinY() + gridPane.getHeight();
@@ -1642,7 +1651,7 @@ public class LadderPane extends GridPane {
     private boolean keyInput(String defaultValue, LadderGrid grid, LadderGridPane gridPane) {
         Ladders.LADDER_BLOCK block = Ladders.LADDER_BLOCK.EMPTY;
         String[] mInput, mBlock;
-        int cInput, columnIndex, index;
+        int cInput, columnIndex, idx, index;
         TextInputDialog alert = new TextInputDialog(defaultValue);
 
         alert.initOwner(stage_);
@@ -1659,6 +1668,7 @@ public class LadderPane extends GridPane {
         if (result.isPresent()) {
             mInput = PATTERN_INPUT.split(result.get().trim());
             columnIndex = grid.getColumnIndex();
+            idx = Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
             for (cInput = 0; cInput < mInput.length; cInput++) {
                 switch (cInput) {
                     case 0:
@@ -1970,6 +1980,10 @@ public class LadderPane extends GridPane {
                             return false;
                         }
 
+                        if (mBlock[1].startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                            idx = ladder_.getIdx();
+                        }
+
                         ladderCommand_.blockChangeStart();
                         switch (block) {
                             case LOAD:
@@ -1991,8 +2005,8 @@ public class LadderPane extends GridPane {
                                 ladderCommand_.blockChangeAddress(ladder_, grid, gridPane, mBlock[1]);
 
                                 // comment
-                                if (ladders_.isComment(mBlock[1])) {
-                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                if (ladders_.isComment(idx, mBlock[1])) {
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                 } else {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
@@ -2022,8 +2036,8 @@ public class LadderPane extends GridPane {
                                 ladderCommand_.blockChangeAddress(ladder_, grid, gridPane, mBlock[1]);
 
                                 // comment
-                                if (ladders_.isComment(mBlock[1])) {
-                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                if (ladders_.isComment(idx, mBlock[1])) {
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                 } else {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
@@ -2070,8 +2084,8 @@ public class LadderPane extends GridPane {
                                     ladderCommand_.blockChangeAddress(ladder_, grid, gridPane, mBlock[1]);
 
                                     // comment
-                                    if (ladders_.isComment(mBlock[1])) {
-                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                    if (ladders_.isComment(idx, mBlock[1])) {
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                     } else {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                     }
@@ -2114,8 +2128,8 @@ public class LadderPane extends GridPane {
                                     ladderCommand_.blockChangeAddress(ladder_, grid, gridPane, mBlock[1]);
 
                                     // comment
-                                    if (ladders_.isComment(mBlock[1])) {
-                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                    if (ladders_.isComment(idx, mBlock[1])) {
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                     } else {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                     }
@@ -2159,8 +2173,8 @@ public class LadderPane extends GridPane {
                                     ladderCommand_.blockChangeAddress(ladder_, grid, gridPane, mBlock[1]);
 
                                     // comment
-                                    if (ladders_.isComment(mBlock[1])) {
-                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(mBlock[1]));
+                                    if (ladders_.isComment(idx, mBlock[1])) {
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                     } else {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                     }
@@ -2216,7 +2230,7 @@ public class LadderPane extends GridPane {
                             case MOVE:
                                 // comment
                                 if (ladderCommand_.blockChangeComment(ladder_, grid, gridPane, mInput[cInput])) {
-                                    ladders_.changeComment(grid.getAddress(), mInput[cInput]);
+                                    ladders_.changeComment(idx, grid.getAddress(), mInput[cInput]);
                                 } else {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
@@ -2232,7 +2246,7 @@ public class LadderPane extends GridPane {
                             case SCRIPT:
                                 // comment
                                 if (ladderCommand_.blockChangeComment(ladder_, grid, gridPane, mInput[cInput])) {
-                                    ladders_.changeComment(grid.getAddress(), mInput[cInput]);
+                                    ladders_.changeComment(idx, grid.getAddress(), mInput[cInput]);
                                 } else {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
                                 }
@@ -2336,13 +2350,20 @@ public class LadderPane extends GridPane {
                             break;
                         case 2:
                             if (!PATTERN_REAL_NUMBER.matcher(grid.getAddress()).find()) {
+                                int idx = Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
+
                                 address_ = grid.getAddress();
-                                value_ = ladders_.getValue(address_);
+
+                                if (address_.startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                                    idx = ladder_.getIdx();
+                                }
+
+                                value_ = ladders_.getValue(idx, address_);
                                 if (value_ != null) {
                                     if (value_ == 0) {
-                                        ladders_.setValue(address_, 1.0);
+                                        ladders_.setValue(idx, address_, 1.0);
                                     } else {
-                                        ladders_.setValue(address_, 0.0);
+                                        ladders_.setValue(idx, address_, 0.0);
                                     }
                                 }
                             }
