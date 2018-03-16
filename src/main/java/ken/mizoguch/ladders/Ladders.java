@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -33,8 +34,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebEngine;
@@ -59,6 +61,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     public static final double LADDER_DEFAULT_GRID_MAX_SIZE = LADDER_DEFAULT_GRID_MIN_SIZE * 122.966;
     public static final double LADDER_DEFAULT_GRID_CONTENTS_WIDTH = LADDER_DEFAULT_GRID_MIN_SIZE * 0.382;
     public static final double LADDER_DEFAULT_GRID_CONTENTS_HIGHT = LADDER_DEFAULT_GRID_CONTENTS_WIDTH * 0.618;
+
+    public static final int LADDER_GLOBAL_ADDRESS_INDEX = 0;
+    public static final String LADDER_LOCAL_ADDRESS_PREFIX = ".";
 
     /**
      *
@@ -140,7 +145,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
     private final DesignLaddersController ladderController_;
     private final TabPane tabLadder;
-    private final TableView<LadderTableIo> tableIo;
+    private final TreeTableView<LadderTreeTableIo> treeTableIo;
 
     private Stage stage_;
     private List<Image> icons_;
@@ -155,10 +160,11 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
     private final Object lock_ = new Object();
     private Ladder[] ladders_;
+    private ObservableList<TreeItem<LadderTreeTableIo>> ovScript_;
     private int laddersSize_, scriptIndex_, scriptSize_;
-    private final ConcurrentHashMap<String, LadderIo> ioMap_;
-    private final ConcurrentHashMap<String, String> commentMap_;
-    private final ConcurrentHashMap<String, LadderIo> scriptIoMap_;
+    private final CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap_;
+    private final CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap_;
+    private final CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> scriptIoMap_;
     private long idealCycleTime_, cycleTime_, minCycleTime_, maxCycleTime_, cumulativeCycleTime_, cumulativeCycleTimeCount_;
     private boolean isCycling_, isChanged_;
 
@@ -171,7 +177,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     public Ladders(DesignLaddersController ladderController) {
         ladderController_ = ladderController;
         tabLadder = ladderController_.getTabLadder();
-        tableIo = ladderController_.getTableIo();
+        treeTableIo = ladderController_.getTreeTableIo();
+        treeTableIo.setRoot(new TreeItem());
 
         stage_ = null;
         icons_ = null;
@@ -188,9 +195,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         laddersSize_ = 0;
         scriptIndex_ = 0;
         scriptSize_ = 0;
-        ioMap_ = new ConcurrentHashMap<>();
-        commentMap_ = new ConcurrentHashMap<>();
-        scriptIoMap_ = new ConcurrentHashMap<>();
+        ioMap_ = new CopyOnWriteArrayList<>();
+        commentMap_ = new CopyOnWriteArrayList<>();
+        scriptIoMap_ = new CopyOnWriteArrayList<>();
         idealCycleTime_ = 0;
         cycleTime_ = 0;
         minCycleTime_ = 0;
@@ -213,8 +220,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      *
      * @return
      */
-    public TableView<LadderTableIo> getTableIo() {
-        return tableIo;
+    public TreeTableView<LadderTreeTableIo> getTreeTableIo() {
+        return treeTableIo;
     }
 
     /**
@@ -245,7 +252,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      *
      * @return
      */
-    public ConcurrentHashMap<String, LadderIo> getIoMap() {
+    public CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> getIoMap() {
         return ioMap_;
     }
 
@@ -253,7 +260,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      *
      * @return
      */
-    public ConcurrentHashMap<String, String> getCommentMap() {
+    public CopyOnWriteArrayList<ConcurrentHashMap<String, String>> getCommentMap() {
         return commentMap_;
     }
 
@@ -261,7 +268,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      *
      * @return
      */
-    public ConcurrentHashMap<String, LadderIo> getScriptIoMap() {
+    public CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> getScriptIoMap() {
         return scriptIoMap_;
     }
 
@@ -309,7 +316,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         int index;
 
         // check connect
-        if (checkConnectLadder(tabLadder, tableIo, ioMap_)) {
+        if (checkConnectLadder(tabLadder, treeTableIo, ioMap_)) {
             synchronized (lock_) {
                 // connect
                 laddersSize_ = tabLadder.getTabs().size();
@@ -317,7 +324,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 for (index = 0; index < laddersSize_; index++) {
                     pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(index).getContent()).getContent();
                     ladders_[index] = pane.getLadder().copy();
-                    ladders_[index].connectLadder(ioMap_, tableIo);
+                    ladders_[index].connectLadder(ioMap_, treeTableIo);
                 }
             }
             register(webEngine_, state_);
@@ -329,17 +336,17 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     /**
      *
      * @param tabPane
-     * @param ioTable
+     * @param ioTreeTable
      * @param ioMap
      * @return
      */
-    public boolean checkConnectLadder(TabPane tabPane, TableView<LadderTableIo> ioTable, ConcurrentHashMap<String, LadderIo> ioMap) {
+    public boolean checkConnectLadder(TabPane tabPane, TreeTableView<LadderTreeTableIo> ioTreeTable, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap) {
         LadderPane pane;
         int index, size;
 
         for (index = 0, size = tabPane.getTabs().size(); index < size; index++) {
             pane = (LadderPane) ((ScrollPane) tabPane.getTabs().get(index).getContent()).getContent();
-            if (pane.getLadder().connectLadder(ioMap, ioTable)) {
+            if (pane.getLadder().connectLadder(ioMap, ioTreeTable)) {
                 pane.clearEditing();
             } else {
                 return false;
@@ -387,41 +394,46 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
     /**
      *
+     * @param oldIdx
      * @param oldAddress
      * @param newAddress
+     * @param newIdx
      */
-    public void changeAddress(String oldAddress, String newAddress) {
-        ladderCommand_.changeAddress(oldAddress, newAddress);
+    public void changeAddress(int oldIdx, String oldAddress, int newIdx, String newAddress) {
+        ladderCommand_.changeAddress(oldIdx, oldAddress, newIdx, newAddress);
         isChanged_ = true;
         setTitle();
     }
 
     /**
      *
+     * @param idx
      * @param address
      * @return
      */
-    public boolean isComment(String address) {
-        return commentMap_.containsKey(address);
+    public boolean isComment(int idx, String address) {
+        return commentMap_.get(idx).containsKey(address);
     }
 
     /**
      *
+     * @param idx
      * @param address
      * @return
      */
-    public String getComment(String address) {
-        return commentMap_.get(address);
+    public String getComment(int idx, String address) {
+        return commentMap_.get(idx).get(address);
     }
 
     /**
      *
+     * @param idx
      * @param address
      * @param comment
      * @return
      */
-    public boolean changeComment(String address, String comment) {
-        if (ladderCommand_.changeComment(address, comment)) {
+    public boolean changeComment(int idx, String address, String comment) {
+        if (ladderCommand_.changeComment(idx, address, comment)) {
             isChanged_ = true;
             setTitle();
             return true;
@@ -435,23 +447,34 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @param value
      */
     public void setValueDirect(String address, double value) {
-        if (!ioMap_.containsKey(address)) {
-            ioMap_.put(address, new LadderIo(address));
-            tableIo.getItems().add(new LadderTableIo(address, value));
+        setValueDirect(LADDER_GLOBAL_ADDRESS_INDEX, address, value);
+    }
+
+    /**
+     *
+     * @param idx
+     * @param address
+     * @param value
+     */
+    public void setValueDirect(int idx, String address, double value) {
+        if (!ioMap_.get(idx).containsKey(address)) {
+            ioMap_.get(idx).put(address, new LadderIo(address));
+            treeTableIo.getRoot().getChildren().get(idx).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address, value)));
         }
 
-        for (scriptIndex_ = 0, scriptSize_ = tableIo.getItems().size(); scriptIndex_ < scriptSize_; scriptIndex_++) {
-            if (address.equals(tableIo.getItems().get(scriptIndex_).getAddress())) {
-                tableIo.getItems().get(scriptIndex_).setValue(value);
+        ovScript_ = treeTableIo.getRoot().getChildren().get(idx).getChildren();
+        for (scriptIndex_ = 0, scriptSize_ = ovScript_.size(); scriptIndex_ < scriptSize_; scriptIndex_++) {
+            if (address.equals(ovScript_.get(scriptIndex_).getValue().getAddress())) {
+                ovScript_.get(scriptIndex_).getValue().setValue(value);
                 break;
             }
         }
 
         synchronized (lock_) {
-            ioMap_.get(address).setValue(value);
-            scriptIoMap_.putIfAbsent(address, new LadderIo(address));
-            scriptIoMap_.get(address).setValue(value);
-            scriptIoMap_.get(address).setCycled(true);
+            ioMap_.get(idx).get(address).setValue(value);
+            scriptIoMap_.get(idx).putIfAbsent(address, new LadderIo(address));
+            scriptIoMap_.get(idx).get(address).setValue(value);
+            scriptIoMap_.get(idx).get(address).setCycled(true);
         }
     }
 
@@ -466,7 +489,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         }
 
         tabLadder.getTabs().clear();
-        tableIo.getItems().clear();
+        treeTableIo.getRoot().getChildren().clear();
         ladderCommand_.clearHistoryManager();
         ladders_ = null;
         ioMap_.clear();
@@ -595,7 +618,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         ButtonType response = fileSavedCheck();
 
         if (response == null) {
-            file = ladderOpen(tabLadder, tableIo, filePath);
+            file = ladderOpen(tabLadder, treeTableIo, filePath);
             if (file == null) {
                 if (filePath != null) {
                     fileNotFound(filePath);
@@ -608,7 +631,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             }
         } else if (response == ButtonType.YES) {
             ladderSave();
-            file = ladderOpen(tabLadder, tableIo, filePath);
+            file = ladderOpen(tabLadder, treeTableIo, filePath);
             if (file == null) {
                 if (filePath != null) {
                     fileNotFound(filePath);
@@ -620,7 +643,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 return true;
             }
         } else if (response == ButtonType.NO) {
-            file = ladderOpen(tabLadder, tableIo, filePath);
+            file = ladderOpen(tabLadder, treeTableIo, filePath);
             if (file == null) {
                 if (filePath != null) {
                     fileNotFound(filePath);
@@ -660,6 +683,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
         if (file != null) {
             filePath_ = file;
+            isChanged_ = false;
             setTitle();
             return true;
         }
@@ -671,7 +695,14 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      */
     public void ladderNew() {
         allClear();
-        ladderCommand_.ladderCreate(0, LadderEnums.LADDERS.toString(), Ladders.LADDER_DEFAULT_GRID_COLUMN, Ladders.LADDER_DEFAULT_GRID_ROW, Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
+
+        // global
+        treeTableIo.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
+        ioMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+        commentMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+        scriptIoMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+
+        ladderCommand_.ladderCreate(LADDER_GLOBAL_ADDRESS_INDEX + 1, LadderEnums.LADDERS.toString(), LADDER_DEFAULT_GRID_COLUMN, LADDER_DEFAULT_GRID_ROW, LADDER_DEFAULT_GRID_MIN_SIZE, LADDER_DEFAULT_GRID_MAX_SIZE, LADDER_DEFAULT_GRID_CONTENTS_WIDTH, LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
     }
 
     /**
@@ -689,8 +720,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             name.delete(0, name.length());
             name.append(LadderEnums.LADDERS.toString()).append(" ").append(index + 1);
         }
-        LadderPane pane = ladderCommand_.ladderCreate(tabLadder.getTabs().size(), name.toString(), Ladders.LADDER_DEFAULT_GRID_COLUMN, Ladders.LADDER_DEFAULT_GRID_ROW, Ladders.LADDER_DEFAULT_GRID_MIN_SIZE, Ladders.LADDER_DEFAULT_GRID_MAX_SIZE, Ladders.LADDER_DEFAULT_GRID_CONTENTS_WIDTH, Ladders.LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
-        tabLadder.getSelectionModel().select(pane.getLadder().getIndex());
+        index = tabLadder.getTabs().size() + 1;
+        LadderPane pane = ladderCommand_.ladderCreate(index, name.toString(), LADDER_DEFAULT_GRID_COLUMN, LADDER_DEFAULT_GRID_ROW, LADDER_DEFAULT_GRID_MIN_SIZE, LADDER_DEFAULT_GRID_MAX_SIZE, LADDER_DEFAULT_GRID_CONTENTS_WIDTH, LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
+        tabLadder.getSelectionModel().select(pane.getLadder().getIdx() - 1);
         isChanged_ = true;
 
         setTitle();
@@ -734,6 +766,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         if (result.isPresent()) {
             String name = result.get().trim();
             if (checkTabName(name)) {
+                treeTableIo.getRoot().getChildren().get(pane.getLadder().getIdx()).getValue().setAddress(name.replace(" ", "_"));
                 pane.setChanged(true);
                 ladderCommand_.ladderChangeName(pane, name);
                 isChanged_ = true;
@@ -747,6 +780,28 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         return false;
     }
 
+    public boolean ladderChangeTabName(int idx, String name) {
+        name = name.trim();
+        if (checkTabName(name)) {
+            LadderPane pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(idx - 1).getContent()).getContent();
+            treeTableIo.getRoot().getChildren().get(idx - 1).getValue().setAddress(name.replace(" ", "_"));
+            pane.setChanged(true);
+            ladderCommand_.ladderChangeName(pane, name);
+            isChanged_ = true;
+
+            setTitle();
+            return true;
+        } else {
+            writeLog(LadderEnums.DUPLICATE_NAMES_ERROR.toString(), true);
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param name
+     * @return
+     */
     private boolean checkTabName(String name) {
         if (name != null) {
             int index, size;
@@ -761,11 +816,11 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         return false;
     }
 
-    private Path ladderOpen(TabPane tabPane, TableView<LadderTableIo> tableView, Path file) {
-        return ladderOpen(tabPane, tableView, ioMap_, commentMap_, file);
+    private Path ladderOpen(TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, Path file) {
+        return ladderOpen(tabPane, treeTableView, ioMap_, commentMap_, file);
     }
 
-    private Path ladderOpen(TabPane tabPane, TableView<LadderTableIo> tableView, ConcurrentHashMap<String, LadderIo> ioMap, ConcurrentHashMap<String, String> commentMap, Path file) {
+    private Path ladderOpen(TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, Path file) {
         if (file == null) {
             FileChooser fileChooser = new FileChooser();
 
@@ -787,7 +842,14 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         LadderJson ladderJson = ladderJsonOpen(file);
         if (ladderJson != null) {
             allClear();
-            if (ladderJsonLoad(this, tabPane, tableView, ioMap, commentMap, ladderJson)) {
+
+            // global
+            treeTableIo.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
+            ioMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+            commentMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+            scriptIoMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+
+            if (ladderJsonLoad(this, tabPane, treeTableView, ioMap, commentMap, scriptIoMap_, ladderJson)) {
                 return file;
             }
         }
@@ -883,29 +945,30 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
     /**
      *
-     * @param ladderController
+     * @param ladders
      * @param tabPane
-     * @param tableView
+     * @param treeTableView
      * @param ioMap
      * @param commentMap
+     * @param scriptIoMap
      * @param ladderJson
      * @return
      */
-    public boolean ladderJsonLoad(Ladders ladderController, TabPane tabPane, TableView<LadderTableIo> tableView, ConcurrentHashMap<String, LadderIo> ioMap, ConcurrentHashMap<String, String> commentMap, LadderJson ladderJson) {
+    public boolean ladderJsonLoad(Ladders ladders, TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> scriptIoMap, LadderJson ladderJson) {
         ladderCommand_.setDisableHistory(true);
         try {
             // ladder
-            if (!ladderCommand_.restoreLadders(ladderController, tabPane, ladderJson, false)) {
+            if (!ladderCommand_.restoreLadders(ladders, tabPane, treeTableView, ioMap, commentMap, scriptIoMap, ladderJson, false)) {
                 return false;
             }
 
             // comments
-            if (!ladderCommand_.restoreComments(tabPane, tableView, ioMap, commentMap, ladderJson)) {
+            if (!ladderCommand_.restoreComments(tabPane, treeTableView, ioMap, commentMap, ladderJson)) {
                 return false;
             }
 
             // history
-            if (ladderController != null) {
+            if (ladders != null) {
                 if (ladderJson.getHistoryManager() != null) {
                     ladderCommand_.setHistoryManager(ladderJson.getHistoryManager());
                 }
@@ -929,7 +992,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         return ladderJsonSave(tabPane, ioMap_, commentMap_);
     }
 
-    private LadderJson ladderJsonSave(TabPane tabPane, ConcurrentHashMap<String, LadderIo> ioMap, ConcurrentHashMap<String, String> commentMap) {
+    private LadderJson ladderJsonSave(TabPane tabPane, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap) {
         LadderJson ladderJson = new LadderJson();
 
         // ladder
@@ -950,11 +1013,32 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @return
      */
     public boolean ladderMoveLeft(Ladder ladder) {
-        ladderCommand_.ladderMoveLeft(ladder);
-        isChanged_ = true;
+        int idx = ladder.getIdx();
 
-        setTitle();
-        return true;
+        if (idx > 1) {
+            TreeItem<LadderTreeTableIo> treeItem = treeTableIo.getRoot().getChildren().get(idx);
+            treeTableIo.getRoot().getChildren().set(idx, treeTableIo.getRoot().getChildren().get(idx - 1));
+            treeTableIo.getRoot().getChildren().set(idx - 1, treeItem);
+
+            ConcurrentHashMap<String, LadderIo> ioMap = ioMap_.get(idx);
+            ioMap_.set(idx, ioMap_.get(idx - 1));
+            ioMap_.set(idx - 1, ioMap);
+
+            ConcurrentHashMap<String, String> commentMap = commentMap_.get(idx);
+            commentMap_.set(idx, commentMap_.get(idx - 1));
+            commentMap_.set(idx - 1, commentMap);
+
+            ConcurrentHashMap<String, LadderIo> scriptIoMap = scriptIoMap_.get(idx);
+            scriptIoMap_.set(idx, scriptIoMap_.get(idx - 1));
+            scriptIoMap_.set(idx - 1, scriptIoMap);
+
+            ladderCommand_.ladderMoveLeft(ladder);
+            isChanged_ = true;
+
+            setTitle();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -963,11 +1047,32 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @return
      */
     public boolean ladderMoveRight(Ladder ladder) {
-        ladderCommand_.ladderMoveRight(ladder);
-        isChanged_ = true;
+        int idx = ladder.getIdx();
 
-        setTitle();
-        return true;
+        if (idx < getTabLadder().getTabs().size()) {
+            TreeItem<LadderTreeTableIo> treeItem = treeTableIo.getRoot().getChildren().get(idx);
+            treeTableIo.getRoot().getChildren().set(idx, treeTableIo.getRoot().getChildren().get(idx + 1));
+            treeTableIo.getRoot().getChildren().set(idx + 1, treeItem);
+
+            ConcurrentHashMap<String, LadderIo> ioMap = ioMap_.get(idx);
+            ioMap_.set(idx, ioMap_.get(idx + 1));
+            ioMap_.set(idx + 1, ioMap);
+
+            ConcurrentHashMap<String, String> commentMap = commentMap_.get(idx);
+            commentMap_.set(idx, commentMap_.get(idx + 1));
+            commentMap_.set(idx + 1, commentMap);
+
+            ConcurrentHashMap<String, LadderIo> scriptIoMap = scriptIoMap_.get(idx);
+            scriptIoMap_.set(idx, scriptIoMap_.get(idx + 1));
+            scriptIoMap_.set(idx + 1, scriptIoMap);
+
+            ladderCommand_.ladderMoveRight(ladder);
+            isChanged_ = true;
+
+            setTitle();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -1216,7 +1321,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         ladderPath = Paths.get(ladderPath.toUri().resolve("ladder.json"));
         if (Files.exists(ladderPath)) {
             // load and start
-            if (ladderOpen(tabLadder, tableIo, ioMap_, commentMap_, ladderPath) != null) {
+            if (ladderOpen(tabLadder, treeTableIo, ioMap_, commentMap_, ladderPath) != null) {
                 if (connectLadder()) {
                     runStartLadder();
                 }
@@ -1280,27 +1385,29 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                             if (soem_ != null) {
                                 for (index = 0, size = registerSoemOut_.size(); index < size; index++) {
                                     registerSoemIo = registerSoemOut_.get(index);
-                                    soem_.out(registerSoemIo.getSlave(), registerSoemIo.getBitsOffset(), registerSoemIo.getBitsMask(), (int) ioMap_.get(registerSoemIo.getAddress()).getValue());
+                                    soem_.out(registerSoemIo.getSlave(), registerSoemIo.getBitsOffset(), registerSoemIo.getBitsMask(), (int) ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).get(registerSoemIo.getAddress()).getValue());
                                 }
                                 for (index = 0, size = registerSoemIn_.size(); index < size; index++) {
                                     registerSoemIo = registerSoemIn_.get(index);
                                     registerSoemValue = soem_.in(registerSoemIo.getSlave(), registerSoemIo.getBitsOffset(), registerSoemIo.getBitsMask());
                                     if (registerSoemValue != null) {
-                                        ioMap_.get(registerSoemIo.getAddress()).setValue(registerSoemValue);
+                                        ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).get(registerSoemIo.getAddress()).setValue(registerSoemValue);
                                     }
                                 }
                             }
 
                             // script io
-                            if (!scriptIoMap_.isEmpty()) {
-                                for (Iterator<Map.Entry<String, LadderIo>> iterator = scriptIoMap_.entrySet().iterator(); iterator.hasNext();) {
-                                    entry = iterator.next();
-                                    if (entry.getValue().isCycled()) {
-                                        ioMap_.get(entry.getKey()).chehckEdge();
-                                        iterator.remove();
-                                    } else {
-                                        ioMap_.get(entry.getKey()).setValue(entry.getValue().getValue());
-                                        entry.getValue().setCycled(true);
+                            for (index = 0; index < scriptIoMap_.size(); index++) {
+                                if (!scriptIoMap_.get(index).isEmpty()) {
+                                    for (Iterator<Map.Entry<String, LadderIo>> iterator = scriptIoMap_.get(index).entrySet().iterator(); iterator.hasNext();) {
+                                        entry = iterator.next();
+                                        if (entry.getValue().isCycled()) {
+                                            ioMap_.get(index).get(entry.getKey()).chehckEdge();
+                                            iterator.remove();
+                                        } else {
+                                            ioMap_.get(index).get(entry.getKey()).setValue(entry.getValue().getValue());
+                                            entry.getValue().setCycled(true);
+                                        }
                                     }
                                 }
                             }
@@ -1308,7 +1415,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                             // refresh view
                             cumulativeCycleTime_ += cycleTime_;
                             cumulativeCycleTimeCount_++;
-                            if (cumulativeCycleTime_ > Ladders.LADDER_VIEW_REFRESH_CYCLE_TIME) {
+                            if (cumulativeCycleTime_ > LADDER_VIEW_REFRESH_CYCLE_TIME) {
                                 ladderController_.refreshLadder(cumulativeCycleTime_, cumulativeCycleTimeCount_);
                                 cumulativeCycleTime_ = 0;
                                 cumulativeCycleTimeCount_ = 0;
@@ -1356,7 +1463,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         if ((webEngine != null) && (state != null)) {
             webEngine_ = webEngine;
             state_ = state;
-            ioMap_.entrySet().forEach((entry) -> {
+            ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).entrySet().forEach((entry) -> {
                 entry.getValue().setWebEngineState(webEngine_, state_);
             });
         }
@@ -1379,10 +1486,10 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                         }
 
                         String address = ((String) objects[1]).trim();
-                        if (!address.contains(" ")) {
-                            if (!ioMap_.containsKey(address)) {
-                                ioMap_.put(address, new LadderIo(address));
-                                tableIo.getItems().add(new LadderTableIo(address));
+                        if (!address.startsWith(LADDER_LOCAL_ADDRESS_PREFIX) && !address.contains(" ")) {
+                            if (!ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).containsKey(address)) {
+                                ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).put(address, new LadderIo(address));
+                                treeTableIo.getRoot().getChildren().get(LADDER_GLOBAL_ADDRESS_INDEX).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address)));
                             }
 
                             int slave = (int) objects[2];
@@ -1425,10 +1532,10 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                         }
 
                         String address = ((String) objects[1]).trim();
-                        if (!address.contains(" ")) {
-                            if (!ioMap_.containsKey(address)) {
-                                ioMap_.put(address, new LadderIo(address));
-                                tableIo.getItems().add(new LadderTableIo(address));
+                        if (!address.startsWith(LADDER_LOCAL_ADDRESS_PREFIX) && !address.contains(" ")) {
+                            if (!ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).containsKey(address)) {
+                                ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).put(address, new LadderIo(address));
+                                treeTableIo.getRoot().getChildren().get(LADDER_GLOBAL_ADDRESS_INDEX).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address)));
                             }
 
                             int slave = (int) objects[2];
@@ -1474,30 +1581,56 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
     @Override
     public Double getValue(String address) {
-        if (ioMap_.containsKey(address)) {
-            return ioMap_.get(address).getValue();
+        if (!address.startsWith(LADDER_LOCAL_ADDRESS_PREFIX)) {
+            return getValue(LADDER_GLOBAL_ADDRESS_INDEX, address);
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param idx
+     * @param address
+     * @return
+     */
+    public Double getValue(int idx, String address) {
+        if (ioMap_.get(idx).containsKey(address)) {
+            return ioMap_.get(idx).get(address).getValue();
         }
         return null;
     }
 
     @Override
     public void setValue(String address, double value) {
-        if (!ioMap_.containsKey(address)) {
-            ioMap_.put(address, new LadderIo(address));
-            tableIo.getItems().add(new LadderTableIo(address, value));
+        if (!address.startsWith(LADDER_LOCAL_ADDRESS_PREFIX)) {
+            setValue(LADDER_GLOBAL_ADDRESS_INDEX, address, value);
+        }
+    }
+
+    /**
+     *
+     * @param idx
+     * @param address
+     * @param value
+     */
+    public void setValue(int idx, String address, double value) {
+        if (!ioMap_.get(idx).containsKey(address)) {
+            ioMap_.get(idx).put(address, new LadderIo(address));
+            treeTableIo.getRoot().getChildren().get(idx).getChildren().add(new TreeItem(new LadderTreeTableIo(address, value)));
         }
 
-        for (scriptIndex_ = 0, scriptSize_ = tableIo.getItems().size(); scriptIndex_ < scriptSize_; scriptIndex_++) {
-            if (address.equals(tableIo.getItems().get(scriptIndex_).getAddress())) {
-                tableIo.getItems().get(scriptIndex_).setValue(value);
+        ovScript_ = treeTableIo.getRoot().getChildren().get(idx).getChildren();
+        for (scriptIndex_ = 0, scriptSize_ = ovScript_.size(); scriptIndex_ < scriptSize_; scriptIndex_++) {
+            if (address.equals(ovScript_.get(scriptIndex_).getValue().getAddress())) {
+                ovScript_.get(scriptIndex_).getValue().setValue(value);
                 break;
             }
         }
 
         synchronized (lock_) {
-            scriptIoMap_.putIfAbsent(address, new LadderIo(address));
-            scriptIoMap_.get(address).setValue(value);
-            scriptIoMap_.get(address).setCycled(false);
+            scriptIoMap_.get(idx).putIfAbsent(address, new LadderIo(address));
+            scriptIoMap_.get(idx).get(address).setValue(value);
+            scriptIoMap_.get(idx).get(address).setCycled(false);
         }
     }
 
