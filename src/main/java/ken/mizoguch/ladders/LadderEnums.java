@@ -45,6 +45,7 @@ public enum LadderEnums {
     IO_ADDRESS("Address", "アドレス"),
     IO_COMMENT("Comment", "コメント"),
     IO_VALUE("Value", "値"),
+    ADDRESS_GLOBAL("Global"),
     RENAME("Rename", "名前の変更"),
     INPUT("Input", "入力"),
     CYCLE_MIN("Min", "最小"),
