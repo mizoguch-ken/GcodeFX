@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -27,12 +28,15 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import static ken.mizoguch.ladders.Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
 
 /**
  *
@@ -50,11 +54,11 @@ public class DesignLaddersDifferenceController implements Initializable {
     @FXML
     private SplitPane splitIoLadderOriginal;
     @FXML
-    private TableView<LadderTableIo> tableIoOriginal;
+    private TreeTableView<LadderTreeTableIo> treeTableIoOriginal;
     @FXML
-    private TableColumn<LadderTableIo, String> tableIoAddressOriginal;
+    private TreeTableColumn<LadderTreeTableIo, String> treeTableIoAddressOriginal;
     @FXML
-    private TableColumn<LadderTableIo, String> tableIoCommentOriginal;
+    private TreeTableColumn<LadderTreeTableIo, String> treeTableIoCommentOriginal;
     @FXML
     private TabPane tabLadderOriginal;
     @FXML
@@ -64,11 +68,11 @@ public class DesignLaddersDifferenceController implements Initializable {
     @FXML
     private SplitPane splitIoLadderRevised;
     @FXML
-    private TableView<LadderTableIo> tableIoRevised;
+    private TreeTableView<LadderTreeTableIo> treeTableIoRevised;
     @FXML
-    private TableColumn<LadderTableIo, String> tableIoAddressRevised;
+    private TreeTableColumn<LadderTreeTableIo, String> treeTableIoAddressRevised;
     @FXML
-    private TableColumn<LadderTableIo, String> tableIoCommentRevised;
+    private TreeTableColumn<LadderTreeTableIo, String> treeTableIoCommentRevised;
     @FXML
     private TabPane tabLadderRevised;
 
@@ -90,6 +94,7 @@ public class DesignLaddersDifferenceController implements Initializable {
     }
 
     private Stage stage_;
+    private List<Image> icons_;
     private Ladders ladders_;
     private final Map<String, Deltab> deltabs_ = new HashMap<>();
 
@@ -113,17 +118,17 @@ public class DesignLaddersDifferenceController implements Initializable {
         });
 
         // io
-        tableIoAddressOriginal.setCellValueFactory((TableColumn.CellDataFeatures<LadderTableIo, String> param) -> {
-            return param.getValue().addressProperty();
+        treeTableIoAddressOriginal.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+            return param.getValue().getValue().addressProperty();
         });
-        tableIoCommentOriginal.setCellValueFactory((TableColumn.CellDataFeatures<LadderTableIo, String> param) -> {
-            return param.getValue().commentProperty();
+        treeTableIoCommentOriginal.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+            return param.getValue().getValue().commentProperty();
         });
-        tableIoAddressRevised.setCellValueFactory((TableColumn.CellDataFeatures<LadderTableIo, String> param) -> {
-            return param.getValue().addressProperty();
+        treeTableIoAddressRevised.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+            return param.getValue().getValue().addressProperty();
         });
-        tableIoCommentRevised.setCellValueFactory((TableColumn.CellDataFeatures<LadderTableIo, String> param) -> {
-            return param.getValue().commentProperty();
+        treeTableIoCommentRevised.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+            return param.getValue().getValue().commentProperty();
         });
 
         // tabpane
@@ -162,11 +167,11 @@ public class DesignLaddersDifferenceController implements Initializable {
     private void initDesign() {
         // io
         labelIoLadderOriginal.setText(LadderEnums.IO_REFERENCE.toString());
-        tableIoAddressOriginal.setText(LadderEnums.IO_ADDRESS.toString());
-        tableIoCommentOriginal.setText(LadderEnums.IO_COMMENT.toString());
+        treeTableIoAddressOriginal.setText(LadderEnums.IO_ADDRESS.toString());
+        treeTableIoCommentOriginal.setText(LadderEnums.IO_COMMENT.toString());
         labelIoLadderRevised.setText(LadderEnums.IO_CURRENT.toString());
-        tableIoAddressRevised.setText(LadderEnums.IO_ADDRESS.toString());
-        tableIoCommentRevised.setText(LadderEnums.IO_COMMENT.toString());
+        treeTableIoAddressRevised.setText(LadderEnums.IO_ADDRESS.toString());
+        treeTableIoCommentRevised.setText(LadderEnums.IO_COMMENT.toString());
     }
 
     /**
@@ -183,9 +188,14 @@ public class DesignLaddersDifferenceController implements Initializable {
 
             // original ladder
             labelIoLadderOriginal.setText(LadderEnums.IO_REFERENCE.toString() + "(" + pathOriginal.toString() + ")");
-            ConcurrentHashMap<String, LadderIo> ioMapOriginal = new ConcurrentHashMap<>();
-            ConcurrentHashMap<String, String> commentMapOriginal = new ConcurrentHashMap<>();
+            CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMapOriginal = new CopyOnWriteArrayList<>();
+            CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMapOriginal = new CopyOnWriteArrayList<>();
             List<String> jsonOriginal = new ArrayList<>();
+
+            // original global
+            treeTableIoOriginal.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
+            ioMapOriginal.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+            commentMapOriginal.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
 
             // revised ladder
             if (pathRevised == null) {
@@ -193,15 +203,20 @@ public class DesignLaddersDifferenceController implements Initializable {
             } else {
                 labelIoLadderRevised.setText(LadderEnums.IO_CURRENT.toString() + "(" + pathRevised.toString() + ")");
             }
-            ConcurrentHashMap<String, LadderIo> ioMapRevised = new ConcurrentHashMap<>();
-            ConcurrentHashMap<String, String> commentMapRevised = new ConcurrentHashMap<>();
+            CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMapRevised = new CopyOnWriteArrayList<>();
+            CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMapRevised = new CopyOnWriteArrayList<>();
             List<String> jsonRevised = new ArrayList<>();
 
+            // revised global
+            treeTableIoRevised.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
+            ioMapRevised.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+            commentMapRevised.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
+
             // connect
-            ladders_.ladderJsonLoad(null, tabLadderOriginal, tableIoOriginal, ioMapOriginal, commentMapOriginal, ladderJsonOriginal);
-            ladders_.checkConnectLadder(tabLadderOriginal, tableIoOriginal, ioMapOriginal);
-            ladders_.ladderJsonLoad(null, tabLadderRevised, tableIoRevised, ioMapRevised, commentMapRevised, ladderJsonRevised);
-            ladders_.checkConnectLadder(tabLadderRevised, tableIoRevised, ioMapRevised);
+            ladders_.ladderJsonLoad(null, tabLadderOriginal, treeTableIoOriginal, ioMapOriginal, commentMapOriginal, null, ladderJsonOriginal);
+            ladders_.checkConnectLadder(tabLadderOriginal, treeTableIoOriginal, ioMapOriginal);
+            ladders_.ladderJsonLoad(null, tabLadderRevised, treeTableIoRevised, ioMapRevised, commentMapRevised, null, ladderJsonRevised);
+            ladders_.checkConnectLadder(tabLadderRevised, treeTableIoRevised, ioMapRevised);
 
             // diff
             Chunk<String> chunk;
@@ -404,6 +419,9 @@ public class DesignLaddersDifferenceController implements Initializable {
     public void startUp(Stage stage, Ladders ladders) {
         stage_ = stage;
         ladders_ = ladders;
+
+        treeTableIoOriginal.setRoot(new TreeItem());
+        treeTableIoRevised.setRoot(new TreeItem());
 
         // design
         addEventDesign();
