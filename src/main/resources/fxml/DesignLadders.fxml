@@ -8,8 +8,8 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -150,16 +150,16 @@
       </MenuBar>
       <SplitPane fx:id="splitIoLadder" dividerPositions="0.382" VBox.vgrow="ALWAYS">
         <items>
-            <TableView fx:id="tableIo" editable="true" tableMenuButtonVisible="true">
+            <TreeTableView fx:id="treeTableIo" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true">
               <columns>
-                <TableColumn fx:id="tableIoAddress" prefWidth="75.0" text="Address" />
-                <TableColumn fx:id="tableIoComment" prefWidth="75.0" text="Comment" />
-                  <TableColumn fx:id="tableIoValue" prefWidth="75.0" text="Value" />
+                <TreeTableColumn fx:id="treeTableIoAddress" prefWidth="75.0" text="Address" />
+                <TreeTableColumn fx:id="treeTableIoComment" prefWidth="75.0" text="Comment" />
+                  <TreeTableColumn fx:id="treeTableIoValue" prefWidth="75.0" text="Value" />
               </columns>
                <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
-            </TableView>
+            </TreeTableView>
             <TabPane fx:id="tabLadder" tabClosingPolicy="UNAVAILABLE" />
         </items>
       </SplitPane>
