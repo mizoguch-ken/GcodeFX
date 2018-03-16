@@ -54,7 +54,7 @@ public class LadderJson {
     public void sortLadders() {
         if (ladders != null) {
             ladders.sort((o1, o2) -> {
-                return o1.getIndex() - o2.getIndex();
+                return o1.getIdx() - o2.getIdx();
             });
         }
     }
