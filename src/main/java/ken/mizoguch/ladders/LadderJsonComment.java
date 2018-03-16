@@ -11,20 +11,31 @@ package ken.mizoguch.ladders;
  */
 public class LadderJsonComment {
 
+    private final Integer idx;
     private final String address;
     private final String comment;
     private final Double value;
 
     /**
      *
+     * @param idx
      * @param address
      * @param comment
      * @param value
      */
-    public LadderJsonComment(String address, String comment, Double value) {
+    public LadderJsonComment(Integer idx, String address, String comment, Double value) {
+        this.idx = idx;
         this.address = address;
         this.comment = comment;
         this.value = value;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Integer getIdx() {
+        return idx;
     }
 
     /**
