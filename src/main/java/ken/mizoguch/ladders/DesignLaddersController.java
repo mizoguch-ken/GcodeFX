@@ -16,8 +16,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,9 +35,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableView;
+import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -142,13 +145,13 @@ public class DesignLaddersController implements Initializable {
     @FXML
     private SplitPane splitIoLadder;
     @FXML
-    private TableView<LadderTableIo> tableIo;
+    private TreeTableView<LadderTreeTableIo> treeTableIo;
     @FXML
-    private TableColumn<LadderTableIo, String> tableIoAddress;
+    private TreeTableColumn<LadderTreeTableIo, String> treeTableIoAddress;
     @FXML
-    private TableColumn<LadderTableIo, String> tableIoComment;
+    private TreeTableColumn<LadderTreeTableIo, String> treeTableIoComment;
     @FXML
-    private TableColumn<LadderTableIo, Double> tableIoValue;
+    private TreeTableColumn<LadderTreeTableIo, Double> treeTableIoValue;
     @FXML
     private TabPane tabLadder;
     // status
@@ -365,11 +368,13 @@ public class DesignLaddersController implements Initializable {
     private long idealCycleTime_;
     private Path ladderPath_;
 
-    private ConcurrentHashMap<String, LadderIo> ioMap_;
+    private CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap_;
     private Tab selectedTab_;
     private ScrollPane selectedScrollPane_;
-    private LadderTableIo ladderTableIo_;
-    private int tableIndex_, tableSize_;
+    private ObservableList<TreeItem<LadderTreeTableIo>> ovTreeTable_, ovTreeTableChild_;
+    private LadderTreeTableIo ladderTreeTableIo_;
+    private int treeTableIndex_, treeTableChildIndex_, treeTableSize_, treeTableChildSize_;
+    private double treeTableValue_;
 
     private boolean viewRefresh_, isShowing_, isShown_;
 
@@ -607,42 +612,92 @@ public class DesignLaddersController implements Initializable {
         });
 
         // io
-        tableIoAddress.setCellFactory((TableColumn<LadderTableIo, String> param) -> {
-            return new TextFieldTableCell<>(new LadderAddressStringConverter(ladders_.getIoMap()));
+        treeTableIoAddress.setCellFactory((TreeTableColumn<LadderTreeTableIo, String> param) -> {
+            return new TextFieldTreeTableCell<>(new LadderAddressStringConverter());
         });
-        tableIoAddress.setCellValueFactory((TableColumn.CellDataFeatures<LadderTableIo, String> param) -> {
-            return param.getValue().addressProperty();
+        treeTableIoAddress.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+            return param.getValue().getValue().addressProperty();
         });
-        tableIoAddress.setOnEditCommit((TableColumn.CellEditEvent<LadderTableIo, String> event) -> {
+        treeTableIoAddress.setOnEditCommit((TreeTableColumn.CellEditEvent<LadderTreeTableIo, String> event) -> {
             if ((event.getOldValue() != null) && (event.getNewValue() != null)) {
                 if (!event.getOldValue().equals(event.getNewValue())) {
-                    ladders_.changeAddress(event.getOldValue(), event.getNewValue());
+                    TreeItem<LadderTreeTableIo> parent = event.getRowValue().getParent();
+
+                    if (parent == event.getTreeTableView().getRoot()) {
+                        // tab name
+                        int idx;
+                        ObservableList<TreeItem<LadderTreeTableIo>> ovTreeTable = event.getTreeTableView().getRoot().getChildren();
+                        for (idx = 0; idx < ovTreeTable.size(); idx++) {
+                            if (ovTreeTable.get(idx) == event.getRowValue()) {
+                                break;
+                            }
+                        }
+                        if ((Ladders.LADDER_GLOBAL_ADDRESS_INDEX < idx) && (idx < ovTreeTable.size())) {
+                            ladders_.ladderChangeTabName(idx, event.getNewValue());
+                        }
+                    } else {
+                        // address
+                        int idx;
+                        ObservableList<TreeItem<LadderTreeTableIo>> ovTreeTable = event.getTreeTableView().getRoot().getChildren();
+                        for (idx = 0; idx < ovTreeTable.size(); idx++) {
+                            if (ovTreeTable.get(idx) == parent) {
+                                break;
+                            }
+                        }
+                        if (idx < ovTreeTable.size()) {
+                            int oldIdx = Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
+                            if (event.getOldValue().startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                                oldIdx = idx;
+                            }
+
+                            int newIdx = Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
+                            if (event.getNewValue().startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                                newIdx = idx;
+                            }
+
+                            ladders_.changeAddress(oldIdx, event.getOldValue(), newIdx, event.getNewValue());
+                        }
+                    }
                 }
             }
         });
-        tableIoComment.setCellFactory((TableColumn<LadderTableIo, String> param) -> {
-            return new TextFieldTableCell<>(new LadderCommentStringConverter());
+        treeTableIoComment.setCellFactory((TreeTableColumn<LadderTreeTableIo, String> param) -> {
+            return new TextFieldTreeTableCell<>(new LadderCommentStringConverter());
         });
-        tableIoComment.setCellValueFactory((TableColumn.CellDataFeatures<LadderTableIo, String> param) -> {
-            return param.getValue().commentProperty();
+        treeTableIoComment.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+            return param.getValue().getValue().commentProperty();
         });
-        tableIoComment.setOnEditCommit((TableColumn.CellEditEvent<LadderTableIo, String> event) -> {
+        treeTableIoComment.setOnEditCommit((TreeTableColumn.CellEditEvent<LadderTreeTableIo, String> event) -> {
             if ((event.getOldValue() != null) && (event.getNewValue() != null)) {
                 if (!event.getOldValue().equals(event.getNewValue())) {
-                    ladders_.changeComment(event.getRowValue().getAddress(), event.getNewValue());
+                    TreeItem<LadderTreeTableIo> parent = event.getRowValue().getParent();
+
+                    if (parent != event.getTreeTableView().getRoot()) {
+                        // comment
+                        int idx;
+                        ObservableList<TreeItem<LadderTreeTableIo>> ovTreeTable = event.getTreeTableView().getRoot().getChildren();
+                        for (idx = 0; idx < ovTreeTable.size(); idx++) {
+                            if (ovTreeTable.get(idx) == parent) {
+                                break;
+                            }
+                        }
+                        if (idx < ovTreeTable.size()) {
+                            ladders_.changeComment(idx, event.getRowValue().getValue().getAddress(), event.getNewValue());
+                        }
+                    }
                 }
             }
         });
-        tableIoValue.setCellFactory((TableColumn<LadderTableIo, Double> param) -> {
-            return new TextFieldTableCell<>(new LadderValueStringConverter());
+        treeTableIoValue.setCellFactory((TreeTableColumn<LadderTreeTableIo, Double> param) -> {
+            return new TextFieldTreeTableCell<>(new LadderValueStringConverter());
         });
-        tableIoValue.setCellValueFactory((TableColumn.CellDataFeatures<LadderTableIo, Double> param) -> {
-            return param.getValue().valueProperty().asObject();
+        treeTableIoValue.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, Double> param) -> {
+            return param.getValue().getValue().valueProperty().asObject();
         });
-        tableIoValue.setOnEditCommit((TableColumn.CellEditEvent<LadderTableIo, Double> event) -> {
+        treeTableIoValue.setOnEditCommit((TreeTableColumn.CellEditEvent<LadderTreeTableIo, Double> event) -> {
             if ((event.getOldValue() != null) && (event.getNewValue() != null)) {
                 if (!event.getOldValue().equals(event.getNewValue())) {
-                    ladders_.setValue(event.getRowValue().getAddress(), event.getNewValue());
+                    ladders_.setValue(event.getRowValue().getValue().getAddress(), event.getNewValue());
                 }
             }
         });
@@ -651,9 +706,11 @@ public class DesignLaddersController implements Initializable {
         tabLadder.setOnKeyPressed((KeyEvent event) -> {
             event.consume();
 
-            ScrollPane scrollPane = (ScrollPane) tabLadder.getSelectionModel().getSelectedItem().getContent();
-            LadderPane pane = (LadderPane) scrollPane.getContent();
-            ladders_.onKeyPressed(pane, event, scrollPane);
+            if (tabLadder.getSelectionModel().getSelectedItem() != null) {
+                ScrollPane scrollPane = (ScrollPane) tabLadder.getSelectionModel().getSelectedItem().getContent();
+                LadderPane pane = (LadderPane) scrollPane.getContent();
+                ladders_.onKeyPressed(pane, event, scrollPane);
+            }
         });
     }
 
@@ -706,9 +763,9 @@ public class DesignLaddersController implements Initializable {
         menuToolsStop.setDisable(true);
 
         // io
-        tableIoAddress.setText(LadderEnums.IO_ADDRESS.toString());
-        tableIoComment.setText(LadderEnums.IO_COMMENT.toString());
-        tableIoValue.setText(LadderEnums.IO_VALUE.toString());
+        treeTableIoAddress.setText(LadderEnums.IO_ADDRESS.toString());
+        treeTableIoComment.setText(LadderEnums.IO_COMMENT.toString());
+        treeTableIoValue.setText(LadderEnums.IO_VALUE.toString());
     }
 
     /**
@@ -731,8 +788,8 @@ public class DesignLaddersController implements Initializable {
      *
      * @return
      */
-    public TableView<LadderTableIo> getTableIo() {
-        return tableIo;
+    public TreeTableView<LadderTreeTableIo> getTreeTableIo() {
+        return treeTableIo;
     }
 
     private int getHistoryGeneration() {
@@ -816,11 +873,18 @@ public class DesignLaddersController implements Initializable {
                     ((LadderPane) selectedScrollPane_.getContent()).refreshView(ioMap_, selectedScrollPane_);
                 }
 
-                // table refresh
-                for (tableIndex_ = 0, tableSize_ = tableIo.getItems().size(); tableIndex_ < tableSize_; tableIndex_++) {
-                    ladderTableIo_ = tableIo.getItems().get(tableIndex_);
-                    if (ioMap_.get(ladderTableIo_.getAddress()).getValue() != ladderTableIo_.getValue()) {
-                        ladderTableIo_.setValue(ioMap_.get(ladderTableIo_.getAddress()).getValue());
+                // tree table refresh
+                ovTreeTable_ = treeTableIo.getRoot().getChildren();
+                for (treeTableIndex_ = 0, treeTableSize_ = ovTreeTable_.size(); treeTableIndex_ < treeTableSize_; treeTableIndex_++) {
+                    ovTreeTableChild_ = ovTreeTable_.get(treeTableIndex_).getChildren();
+                    if (ovTreeTable_.get(treeTableIndex_).isExpanded()) {
+                        for (treeTableChildIndex_ = 0, treeTableChildSize_ = ovTreeTableChild_.size(); treeTableChildIndex_ < treeTableChildSize_; treeTableChildIndex_++) {
+                            ladderTreeTableIo_ = ovTreeTableChild_.get(treeTableChildIndex_).getValue();
+                            treeTableValue_ = ioMap_.get(treeTableIndex_).get(ladderTreeTableIo_.getAddress()).getValue();
+                            if (treeTableValue_ != ladderTreeTableIo_.getValue()) {
+                                ladderTreeTableIo_.setValue(treeTableValue_);
+                            }
+                        }
                     }
                 }
                 viewRefresh_ = true;
@@ -1131,9 +1195,12 @@ public class DesignLaddersController implements Initializable {
         ioMap_ = null;
         selectedTab_ = null;
         selectedScrollPane_ = null;
-        ladderTableIo_ = null;
-        tableIndex_ = 0;
-        tableSize_ = 0;
+        ladderTreeTableIo_ = null;
+        treeTableIndex_ = 0;
+        treeTableChildIndex_ = 0;
+        treeTableSize_ = 0;
+        treeTableChildSize_ = 0;
+        treeTableValue_ = 0.0;
 
         viewRefresh_ = true;
         isShowing_ = false;
