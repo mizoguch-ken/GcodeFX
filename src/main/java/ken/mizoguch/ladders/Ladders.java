@@ -784,7 +784,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         name = name.trim();
         if (checkTabName(name)) {
             LadderPane pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(idx - 1).getContent()).getContent();
-            treeTableIo.getRoot().getChildren().get(idx - 1).getValue().setAddress(name.replace(" ", "_"));
+            treeTableIo.getRoot().getChildren().get(idx).getValue().setAddress(name.replace(" ", "_"));
             pane.setChanged(true);
             ladderCommand_.ladderChangeName(pane, name);
             isChanged_ = true;
