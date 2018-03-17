@@ -780,6 +780,12 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         return false;
     }
 
+    /**
+     *
+     * @param idx
+     * @param name
+     * @return
+     */
     public boolean ladderChangeTabName(int idx, String name) {
         name = name.trim();
         if (checkTabName(name)) {
