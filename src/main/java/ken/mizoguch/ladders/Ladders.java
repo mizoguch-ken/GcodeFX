@@ -812,6 +812,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         if (name != null) {
             int index, size;
 
+            name = name.replace(" ", "_");
             for (index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
                 if (((LadderPane) ((ScrollPane) tabLadder.getTabs().get(index).getContent()).getContent()).getLadder().getName().equals(name)) {
                     return false;
