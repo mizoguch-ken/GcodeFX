@@ -1287,6 +1287,7 @@ public class LadderCommand {
                                 grid.setBlock(copyGrid.getBlock());
                                 grid.setBlockValue(copyGrid.getBlockValue());
                                 grid.setBlockFunctions(copyGrid.getBlockFunctions());
+                                grid.setBlockScript(copyGrid.getBlockScript());
                                 if ((grid.getColumnIndex() > 1) && (grid.getRowIndex() > 1)) {
                                     grid.setVertical(copyGrid.isVertical());
                                     grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
