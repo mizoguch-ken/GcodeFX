@@ -165,7 +165,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     private final CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap_;
     private final CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap_;
     private final CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> scriptIoMap_;
-    private long idealCycleTime_, cycleTime_, minCycleTime_, maxCycleTime_, cumulativeCycleTime_, cumulativeCycleTimeCount_;
+    private long idealCycleTime_;
     private boolean isCycling_, isChanged_;
 
     private final Gson gson_ = new GsonBuilder().setPrettyPrinting().create();
@@ -199,11 +199,6 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         commentMap_ = new CopyOnWriteArrayList<>();
         scriptIoMap_ = new CopyOnWriteArrayList<>();
         idealCycleTime_ = 0;
-        cycleTime_ = 0;
-        minCycleTime_ = 0;
-        maxCycleTime_ = 0;
-        cumulativeCycleTime_ = 0;
-        cumulativeCycleTimeCount_ = 0;
         isChanged_ = false;
         isCycling_ = false;
     }
@@ -1226,14 +1221,20 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                     break;
                 case LEFT:
                     if (!event.isShiftDown() && !event.isShortcutDown() && event.isAltDown()) {
-                        ladderMoveLeft(pane.getLadder());
-                        return true;
+                        if (!isCycling_) {
+                            ladderMoveLeft(pane.getLadder());
+                            return true;
+                        }
+                        return false;
                     }
                     break;
                 case RIGHT:
                     if (!event.isShiftDown() && !event.isShortcutDown() && event.isAltDown()) {
-                        ladderMoveRight(pane.getLadder());
-                        return true;
+                        if (!isCycling_) {
+                            ladderMoveRight(pane.getLadder());
+                            return true;
+                        }
+                        return false;
                     }
                     break;
                 case N:
@@ -1363,32 +1364,20 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                     Map.Entry<String, LadderIo> entry;
                     LadderRegisterSoemIo registerSoemIo;
                     Integer registerSoemValue;
-                    long nanoTime, nanoTimeOld;
+                    long cycleTime, minCycleTime, maxCycleTime, cumulativeCycleTime, cumulativeCycleTimeCount, nanoTime, nanoTimeOld, waitTime;
                     int index, size;
 
                     ladderController_.runViewRunning(true);
 
-                    minCycleTime_ = Long.MAX_VALUE;
-                    maxCycleTime_ = 0;
-                    cumulativeCycleTime_ = 0;
-                    cumulativeCycleTimeCount_ = 0;
+                    cycleTime = 0;
+                    minCycleTime = Long.MAX_VALUE;
+                    maxCycleTime = 0;
+                    cumulativeCycleTime = 0;
+                    cumulativeCycleTimeCount = 0;
 
                     nanoTimeOld = System.nanoTime();
                     while (isCycling_) {
                         synchronized (lock_) {
-                            // cycletimme
-                            nanoTime = System.nanoTime();
-                            cycleTime_ = nanoTime - nanoTimeOld;
-                            if ((cycleTime_ > 0) && (cycleTime_ < minCycleTime_)) {
-                                minCycleTime_ = cycleTime_;
-                                ladderController_.setMinCycleTime(minCycleTime_);
-                            }
-                            if (cycleTime_ > maxCycleTime_) {
-                                maxCycleTime_ = cycleTime_;
-                                ladderController_.setMaxCycleTime(maxCycleTime_);
-                            }
-                            nanoTimeOld = nanoTime;
-
                             // soem
                             if (soem_ != null) {
                                 for (index = 0, size = registerSoemOut_.size(); index < size; index++) {
@@ -1420,27 +1409,42 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                                 }
                             }
 
-                            // refresh view
-                            cumulativeCycleTime_ += cycleTime_;
-                            cumulativeCycleTimeCount_++;
-                            if (cumulativeCycleTime_ > LADDER_VIEW_REFRESH_CYCLE_TIME) {
-                                ladderController_.refreshLadder(cumulativeCycleTime_, cumulativeCycleTimeCount_);
-                                cumulativeCycleTime_ = 0;
-                                cumulativeCycleTimeCount_ = 0;
-                            }
-
                             // ladder
                             for (index = 0; index < laddersSize_; index++) {
-                                ladders_[index].run(ioMap_, cycleTime_);
+                                ladders_[index].run(ioMap_, cycleTime);
+                            }
+
+                            // refresh view
+                            if ((LADDER_VIEW_REFRESH_CYCLE_TIME - cumulativeCycleTime) < 0) {
+                                ladderController_.refreshLadder(cumulativeCycleTime, cumulativeCycleTimeCount);
+                                cumulativeCycleTime = 0;
+                                cumulativeCycleTimeCount = 0;
                             }
                         }
 
                         // ideal cycletime
-                        if (idealCycleTime_ > cycleTime_) {
+                        waitTime = idealCycleTime_ - cycleTime;
+                        if (waitTime > 0) {
                             try {
-                                TimeUnit.NANOSECONDS.sleep(idealCycleTime_ - cycleTime_);
+                                TimeUnit.NANOSECONDS.sleep(waitTime);
                             } catch (InterruptedException ex) {
                             }
+                        }
+
+                        // cycletimme
+                        nanoTime = System.nanoTime();
+                        cycleTime = nanoTime - nanoTimeOld;
+                        if (cycleTime > 0) {
+                            if ((cycleTime - minCycleTime) < 0) {
+                                minCycleTime = cycleTime;
+                                ladderController_.setMinCycleTime(minCycleTime);
+                            } else if ((cycleTime - maxCycleTime) > 0) {
+                                maxCycleTime = cycleTime;
+                                ladderController_.setMaxCycleTime(maxCycleTime);
+                            }
+                            cumulativeCycleTime += cycleTime;
+                            cumulativeCycleTimeCount++;
+                            nanoTimeOld = nanoTime;
                         }
                     }
                 } catch (Exception ex) {
