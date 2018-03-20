@@ -449,10 +449,10 @@ public class LadderCommand {
      * @return
      */
     public boolean changeComment(TabPane tabPane, TreeTableView<LadderTreeTableIo> treeTableView, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap, CopyOnWriteArrayList<ConcurrentHashMap<String, String>> commentMap, int idx, String address, String comment) {
-        String oldComment = "";
+        String oldComment = LadderGrid.LADDER_GRID_INITIAL_COMMENT;
 
         if (comment == null) {
-            comment = "";
+            comment = LadderGrid.LADDER_GRID_INITIAL_COMMENT;
         }
 
         if (comment.isEmpty()) {
@@ -1244,13 +1244,26 @@ public class LadderCommand {
                                     gridPaneBuf.setEditing(true);
                                 }
                                 grid.setAddress(copyGrid.getAddress());
-                                grid.setComment(copyGrid.getComment());
                                 gridPane.changeBlock();
-                                gridPane.changeBlockIO();
-                                gridPane.changeAddress();
+
+                                if (LadderGrid.LADDER_GRID_INITIAL_ADDRESS.equals(copyGrid.getAddress())) {
+                                    grid.setComment(ladders_.getComment(ladder.getIdx(), LadderGrid.LADDER_GRID_INITIAL_COMMENT));
+                                } else {
+                                    if (copyGrid.getAddress().startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                                        if (ladders_.isComment(ladder.getIdx(), copyGrid.getAddress())) {
+                                            grid.setComment(ladders_.getComment(ladder.getIdx(), copyGrid.getAddress()));
+                                        } else {
+                                            changeComment(ladder.getIdx(), copyGrid.getAddress(), copyGrid.getComment());
+                                        }
+                                    } else {
+                                        if (ladders_.isComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress())) {
+                                            grid.setComment(ladders_.getComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress()));
+                                        } else {
+                                            changeComment(ladder.getIdx(), copyGrid.getAddress(), copyGrid.getComment());
+                                        }
+                                    }
+                                }
                                 gridPane.changeComment();
-                                gridPane.changeBlockFunction();
-                                gridPane.changeBlockScript();
                                 gridPane.setEditing(true);
 
                                 blockChangeRevised(ladder, grid);
@@ -1297,13 +1310,26 @@ public class LadderCommand {
                                     gridPaneBuf.setEditing(true);
                                 }
                                 grid.setAddress(copyGrid.getAddress());
-                                grid.setComment(copyGrid.getComment());
                                 gridPane.changeBlock();
-                                gridPane.changeBlockIO();
-                                gridPane.changeAddress();
+
+                                if (LadderGrid.LADDER_GRID_INITIAL_ADDRESS.equals(copyGrid.getAddress())) {
+                                    grid.setComment(ladders_.getComment(ladder.getIdx(), LadderGrid.LADDER_GRID_INITIAL_COMMENT));
+                                } else {
+                                    if (copyGrid.getAddress().startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                                        if (ladders_.isComment(ladder.getIdx(), copyGrid.getAddress())) {
+                                            grid.setComment(ladders_.getComment(ladder.getIdx(), copyGrid.getAddress()));
+                                        } else {
+                                            changeComment(ladder.getIdx(), copyGrid.getAddress(), copyGrid.getComment());
+                                        }
+                                    } else {
+                                        if (ladders_.isComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress())) {
+                                            grid.setComment(ladders_.getComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress()));
+                                        } else {
+                                            changeComment(ladder.getIdx(), copyGrid.getAddress(), copyGrid.getComment());
+                                        }
+                                    }
+                                }
                                 gridPane.changeComment();
-                                gridPane.changeBlockFunction();
-                                gridPane.changeBlockScript();
                                 gridPane.setEditing(true);
 
                                 blockChangeRevised(ladder, grid);
