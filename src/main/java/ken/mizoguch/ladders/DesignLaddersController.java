@@ -1155,6 +1155,7 @@ public class DesignLaddersController implements Initializable {
         // ladders
         ladders_.startUp(stage_, icons_, ladderPath_);
         ladders_.setHistoryGeneration(historyGeneration_);
+        ladders_.setIdealCycleTime(idealCycleTime_);
     }
 
     /**
