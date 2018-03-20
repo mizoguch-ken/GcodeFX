@@ -1198,12 +1198,16 @@ public class LadderCommand {
                             if ((grid.getColumnIndex() > 0) && (grid.getColumnIndex() < ladder.getColumn())) {
                                 grid.clear();
                                 if ((grid.getColumnIndex() > 1) && (grid.getRowIndex() > 1)) {
-                                    grid.setVertical(copyGrid.isVertical());
-                                    grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
-                                    gridPane.changeStrokeVertical();
-                                    gridPaneBuf = pane.findGridPane(grid.getUpLadderGrid());
-                                    gridPaneBuf.changeStrokeVerticalOr();
-                                    gridPaneBuf.setEditing(true);
+                                    if (grid.isVertical() != copyGrid.isVertical()) {
+                                        grid.setVertical(copyGrid.isVertical());
+                                        gridPane.changeStrokeVertical();
+                                    }
+                                    if (grid.getUpLadderGrid().isVerticalOr() != copyGrid.isVertical()) {
+                                        grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
+                                        gridPaneBuf = pane.findGridPane(grid.getUpLadderGrid());
+                                        gridPaneBuf.changeStrokeVerticalOr();
+                                        gridPaneBuf.setEditing(true);
+                                    }
                                 }
                                 gridPane.changeBlock();
                                 gridPane.changeBlockIO();
@@ -1236,12 +1240,16 @@ public class LadderCommand {
                                 grid.setBlock(copyGrid.getBlock());
                                 grid.setBlockFunctions(copyGrid.getBlockFunctions());
                                 if ((grid.getColumnIndex() > 1) && (grid.getRowIndex() > 1)) {
-                                    grid.setVertical(copyGrid.isVertical());
-                                    grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
-                                    gridPane.changeStrokeVertical();
-                                    gridPaneBuf = pane.findGridPane(grid.getUpLadderGrid());
-                                    gridPaneBuf.changeStrokeVerticalOr();
-                                    gridPaneBuf.setEditing(true);
+                                    if (grid.isVertical() != copyGrid.isVertical()) {
+                                        grid.setVertical(copyGrid.isVertical());
+                                        gridPane.changeStrokeVertical();
+                                    }
+                                    if (grid.getUpLadderGrid().isVerticalOr() != copyGrid.isVertical()) {
+                                        grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
+                                        gridPaneBuf = pane.findGridPane(grid.getUpLadderGrid());
+                                        gridPaneBuf.changeStrokeVerticalOr();
+                                        gridPaneBuf.setEditing(true);
+                                    }
                                 }
                                 grid.setAddress(copyGrid.getAddress());
                                 gridPane.changeBlock();
@@ -1302,12 +1310,16 @@ public class LadderCommand {
                                 grid.setBlockFunctions(copyGrid.getBlockFunctions());
                                 grid.setBlockScript(copyGrid.getBlockScript());
                                 if ((grid.getColumnIndex() > 1) && (grid.getRowIndex() > 1)) {
-                                    grid.setVertical(copyGrid.isVertical());
-                                    grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
-                                    gridPane.changeStrokeVertical();
-                                    gridPaneBuf = pane.findGridPane(grid.getUpLadderGrid());
-                                    gridPaneBuf.changeStrokeVerticalOr();
-                                    gridPaneBuf.setEditing(true);
+                                    if (grid.isVertical() != copyGrid.isVertical()) {
+                                        grid.setVertical(copyGrid.isVertical());
+                                        gridPane.changeStrokeVertical();
+                                    }
+                                    if (grid.getUpLadderGrid().isVerticalOr() != copyGrid.isVertical()) {
+                                        grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
+                                        gridPaneBuf = pane.findGridPane(grid.getUpLadderGrid());
+                                        gridPaneBuf.changeStrokeVerticalOr();
+                                        gridPaneBuf.setEditing(true);
+                                    }
                                 }
                                 grid.setAddress(copyGrid.getAddress());
                                 gridPane.changeBlock();
