@@ -24,7 +24,6 @@ import static javafx.scene.layout.GridPane.setColumnIndex;
 import static javafx.scene.layout.GridPane.setRowIndex;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import static ken.mizoguch.ladders.LadderGrid.LADDER_GRID_INITIAL_COMMENT;
 
 /**
  *
@@ -319,109 +318,61 @@ public class LadderPane extends GridPane {
                                         defaultValue.append("LD");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case LOAD_NOT:
                                         defaultValue.append("/LD");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case LOAD_RISING:
                                         defaultValue.append("@LD");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case LOAD_RISING_NOT:
                                         defaultValue.append("/@LD");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case LOAD_FALLING:
                                         defaultValue.append("%LD");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case LOAD_FALLING_NOT:
                                         defaultValue.append("/%LD");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case OUT:
                                         defaultValue.append("OUT");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case OUT_NOT:
                                         defaultValue.append("/OUT");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case OUT_RISING:
                                         defaultValue.append("@OUT");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case OUT_RISING_NOT:
                                         defaultValue.append("/@OUT");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case OUT_FALLING:
                                         defaultValue.append("%OUT");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case OUT_FALLING_NOT:
                                         defaultValue.append("/%OUT");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case COMPARISON_EQUAL:
                                         defaultValue.append("=");
@@ -442,10 +393,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case COMPARISON_NOT_EQUAL:
@@ -468,10 +415,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case COMPARISON_LESS:
                                         defaultValue.append("<");
@@ -492,10 +435,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case COMPARISON_LESS_EQUAL:
@@ -518,10 +457,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case COMPARISON_GREATER:
                                         defaultValue.append(">");
@@ -542,10 +477,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case COMPARISON_GREATER_EQUAL:
@@ -568,10 +499,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case COMPARISON_AND_BITS:
                                         defaultValue.append("&");
@@ -592,10 +519,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case COMPARISON_OR_BITS:
@@ -618,10 +541,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case COMPARISON_XOR_BITS:
                                         defaultValue.append("^");
@@ -643,28 +562,16 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case SET:
                                         defaultValue.append("SET");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case RESET:
                                         defaultValue.append("RES");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case AND_BITS:
                                         defaultValue.append("AND");
@@ -701,10 +608,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case OR_BITS:
@@ -743,10 +646,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case XOR_BITS:
                                         defaultValue.append("XOR");
@@ -784,10 +683,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case NOT_BITS:
                                         defaultValue.append("NOT");
@@ -808,10 +703,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case ADDITION:
@@ -850,10 +741,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case SUBTRACTION:
                                         defaultValue.append("SUB");
@@ -890,10 +777,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case MULTIPLICATION:
@@ -932,10 +815,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case DIVISION:
                                         defaultValue.append("DIV");
@@ -972,10 +851,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case AVERAGE:
@@ -1014,10 +889,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case SHIFT_LEFT_BITS:
                                         defaultValue.append("SFL");
@@ -1054,10 +925,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case SHIFT_RIGHT_BITS:
@@ -1096,10 +963,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case SIGMOID:
                                         defaultValue.append("SIG");
@@ -1137,19 +1000,11 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[1].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case RANDOM:
                                         defaultValue.append("RAND");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case TIMER:
                                         defaultValue.append("TIM");
@@ -1170,10 +1025,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case TIMER_NOT:
@@ -1196,10 +1047,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case COUNTER:
                                         defaultValue.append("CNT");
@@ -1220,10 +1067,6 @@ public class LadderPane extends GridPane {
                                             }
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
-                                        }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
                                         }
                                         break;
                                     case COUNTER_NOT:
@@ -1246,10 +1089,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case MOVE:
                                         defaultValue.append("MOV");
@@ -1271,10 +1110,6 @@ public class LadderPane extends GridPane {
                                         } else {
                                             defaultValue.append(previousGrid.getBlockFunctions()[0].getAddress());
                                         }
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                     case SCRIPT:
                                         defaultValue.append("SCR");
@@ -1282,10 +1117,6 @@ public class LadderPane extends GridPane {
                                         defaultValue.append(previousGrid.getAddress()).append(";");
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getBlockScript());
-                                        if (!previousGrid.getComment().isEmpty()) {
-                                            defaultValue.append("; ");
-                                            defaultValue.append(previousGrid.getComment());
-                                        }
                                         break;
                                 }
                                 changed = keyInput(defaultValue.toString(), previousGrid, previousGridPane);
@@ -2008,7 +1839,7 @@ public class LadderPane extends GridPane {
                                 if (ladders_.isComment(idx, mBlock[1])) {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                 } else {
-                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LadderGrid.LADDER_GRID_INITIAL_COMMENT);
                                 }
 
                                 // select
@@ -2039,7 +1870,7 @@ public class LadderPane extends GridPane {
                                 if (ladders_.isComment(idx, mBlock[1])) {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                 } else {
-                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
+                                    ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LadderGrid.LADDER_GRID_INITIAL_COMMENT);
                                 }
 
                                 // function value
@@ -2087,7 +1918,7 @@ public class LadderPane extends GridPane {
                                     if (ladders_.isComment(idx, mBlock[1])) {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                     } else {
-                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LadderGrid.LADDER_GRID_INITIAL_COMMENT);
                                     }
                                 }
                                 break;
@@ -2131,7 +1962,7 @@ public class LadderPane extends GridPane {
                                     if (ladders_.isComment(idx, mBlock[1])) {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                     } else {
-                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LadderGrid.LADDER_GRID_INITIAL_COMMENT);
                                     }
 
                                     // function value
@@ -2176,7 +2007,7 @@ public class LadderPane extends GridPane {
                                     if (ladders_.isComment(idx, mBlock[1])) {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, ladders_.getComment(idx, mBlock[1]));
                                     } else {
-                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LADDER_GRID_INITIAL_COMMENT);
+                                        ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LadderGrid.LADDER_GRID_INITIAL_COMMENT);
                                     }
 
                                     // function value
