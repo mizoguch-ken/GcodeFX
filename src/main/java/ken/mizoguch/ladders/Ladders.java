@@ -1287,6 +1287,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 if (pane.isChanged()) {
                     isChanged_ = true;
 
+                    tab.setText(pane.getLadder().getName() + " *");
                     setTitle();
                     return true;
                 }
