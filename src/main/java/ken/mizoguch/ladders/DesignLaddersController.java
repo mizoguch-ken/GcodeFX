@@ -827,6 +827,8 @@ public class DesignLaddersController implements Initializable {
     }
 
     private void viewRunning(boolean bln) {
+        menuEditTabMoveLeft.setDisable(bln);
+        menuEditTabMoveRight.setDisable(bln);
         menuToolsRun.setDisable(bln);
         menuToolsStop.setDisable(!bln);
     }
