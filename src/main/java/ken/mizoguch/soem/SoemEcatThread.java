@@ -69,7 +69,7 @@ public class SoemEcatThread extends Service<Void> {
     private final ConcurrentMap<Long, EcatData> out_;
     private SoemEcatCheck ecatCheck_;
     private long cycletime_;
-    private boolean exit_;
+    private boolean init_, exit_;
 
     /**
      *
@@ -85,6 +85,7 @@ public class SoemEcatThread extends Service<Void> {
         out_ = new ConcurrentHashMap<>();
         ecatCheck_ = null;
         cycletime_ = 0;
+        init_ = false;
         exit_ = true;
     }
 
@@ -201,6 +202,7 @@ public class SoemEcatThread extends Service<Void> {
                                     runEcatCheck();
                                 });
                             }
+                            init_ = true;
                             return true;
                         }
                     }
@@ -233,7 +235,8 @@ public class SoemEcatThread extends Service<Void> {
             ecatCheck_.cancel();
             ecatCheck_ = null;
         }
-        if ((soem_ != null) && (context_ != null)) {
+        if (init_ && (soem_ != null) && (context_ != null)) {
+            init_ = false;
             context_.slavelist[0].state.set(EC_STATE_PRE_OP.intValue());
             soem_.ecx_writestate(context_, 0);
             chk = 40;
