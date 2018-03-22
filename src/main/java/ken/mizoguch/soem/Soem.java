@@ -387,6 +387,14 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
+    public Integer slavecount() {
+        if (context_ != null) {
+            return context_.slavecount.get();
+        }
+        return null;
+    }
+
+    @Override
     public Integer in(int slave, long bitsOffset, int bitsMask) {
         if (context_ != null) {
             if ((bitsOffset >= 0) && (bitsOffset < context_.slavelist[slave].Ibits.get())) {
