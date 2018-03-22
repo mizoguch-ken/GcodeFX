@@ -26,6 +26,8 @@ public interface SoemPlugin {
 
     public Boolean setNotifyCheck(boolean state);
 
+    public Integer slavecount();
+
     public Integer in(int slave, long bitsOffset, int bitsMask);
 
     public Long notify(int slave, long bitsOffset, int bitsMask, boolean register);
