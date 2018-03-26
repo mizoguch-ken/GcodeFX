@@ -28,11 +28,11 @@ public interface SoemPlugin {
 
     public Integer slavecount();
 
-    public Integer in(int slave, long bitsOffset, int bitsMask);
+    public Long in(int slave, long bitsOffset, long bitsMask);
 
-    public Long notify(int slave, long bitsOffset, int bitsMask, boolean register);
+    public Long notify(int slave, long bitsOffset, long bitsMask, boolean register);
 
-    public Integer out(int slave, long bitsOffset, int bitsMask, int value);
+    public Long out(int slave, long bitsOffset, long bitsMask, long value);
 
     public String find_adapters();
 
