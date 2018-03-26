@@ -401,28 +401,26 @@ public class Soem implements SoemPlugin {
                 if (context_.slavelist[slave].inputs.get() != null) {
                     long bits = (context_.slavelist[slave].Ibits.get() - bitsOffset);
                     if ((bitsMask > 0) && (bits > 0)) {
-                        if (bits >= 64) {
-                            bits = 0xffffffffffffffffL;
-                        } else {
-                            bits = (1 << bits) - 1;
+                        if (bits < 64) {
+                            bitsMask &= (1 << bits) - 1;
                         }
 
                         if (bitsMask < 0xff) {
-                            return (((context_.slavelist[slave].inputs.get().getByte(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
-                        } else if ((bitsMask < 0xffff) && (bits > 8)) {
-                            return (((context_.slavelist[slave].inputs.get().getShort(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
-                        } else if ((bitsMask < 0xffffff) && (bits > 16)) {
-                            return (((context_.slavelist[slave].inputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
-                        } else if ((bitsMask < 0xffffffff) && (bits > 24)) {
-                            return (((context_.slavelist[slave].inputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
-                        } else if ((bitsMask < 0xffffffffffL) && (bits > 32)) {
-                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
-                        } else if ((bitsMask < 0xffffffffffffL) && (bits > 40)) {
-                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
-                        } else if ((bitsMask < 0xffffffffffffffL) && (bits > 48)) {
-                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                            return ((context_.slavelist[slave].inputs.get().getByte(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffff) {
+                            return ((context_.slavelist[slave].inputs.get().getShort(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffff) {
+                            return ((context_.slavelist[slave].inputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffff) {
+                            return ((context_.slavelist[slave].inputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffffffL) {
+                            return ((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffffffffL) {
+                            return ((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffffffffffL) {
+                            return ((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
                         } else {
-                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                            return ((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bitsMask);
                         }
                     }
                 }
