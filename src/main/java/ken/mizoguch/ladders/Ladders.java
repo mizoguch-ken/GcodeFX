@@ -1475,9 +1475,11 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         if ((webEngine != null) && (state != null)) {
             webEngine_ = webEngine;
             state_ = state;
-            ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).entrySet().forEach((entry) -> {
-                entry.getValue().setWebEngineState(webEngine_, state_);
-            });
+            for (int idx = 0; idx < ioMap_.size(); idx++) {
+                ioMap_.get(idx).entrySet().forEach((entry) -> {
+                    entry.getValue().setWebEngineState(webEngine_, state_);
+                });
+            }
         }
     }
 
