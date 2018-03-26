@@ -276,31 +276,29 @@ public class SoemEcatThread extends Service<Void> {
             int bytes, cnt;
 
             if ((bitsMask > 0) && (bits > 0)) {
-                if (bits >= 64) {
-                    bits = 0xffffffffffffffffL;
-                } else {
-                    bits = (1 << bits) - 1;
+                if (bits < 64) {
+                    bitsMask &= (1 << bits) - 1;
                 }
 
                 if (bitsMask < 0xff) {
                     bytes = 1;
-                } else if ((bitsMask < 0xffff) && (bits > 8)) {
+                } else if (bitsMask < 0xffff) {
                     bytes = 2;
-                } else if ((bitsMask < 0xffffff) && (bits > 16)) {
+                } else if (bitsMask < 0xffffff) {
                     bytes = 3;
-                } else if ((bitsMask < 0xffffffff) && (bits > 24)) {
+                } else if (bitsMask < 0xffffffff) {
                     bytes = 4;
-                } else if ((bitsMask < 0xffffffffffL) && (bits > 32)) {
+                } else if (bitsMask < 0xffffffffffL) {
                     bytes = 5;
-                } else if ((bitsMask < 0xffffffffffffL) && (bits > 40)) {
+                } else if (bitsMask < 0xffffffffffffL) {
                     bytes = 6;
-                } else if ((bitsMask < 0xffffffffffffffL) && (bits > 48)) {
+                } else if (bitsMask < 0xffffffffffffffL) {
                     bytes = 7;
                 } else {
                     bytes = 8;
                 }
 
-                bitsMask = (bits & bitsMask) << startbit;
+                bitsMask <<= startbit;
                 synchronized (lockNotify_) {
                     if (register) {
                         switch (bytes) {
@@ -326,20 +324,17 @@ public class SoemEcatThread extends Service<Void> {
                         }
 
                         for (cnt = 0; cnt < bytes; cnt++) {
-                            bitsMask >>>= cnt * 8;
-                            value >>>= cnt * 8;
                             if (notify_.containsKey(address + cnt)) {
-                                notify_.get(address + cnt).bitMask |= bitsMask & 0xff;
-                                notify_.get(address + cnt).value |= value & 0xff;
+                                notify_.get(address + cnt).bitMask |= (bitsMask >>> (cnt * Byte.SIZE)) & 0xff;
+                                notify_.get(address + cnt).value |= (value >>> (cnt * Byte.SIZE)) & 0xff;
                             } else {
-                                notify_.put(address + cnt, new EcatData((int) (bitsMask & 0xff), (int) (value & 0xff)));
+                                notify_.put(address + cnt, new EcatData((int) ((bitsMask >>> (cnt * Byte.SIZE)) & 0xff), (int) ((value >>> (cnt * Byte.SIZE)) & 0xff)));
                             }
                         }
                     } else {
                         for (cnt = 0; cnt < bytes; cnt++) {
-                            bitsMask >>>= cnt * 8;
                             if (notify_.containsKey(address + cnt)) {
-                                notify_.get(address + cnt).bitMask &= ~bitsMask & 0xff;
+                                notify_.get(address + cnt).bitMask &= ~(bitsMask >>> (cnt * Byte.SIZE)) & 0xff;
                                 if ((notify_.get(address + cnt).bitMask) == 0) {
                                     notify_.remove(address + cnt);
                                 }
@@ -366,46 +361,40 @@ public class SoemEcatThread extends Service<Void> {
             long address = context_.slavelist[slave].outputs.get().address() - context_.slavelist[0].outputs.get().address() + (bitsOffset / 8);
             int startbit = context_.slavelist[slave].Ostartbit.get() + ((int) (bitsOffset % 8));
             long bits = (context_.slavelist[slave].Obits.get() - bitsOffset);
-            long notBitsMask;
             int bytes, cnt;
 
             if ((bitsMask > 0) && (bits > 0)) {
-                if (bits >= 64) {
-                    bits = 0xffffffffffffffffL;
-                } else {
-                    bits = (1 << bits) - 1;
+                if (bits < 64) {
+                    bitsMask &= (1 << bits) - 1;
                 }
 
                 if (bitsMask < 0xff) {
                     bytes = 1;
-                } else if ((bitsMask < 0xffff) && (bits > 8)) {
+                } else if (bitsMask < 0xffff) {
                     bytes = 2;
-                } else if ((bitsMask < 0xffffff) && (bits > 16)) {
+                } else if (bitsMask < 0xffffff) {
                     bytes = 3;
-                } else if ((bitsMask < 0xffffffff) && (bits > 24)) {
+                } else if (bitsMask < 0xffffffff) {
                     bytes = 4;
-                } else if ((bitsMask < 0xffffffffffL) && (bits > 32)) {
+                } else if (bitsMask < 0xffffffffffL) {
                     bytes = 5;
-                } else if ((bitsMask < 0xffffffffffffL) && (bits > 40)) {
+                } else if (bitsMask < 0xffffffffffffL) {
                     bytes = 6;
-                } else if ((bitsMask < 0xffffffffffffffL) && (bits > 48)) {
+                } else if (bitsMask < 0xffffffffffffffL) {
                     bytes = 7;
                 } else {
                     bytes = 8;
                 }
 
-                bitsMask = (bits & bitsMask) << startbit;
-                notBitsMask = ~bitsMask;
+                bitsMask <<= startbit;
                 value = (value << startbit) & bitsMask;
                 synchronized (lockOut_) {
                     for (cnt = 0; cnt < bytes; cnt++) {
-                        notBitsMask >>>= cnt * 8;
-                        value >>>= cnt * 8;
                         if (out_.containsKey(address + cnt)) {
-                            out_.get(address + cnt).bitMask |= notBitsMask & 0xff;
-                            out_.get(address + cnt).value = (int) ((out_.get(address + cnt).value & (notBitsMask & 0xff)) | (value & 0xff));
+                            out_.get(address + cnt).bitMask |= (bitsMask >>> (cnt * Byte.SIZE)) & 0xff;
+                            out_.get(address + cnt).value |= (value >>> (cnt * Byte.SIZE)) & 0xff;
                         } else {
-                            out_.put(address + cnt, new EcatData((int) (notBitsMask & 0xff), (int) (value & 0xff)));
+                            out_.put(address + cnt, new EcatData((int) ((bitsMask >>> (cnt * Byte.SIZE)) & 0xff), (int) ((value >>> (cnt * Byte.SIZE)) & 0xff)));
                         }
                     }
                 }
@@ -453,7 +442,7 @@ public class SoemEcatThread extends Service<Void> {
                             synchronized (lockOut_) {
                                 for (Iterator<Map.Entry<Long, EcatData>> iterator = out_.entrySet().iterator(); iterator.hasNext();) {
                                     entry = iterator.next();
-                                    pointer.putByte(entry.getKey(), (byte) ((pointer.getByte(entry.getKey()) & entry.getValue().bitMask) | entry.getValue().value));
+                                    pointer.putByte(entry.getKey(), (byte) ((pointer.getByte(entry.getKey()) | entry.getValue().value) & entry.getValue().bitMask));
                                     iterator.remove();
                                 }
                             }
