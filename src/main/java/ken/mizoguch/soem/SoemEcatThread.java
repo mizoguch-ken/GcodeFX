@@ -262,65 +262,93 @@ public class SoemEcatThread extends Service<Void> {
      *
      * @param slave
      * @param bitsOffset
-     * @param mask
+     * @param bitsMask
      * @param register
      * @return
      */
-    public Long notify(int slave, long bitsOffset, int mask, boolean register) {
+    public Long notify(int slave, long bitsOffset, long bitsMask, boolean register) {
         Pointer pointer = context_.slavelist[slave].inputs.get();
         if (pointer != null) {
             long address = pointer.address() - context_.slavelist[0].inputs.get().address() + (bitsOffset / 8);
             int startbit = context_.slavelist[slave].Istartbit.get() + ((int) (bitsOffset % 8));
             long bits = (context_.slavelist[slave].Ibits.get() - bitsOffset);
-            int value, bitMask;
+            long value;
+            int bytes, cnt;
 
-            if (bits > 8) {
-                bits = 8;
-            }
-            bitMask = (((1 << bits) - 1) & mask) << startbit;
-            synchronized (lockNotify_) {
-                if (register) {
-                    if ((startbit + bits) > 8) {
-                        value = pointer.getShort(bitsOffset / 8) & bitMask;
-                        if (notify_.containsKey(address)) {
-                            notify_.get(address).bitMask |= bitMask & 0xff;
-                            notify_.get(address).value |= value & 0xff;
-                        } else {
-                            notify_.put(address, new EcatData(bitMask & 0xff, value & 0xff));
+            if ((bitsMask > 0) && (bits > 0)) {
+                if (bits >= 64) {
+                    bits = 0xffffffffffffffffL;
+                } else {
+                    bits = (1 << bits) - 1;
+                }
+
+                if (bitsMask < 0xff) {
+                    bytes = 1;
+                } else if ((bitsMask < 0xffff) && (bits > 8)) {
+                    bytes = 2;
+                } else if ((bitsMask < 0xffffff) && (bits > 16)) {
+                    bytes = 3;
+                } else if ((bitsMask < 0xffffffff) && (bits > 24)) {
+                    bytes = 4;
+                } else if ((bitsMask < 0xffffffffffL) && (bits > 32)) {
+                    bytes = 5;
+                } else if ((bitsMask < 0xffffffffffffL) && (bits > 40)) {
+                    bytes = 6;
+                } else if ((bitsMask < 0xffffffffffffffL) && (bits > 48)) {
+                    bytes = 7;
+                } else {
+                    bytes = 8;
+                }
+
+                bitsMask = (bits & bitsMask) << startbit;
+                synchronized (lockNotify_) {
+                    if (register) {
+                        switch (bytes) {
+                            case 1:
+                                value = pointer.getByte(bitsOffset / 8) & bitsMask;
+                                break;
+                            case 2:
+                                value = pointer.getShort(bitsOffset / 8) & bitsMask;
+                                break;
+                            case 3:
+                            case 4:
+                                value = pointer.getInt(bitsOffset / 8) & bitsMask;
+                                break;
+                            case 5:
+                            case 6:
+                            case 7:
+                            case 8:
+                                value = pointer.getLong(bitsOffset / 8) & bitsMask;
+                                break;
+                            default:
+                                value = 0;
+                                break;
                         }
-                        if (notify_.containsKey(address + 1)) {
-                            notify_.get(address + 1).bitMask |= bitMask >>> 8;
-                            notify_.get(address + 1).value |= value >>> 8;
-                        } else {
-                            notify_.put(address + 1, new EcatData(bitMask >>> 8, value >>> 8));
+
+                        for (cnt = 0; cnt < bytes; cnt++) {
+                            bitsMask >>>= cnt * 8;
+                            value >>>= cnt * 8;
+                            if (notify_.containsKey(address + cnt)) {
+                                notify_.get(address + cnt).bitMask |= bitsMask & 0xff;
+                                notify_.get(address + cnt).value |= value & 0xff;
+                            } else {
+                                notify_.put(address + cnt, new EcatData((int) (bitsMask & 0xff), (int) (value & 0xff)));
+                            }
                         }
                     } else {
-                        value = pointer.getByte(bitsOffset / 8) & bitMask;
-                        if (notify_.containsKey(address)) {
-                            notify_.get(address).bitMask |= bitMask;
-                            notify_.get(address).value |= value;
-                        } else {
-                            notify_.put(address, new EcatData(bitMask, value));
-                        }
-                    }
-                } else {
-                    if (notify_.containsKey(address)) {
-                        notify_.get(address).bitMask &= (~bitMask) & 0xff;
-                        if ((notify_.get(address).bitMask) == 0) {
-                            notify_.remove(address);
-                        }
-                    }
-                    if ((startbit + bits) > 8) {
-                        if (notify_.containsKey(address + 1)) {
-                            notify_.get(address + 1).bitMask &= (~bitMask >>> 8) & 0xff;
-                            if ((notify_.get(address + 1).bitMask) == 0) {
-                                notify_.remove(address + 1);
+                        for (cnt = 0; cnt < bytes; cnt++) {
+                            bitsMask >>>= cnt * 8;
+                            if (notify_.containsKey(address + cnt)) {
+                                notify_.get(address + cnt).bitMask &= ~bitsMask & 0xff;
+                                if ((notify_.get(address + cnt).bitMask) == 0) {
+                                    notify_.remove(address + cnt);
+                                }
                             }
                         }
                     }
                 }
+                return address;
             }
-            return address;
         }
         return null;
     }
@@ -333,44 +361,56 @@ public class SoemEcatThread extends Service<Void> {
      * @param value
      * @return
      */
-    public Integer out(int slave, long bitsOffset, int bitsMask, int value) {
+    public Long out(int slave, long bitsOffset, long bitsMask, long value) {
         if (context_.slavelist[slave].outputs.get() != null) {
             long address = context_.slavelist[slave].outputs.get().address() - context_.slavelist[0].outputs.get().address() + (bitsOffset / 8);
             int startbit = context_.slavelist[slave].Ostartbit.get() + ((int) (bitsOffset % 8));
             long bits = (context_.slavelist[slave].Obits.get() - bitsOffset);
-            int bitMask, notBitMask;
+            long notBitsMask;
+            int bytes, cnt;
 
-            if (bits > 8) {
-                bits = 8;
-            }
-            bitMask = (((1 << bits) - 1) & bitsMask) << startbit;
-            value = (value << startbit) & bitMask;
-            synchronized (lockOut_) {
-                if ((startbit + bits) > 8) {
-                    notBitMask = (~bitMask) & 0xffff;
-                    if (out_.containsKey(address)) {
-                        out_.get(address).bitMask &= notBitMask & 0xff;
-                        out_.get(address).value = ((out_.get(address).value & notBitMask) | value) & 0xff;
-                    } else {
-                        out_.put(address, new EcatData(notBitMask & 0xff, value & 0xff));
-                    }
-                    if (out_.containsKey(address + 1)) {
-                        out_.get(address + 1).bitMask |= notBitMask >>> 8;
-                        out_.get(address + 1).value = (out_.get(address + 1).value & (notBitMask >>> 8)) | value >>> 8;
-                    } else {
-                        out_.put(address + 1, new EcatData(bitMask >>> 8, value >>> 8));
-                    }
+            if ((bitsMask > 0) && (bits > 0)) {
+                if (bits >= 64) {
+                    bits = 0xffffffffffffffffL;
                 } else {
-                    notBitMask = (~bitMask) & 0xff;
-                    if (out_.containsKey(address)) {
-                        out_.get(address).bitMask &= notBitMask;
-                        out_.get(address).value = (out_.get(address).value & notBitMask) | value;
-                    } else {
-                        out_.put(address, new EcatData(notBitMask, value));
+                    bits = (1 << bits) - 1;
+                }
+
+                if (bitsMask < 0xff) {
+                    bytes = 1;
+                } else if ((bitsMask < 0xffff) && (bits > 8)) {
+                    bytes = 2;
+                } else if ((bitsMask < 0xffffff) && (bits > 16)) {
+                    bytes = 3;
+                } else if ((bitsMask < 0xffffffff) && (bits > 24)) {
+                    bytes = 4;
+                } else if ((bitsMask < 0xffffffffffL) && (bits > 32)) {
+                    bytes = 5;
+                } else if ((bitsMask < 0xffffffffffffL) && (bits > 40)) {
+                    bytes = 6;
+                } else if ((bitsMask < 0xffffffffffffffL) && (bits > 48)) {
+                    bytes = 7;
+                } else {
+                    bytes = 8;
+                }
+
+                bitsMask = (bits & bitsMask) << startbit;
+                notBitsMask = ~bitsMask;
+                value = (value << startbit) & bitsMask;
+                synchronized (lockOut_) {
+                    for (cnt = 0; cnt < bytes; cnt++) {
+                        notBitsMask >>>= cnt * 8;
+                        value >>>= cnt * 8;
+                        if (out_.containsKey(address + cnt)) {
+                            out_.get(address + cnt).bitMask |= notBitsMask & 0xff;
+                            out_.get(address + cnt).value = (int) ((out_.get(address + cnt).value & (notBitsMask & 0xff)) | (value & 0xff));
+                        } else {
+                            out_.put(address + cnt, new EcatData((int) (notBitsMask & 0xff), (int) (value & 0xff)));
+                        }
                     }
                 }
+                return address;
             }
-            return value;
         }
         return null;
     }
