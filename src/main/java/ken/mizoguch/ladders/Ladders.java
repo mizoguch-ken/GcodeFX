@@ -1363,7 +1363,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 try {
                     Map.Entry<String, LadderIo> entry;
                     LadderRegisterSoemIo registerSoemIo;
-                    Integer registerSoemValue;
+                    Long registerSoemValue;
                     long cycleTime, minCycleTime, maxCycleTime, cumulativeCycleTime, cumulativeCycleTimeCount, nanoTime, nanoTimeOld, waitTime;
                     int index, size;
 
@@ -1382,7 +1382,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                             if (soem_ != null) {
                                 for (index = 0, size = registerSoemOut_.size(); index < size; index++) {
                                     registerSoemIo = registerSoemOut_.get(index);
-                                    soem_.out(registerSoemIo.getSlave(), registerSoemIo.getBitsOffset(), registerSoemIo.getBitsMask(), (int) ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).get(registerSoemIo.getAddress()).getValue());
+                                    soem_.out(registerSoemIo.getSlave(), registerSoemIo.getBitsOffset(), registerSoemIo.getBitsMask(), (long) ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).get(registerSoemIo.getAddress()).getValue());
                                 }
                                 for (index = 0, size = registerSoemIn_.size(); index < size; index++) {
                                     registerSoemIo = registerSoemIn_.get(index);
@@ -1486,7 +1486,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         if (objects != null) {
             switch (objects.length) {
                 case 5:
-                    if ((objects[0] instanceof Soem) && (objects[1] instanceof String) && (objects[2] instanceof Integer) && (objects[3] instanceof Long) && (objects[4] instanceof Integer)) {
+                    if ((objects[0] instanceof Soem) && (objects[1] instanceof String) && (objects[2] instanceof Integer) && (objects[3] instanceof Long) && (objects[4] instanceof Long)) {
                         if (soem_ == null) {
                             soem_ = (Soem) objects[0];
                             if (registerSoemIn_ != null) {
@@ -1506,7 +1506,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
                             int slave = (int) objects[2];
                             long bitsOffset = (long) objects[3];
-                            int bitsMask = (int) objects[4];
+                            long bitsMask = (long) objects[4];
                             for (int index = 0, size = registerSoemIn_.size(); index < size; index++) {
                                 if (registerSoemIn_.get(index).getAddress().equals(address)) {
                                     if ((registerSoemIn_.get(index).getSlave() != slave) || (registerSoemIn_.get(index).getBitsOffset() != bitsOffset) || (registerSoemIn_.get(index).getBitsMask() != bitsMask)) {
@@ -1532,7 +1532,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         if (objects != null) {
             switch (objects.length) {
                 case 5:
-                    if ((objects[0] instanceof Soem) && (objects[1] instanceof String) && (objects[2] instanceof Integer) && (objects[3] instanceof Long) && (objects[4] instanceof Integer)) {
+                    if ((objects[0] instanceof Soem) && (objects[1] instanceof String) && (objects[2] instanceof Integer) && (objects[3] instanceof Long) && (objects[4] instanceof Long)) {
                         if (soem_ == null) {
                             soem_ = (Soem) objects[0];
                             if (registerSoemIn_ != null) {
@@ -1552,7 +1552,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
                             int slave = (int) objects[2];
                             long bitsOffset = (long) objects[3];
-                            int bitsMask = (int) objects[4];
+                            long bitsMask = (long) objects[4];
                             for (int index = 0, size = registerSoemOut_.size(); index < size; index++) {
                                 if (registerSoemOut_.get(index).getAddress().equals(address)) {
                                     if ((registerSoemOut_.get(index).getSlave() != slave) || (registerSoemOut_.get(index).getBitsOffset() != bitsOffset) || (registerSoemOut_.get(index).getBitsMask() != bitsMask)) {
@@ -1562,7 +1562,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                                     return true;
                                 }
                             }
-                            registerSoemOut_.add(new LadderRegisterSoemIo(address, (int) objects[2], (long) objects[3], (int) objects[4]));
+                            registerSoemOut_.add(new LadderRegisterSoemIo(address, (int) objects[2], (long) objects[3], (long) objects[4]));
                             return true;
                         }
                     }
