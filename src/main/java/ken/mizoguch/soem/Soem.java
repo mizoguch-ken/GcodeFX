@@ -395,15 +395,36 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public Integer in(int slave, long bitsOffset, int bitsMask) {
+    public Long in(int slave, long bitsOffset, long bitsMask) {
         if (context_ != null) {
             if ((bitsOffset >= 0) && (bitsOffset < context_.slavelist[slave].Ibits.get())) {
                 if (context_.slavelist[slave].inputs.get() != null) {
                     long bits = (context_.slavelist[slave].Ibits.get() - bitsOffset);
-                    if (bits > 8) {
-                        bits = 8;
+                    if ((bitsMask > 0) && (bits > 0)) {
+                        if (bits >= 64) {
+                            bits = 0xffffffffffffffffL;
+                        } else {
+                            bits = (1 << bits) - 1;
+                        }
+
+                        if (bitsMask < 0xff) {
+                            return (((context_.slavelist[slave].inputs.get().getByte(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        } else if ((bitsMask < 0xffff) && (bits > 8)) {
+                            return (((context_.slavelist[slave].inputs.get().getShort(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        } else if ((bitsMask < 0xffffff) && (bits > 16)) {
+                            return (((context_.slavelist[slave].inputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        } else if ((bitsMask < 0xffffffff) && (bits > 24)) {
+                            return (((context_.slavelist[slave].inputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        } else if ((bitsMask < 0xffffffffffL) && (bits > 32)) {
+                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        } else if ((bitsMask < 0xffffffffffffL) && (bits > 40)) {
+                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        } else if ((bitsMask < 0xffffffffffffffL) && (bits > 48)) {
+                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        } else {
+                            return (((context_.slavelist[slave].inputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & bits) & bitsMask);
+                        }
                     }
-                    return (((context_.slavelist[slave].inputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Istartbit.get() + (bitsOffset % 8))) & ((1 << bits) - 1)) & bitsMask);
                 }
             }
         }
@@ -411,7 +432,7 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public Long notify(int slave, long bitsOffset, int bitsMask, boolean register) {
+    public Long notify(int slave, long bitsOffset, long bitsMask, boolean register) {
         if ((context_ != null) && (ecatThread_ != null)) {
             if ((bitsOffset >= 0) && (bitsOffset < context_.slavelist[slave].Ibytes.get())) {
                 return ecatThread_.notify(slave, bitsOffset, bitsMask, register);
@@ -421,7 +442,7 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public Integer out(int slave, long bitsOffset, int bitsMask, int value) {
+    public Long out(int slave, long bitsOffset, long bitsMask, long value) {
         if ((context_ != null) && (ecatThread_ != null)) {
             if ((bitsOffset >= 0) && (bitsOffset < context_.slavelist[slave].Obits.get())) {
                 return ecatThread_.out(slave, bitsOffset, bitsMask, value);
