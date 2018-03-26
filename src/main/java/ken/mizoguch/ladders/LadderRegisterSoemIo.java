@@ -14,7 +14,7 @@ public class LadderRegisterSoemIo {
     private final String address_;
     private final int slave_;
     private final long bitsOffset_;
-    private final int bitsMask_;
+    private final long bitsMask_;
 
     /**
      *
@@ -23,7 +23,7 @@ public class LadderRegisterSoemIo {
      * @param bitsOffset
      * @param bitsMask
      */
-    public LadderRegisterSoemIo(String address, int slave, long bitsOffset, int bitsMask) {
+    public LadderRegisterSoemIo(String address, int slave, long bitsOffset, long bitsMask) {
         address_ = address;
         slave_ = slave;
         bitsOffset_ = bitsOffset;
@@ -58,7 +58,7 @@ public class LadderRegisterSoemIo {
      *
      * @return
      */
-    public int getBitsMask() {
+    public long getBitsMask() {
         return bitsMask_;
     }
 }
