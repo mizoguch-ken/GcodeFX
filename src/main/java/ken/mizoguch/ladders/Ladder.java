@@ -1107,6 +1107,8 @@ public class Ladder {
                         return true;
                     }
                 }
+            } else if (connectNumber == 1) {
+                return true;
             }
         }
         return false;
