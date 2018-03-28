@@ -1997,6 +1997,25 @@ public class LadderCommand {
             gridPane.changeAddress();
             gridPane.changeBlockIO();
 
+            if (LadderGrid.LADDER_GRID_INITIAL_ADDRESS.equals(address)) {
+                grid.setComment(ladders_.getComment(ladder.getIdx(), LadderGrid.LADDER_GRID_INITIAL_COMMENT));
+            } else {
+                if (address.startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                    if (ladders_.isComment(ladder.getIdx(), address)) {
+                        grid.setComment(ladders_.getComment(ladder.getIdx(), address));
+                    } else {
+                        grid.setComment(LadderGrid.LADDER_GRID_INITIAL_COMMENT);
+                    }
+                } else {
+                    if (ladders_.isComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, address)) {
+                        grid.setComment(ladders_.getComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, address));
+                    } else {
+                        grid.setComment(LadderGrid.LADDER_GRID_INITIAL_COMMENT);
+                    }
+                }
+            }
+            gridPane.changeComment();
+
             if (isBlockChanging_) {
                 blockChangingGridPane_.add(gridPane);
             } else {
