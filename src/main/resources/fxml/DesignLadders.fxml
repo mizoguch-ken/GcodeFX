@@ -150,11 +150,11 @@
       </MenuBar>
       <SplitPane fx:id="splitIoLadder" dividerPositions="0.382" VBox.vgrow="ALWAYS">
         <items>
-            <TreeTableView fx:id="treeTableIo" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true">
+            <TreeTableView fx:id="treeTableIo" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false">
               <columns>
-                <TreeTableColumn fx:id="treeTableIoAddress" prefWidth="75.0" text="Address" />
-                <TreeTableColumn fx:id="treeTableIoComment" prefWidth="75.0" text="Comment" />
-                  <TreeTableColumn fx:id="treeTableIoValue" prefWidth="75.0" text="Value" />
+                <TreeTableColumn fx:id="treeTableIoAddress" prefWidth="75.0" sortable="false" text="Address" />
+                <TreeTableColumn fx:id="treeTableIoComment" prefWidth="75.0" sortable="false" text="Comment" />
+                  <TreeTableColumn fx:id="treeTableIoValue" prefWidth="75.0" sortable="false" text="Value" />
               </columns>
                <columnResizePolicy>
                   <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
