@@ -16,10 +16,10 @@
             <Label fx:id="labelIoLadderRevised" text="LadderRevised" textOverrun="CENTER_ELLIPSIS" />
             <SplitPane fx:id="splitIoLadderRevised" dividerPositions="0.382" VBox.vgrow="ALWAYS">
                <items>
-                  <TreeTableView fx:id="treeTableIoRevised" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true">
+                  <TreeTableView fx:id="treeTableIoRevised" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false">
                     <columns>
-                      <TreeTableColumn fx:id="treeTableIoAddressRevised" prefWidth="75.0" text="Address" />
-                      <TreeTableColumn fx:id="treeTableIoCommentRevised" prefWidth="75.0" text="Comment" />
+                      <TreeTableColumn fx:id="treeTableIoAddressRevised" prefWidth="75.0" sortable="false" text="Address" />
+                      <TreeTableColumn fx:id="treeTableIoCommentRevised" prefWidth="75.0" sortable="false" text="Comment" />
                     </columns>
                      <columnResizePolicy>
                         <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -36,10 +36,10 @@
             <Label fx:id="labelIoLadderOriginal" text="LadderOriginal" textOverrun="CENTER_ELLIPSIS" />
             <SplitPane fx:id="splitIoLadderOriginal" dividerPositions="0.382" VBox.vgrow="ALWAYS">
                <items>
-                  <TreeTableView fx:id="treeTableIoOriginal" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false" tableMenuButtonVisible="true">
+                  <TreeTableView fx:id="treeTableIoOriginal" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false">
                     <columns>
-                      <TreeTableColumn fx:id="treeTableIoAddressOriginal" prefWidth="75.0" text="Address" />
-                      <TreeTableColumn fx:id="treeTableIoCommentOriginal" prefWidth="75.0" text="Comment" />
+                      <TreeTableColumn fx:id="treeTableIoAddressOriginal" prefWidth="75.0" sortable="false" text="Address" />
+                      <TreeTableColumn fx:id="treeTableIoCommentOriginal" prefWidth="75.0" sortable="false" text="Comment" />
                     </columns>
                      <columnResizePolicy>
                         <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
