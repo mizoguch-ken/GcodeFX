@@ -136,7 +136,7 @@ public class LadderCommand {
                         ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx());
                         break;
                     case LADDER_REMOVE_ROW:
-                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx());
+                        ladders_.getTabLadder().getSelectionModel().select(history_.getOriginal().getIdx() - 1);
                         scrollPane = (ScrollPane) ladders_.getTabLadder().getTabs().get(history_.getOriginal().getIdx() - 1).getContent();
                         pane = (LadderPane) scrollPane.getContent();
                         columnIndex = history_.getOriginal().getColumnIndex();
