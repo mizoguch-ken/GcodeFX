@@ -361,6 +361,7 @@ public class SoemEcatThread extends Service<Void> {
             long address = context_.slavelist[slave].outputs.get().address() - context_.slavelist[0].outputs.get().address() + (bitsOffset / 8);
             int startbit = context_.slavelist[slave].Ostartbit.get() + ((int) (bitsOffset % 8));
             long bits = (context_.slavelist[slave].Obits.get() - bitsOffset);
+            long notBitsMask;
             int bytes, cnt;
 
             if ((bitsMask > 0) && (bits > 0)) {
@@ -387,14 +388,15 @@ public class SoemEcatThread extends Service<Void> {
                 }
 
                 bitsMask <<= startbit;
+                notBitsMask = ~bitsMask;
                 value = (value << startbit) & bitsMask;
                 synchronized (lockOut_) {
                     for (cnt = 0; cnt < bytes; cnt++) {
                         if (out_.containsKey(address + cnt)) {
-                            out_.get(address + cnt).bitMask |= (bitsMask >>> (cnt * Byte.SIZE)) & 0xff;
+                            out_.get(address + cnt).bitMask &= (notBitsMask >>> (cnt * Byte.SIZE)) & 0xff;
                             out_.get(address + cnt).value |= (value >>> (cnt * Byte.SIZE)) & 0xff;
                         } else {
-                            out_.put(address + cnt, new EcatData((int) ((bitsMask >>> (cnt * Byte.SIZE)) & 0xff), (int) ((value >>> (cnt * Byte.SIZE)) & 0xff)));
+                            out_.put(address + cnt, new EcatData((int) ((notBitsMask >>> (cnt * Byte.SIZE)) & 0xff), (int) ((value >>> (cnt * Byte.SIZE)) & 0xff)));
                         }
                     }
                 }
@@ -442,7 +444,7 @@ public class SoemEcatThread extends Service<Void> {
                             synchronized (lockOut_) {
                                 for (Iterator<Map.Entry<Long, EcatData>> iterator = out_.entrySet().iterator(); iterator.hasNext();) {
                                     entry = iterator.next();
-                                    pointer.putByte(entry.getKey(), (byte) ((pointer.getByte(entry.getKey()) | entry.getValue().value) & entry.getValue().bitMask));
+                                    pointer.putByte(entry.getKey(), (byte) ((pointer.getByte(entry.getKey()) & entry.getValue().bitMask) | entry.getValue().value));
                                     iterator.remove();
                                 }
                             }
