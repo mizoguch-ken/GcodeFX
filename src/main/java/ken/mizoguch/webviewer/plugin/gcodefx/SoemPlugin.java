@@ -28,6 +28,12 @@ public interface SoemPlugin {
 
     public Integer slavecount();
 
+    public Integer state(int slave);
+
+    public Boolean islost(int slave);
+
+    public Boolean docheckstate();
+
     public Long in(int slave, long bitsOffset, long bitsMask);
 
     public Long notify(int slave, long bitsOffset, long bitsMask, boolean register);

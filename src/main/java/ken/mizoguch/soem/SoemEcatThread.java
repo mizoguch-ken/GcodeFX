@@ -13,19 +13,12 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
-import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javax.swing.event.EventListenerList;
 import jnr.ffi.Pointer;
 import ken.mizoguch.console.Console;
-import static ken.mizoguch.soem.SoemEthercatType.EC_TIMEOUTRET;
-import static ken.mizoguch.soem.SoemEthercatType.EC_TIMEOUTSTATE;
-import static ken.mizoguch.soem.SoemEthercatType.ec_state.EC_STATE_OPERATIONAL;
-import static ken.mizoguch.soem.SoemEthercatType.ec_state.EC_STATE_PRE_OP;
-import static ken.mizoguch.soem.SoemEthercatType.ec_state.EC_STATE_SAFE_OP;
-import static ken.mizoguch.soem.SoemOsal.FALSE;
 import ken.mizoguch.webviewer.plugin.gcodefx.SoemPluginListener;
 
 /**
@@ -63,28 +56,29 @@ public class SoemEcatThread extends Service<Void> {
     private final SoemLibrary soem_;
     private final Object lockNotify_ = new Object();
     private final Object lockOut_ = new Object();
-    private final SoemEthercatMain.ecx_contextt context_;
+    private final SoemEtherCAT.ecx_parcelt parcel_;
+    private final SoemEtherCATMain.ecx_contextt context_;
     private final ConcurrentMap<Integer, EcatPO2SO> po2so_;
     private final ConcurrentMap<Long, EcatData> notify_;
     private final ConcurrentMap<Long, EcatData> out_;
     private SoemEcatCheck ecatCheck_;
-    private long cycletime_;
     private boolean init_, exit_;
 
     /**
      *
      * @param soem
+     * @param parcel
      * @param context
      */
-    public SoemEcatThread(SoemLibrary soem, SoemEthercatMain.ecx_contextt context) {
+    public SoemEcatThread(SoemLibrary soem, SoemEtherCAT.ecx_parcelt parcel, SoemEtherCATMain.ecx_contextt context) {
         eventListenerList_ = new EventListenerList();
         soem_ = soem;
+        parcel_ = parcel;
         context_ = context;
         po2so_ = new ConcurrentHashMap<>();
         notify_ = new ConcurrentHashMap<>();
         out_ = new ConcurrentHashMap<>();
         ecatCheck_ = null;
-        cycletime_ = 0;
         init_ = false;
         exit_ = true;
     }
@@ -143,10 +137,9 @@ public class SoemEcatThread extends Service<Void> {
             try {
                 int index, size, chk;
 
-                cycletime_ = cycletime;
                 exit_ = false;
                 if (soem_.ecx_init(context_, ifname) > 0) {
-                    if (soem_.ecx_config_init(context_, FALSE) > 0) {
+                    if (soem_.ecx_config_init(context_, SoemOsal.FALSE) > 0) {
                         if (context_.slavecount.get() > 0) {
                             for (index = 1, size = context_.slavecount.get(); index <= size; index++) {
                                 if (po2so_.containsKey(index)) {
@@ -182,18 +175,18 @@ public class SoemEcatThread extends Service<Void> {
                         }
                         soem_.ecx_config_map_group(context_, pIOmap, 0);
                         soem_.ecx_configdc(context_);
-                        soem_.ecx_statecheck(context_, 0, EC_STATE_SAFE_OP.intValue(), EC_TIMEOUTSTATE * 4);
-                        ecatCheck_ = new SoemEcatCheck(eventListenerList_, soem_, context_);
+                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE * 4);
+                        ecatCheck_ = new SoemEcatCheck(eventListenerList_, soem_, parcel_, context_);
                         ecatCheck_.setExpectedWKC((context_.grouplist[0].outputsWKC.get() * 2) + context_.grouplist[0].inputsWKC.get());
-                        context_.slavelist[0].state.set(EC_STATE_OPERATIONAL.intValue());
+                        context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue());
                         soem_.ecx_send_processdata(context_);
-                        soem_.ecx_receive_processdata(context_, EC_TIMEOUTRET);
+                        soem_.ecx_receive_processdata(context_, SoemEtherCATType.EC_TIMEOUTRET);
                         soem_.ecx_writestate(context_, 0);
                         chk = 40;
                         do {
-                            soem_.ecx_statecheck(context_, 0, EC_STATE_OPERATIONAL.intValue(), 50000);
-                        } while ((chk-- > 0) && (context_.slavelist[0].state.get() != EC_STATE_OPERATIONAL.intValue()));
-                        if (context_.slavelist[0].state.get() == EC_STATE_OPERATIONAL.intValue()) {
+                            soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue(), 50000);
+                        } while ((chk-- > 0) && (context_.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue()));
+                        if (context_.slavelist[0].state.get() == SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue()) {
                             ecatCheck_.init();
                             if (Platform.isFxApplicationThread()) {
                                 runEcatCheck();
@@ -228,7 +221,6 @@ public class SoemEcatThread extends Service<Void> {
     public void exit() {
         int chk;
 
-        cycletime_ = 0;
         exit_ = true;
         if (ecatCheck_ != null) {
             ecatCheck_.exit();
@@ -237,12 +229,12 @@ public class SoemEcatThread extends Service<Void> {
         }
         if (init_ && (soem_ != null) && (context_ != null)) {
             init_ = false;
-            context_.slavelist[0].state.set(EC_STATE_PRE_OP.intValue());
+            context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue());
             soem_.ecx_writestate(context_, 0);
             chk = 40;
             do {
-                soem_.ecx_statecheck(context_, 0, EC_STATE_PRE_OP.intValue(), 50000);
-            } while ((chk-- > 0) && (context_.slavelist[0].state.get() != EC_STATE_PRE_OP.intValue()));
+                soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), 50000);
+            } while ((chk-- > 0) && (context_.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue()));
         }
     }
 
@@ -358,11 +350,12 @@ public class SoemEcatThread extends Service<Void> {
      */
     public Long out(int slave, long bitsOffset, long bitsMask, long value) {
         if (context_.slavelist[slave].outputs.get() != null) {
+            Pointer pointer = context_.slavelist[0].outputs.get();
             long address = context_.slavelist[slave].outputs.get().address() - context_.slavelist[0].outputs.get().address() + (bitsOffset / 8);
             int startbit = context_.slavelist[slave].Ostartbit.get() + ((int) (bitsOffset % 8));
             long bits = (context_.slavelist[slave].Obits.get() - bitsOffset);
             long notBitsMask;
-            int bytes, cnt;
+            int val, bytes, cnt;
 
             if ((bitsMask > 0) && (bits > 0)) {
                 if (bits < 64) {
@@ -396,7 +389,10 @@ public class SoemEcatThread extends Service<Void> {
                             out_.get(address + cnt).bitMask &= (notBitsMask >>> (cnt * Byte.SIZE)) & 0xff;
                             out_.get(address + cnt).value |= (value >>> (cnt * Byte.SIZE)) & 0xff;
                         } else {
-                            out_.put(address + cnt, new EcatData((int) ((notBitsMask >>> (cnt * Byte.SIZE)) & 0xff), (int) ((value >>> (cnt * Byte.SIZE)) & 0xff)));
+                            val = Byte.toUnsignedInt(pointer.getByte(address + cnt));
+                            if (val != (((val & (notBitsMask >>> (cnt * Byte.SIZE))) | (value >>> (cnt * Byte.SIZE))) & 0xff)) {
+                                out_.put(address + cnt, new EcatData((int) ((notBitsMask >>> (cnt * Byte.SIZE)) & 0xff), (int) ((value >>> (cnt * Byte.SIZE)) & 0xff)));
+                            }
                         }
                     }
                 }
@@ -414,60 +410,39 @@ public class SoemEcatThread extends Service<Void> {
                 try {
                     Pointer pointer;
                     Map.Entry<Long, EcatData> entry;
-                    long toff, delta, integral;
                     int value;
 
-                    toff = 0;
-                    integral = 0;
-                    soem_.ecx_send_processdata(context_);
+                    soem_.ec_run(parcel_);
                     while (!exit_) {
-                        ecatCheck_.setWkc(soem_.ecx_receive_processdata(context_, EC_TIMEOUTRET));
+                        if (parcel_.isprocess.get() == SoemOsal.FALSE) {
+                            if (!out_.isEmpty()) {
+                                pointer = context_.slavelist[0].outputs.get();
+                                synchronized (lockOut_) {
+                                    for (Iterator<Map.Entry<Long, EcatData>> iterator = out_.entrySet().iterator(); iterator.hasNext();) {
+                                        entry = iterator.next();
+                                        value = pointer.getByte(entry.getKey());
+                                        pointer.putByte(entry.getKey(), (byte) ((value & entry.getValue().bitMask) | entry.getValue().value));
+                                        iterator.remove();
+                                    }
+                                }
+                            }
+                            parcel_.isprocess.set(SoemOsal.TRUE);
 
-                        if (!notify_.isEmpty()) {
-                            pointer = context_.slavelist[0].inputs.get();
-                            synchronized (lockNotify_) {
-                                for (Iterator<Map.Entry<Long, EcatData>> iterator = notify_.entrySet().iterator(); iterator.hasNext();) {
-                                    entry = iterator.next();
-                                    value = pointer.getByte(entry.getKey()) & entry.getValue().bitMask;
-                                    if (entry.getValue().value != value) {
-                                        entry.getValue().value = value;
-                                        for (SoemPluginListener listener : eventListenerList_.getListeners(SoemPluginListener.class)) {
-                                            listener.onChangeSoemEcatThread(entry.getKey(), value);
+                            if (!notify_.isEmpty()) {
+                                pointer = context_.slavelist[0].inputs.get();
+                                synchronized (lockNotify_) {
+                                    for (Iterator<Map.Entry<Long, EcatData>> iterator = notify_.entrySet().iterator(); iterator.hasNext();) {
+                                        entry = iterator.next();
+                                        value = pointer.getByte(entry.getKey()) & entry.getValue().bitMask;
+                                        if (entry.getValue().value != value) {
+                                            entry.getValue().value = value;
+                                            for (SoemPluginListener listener : eventListenerList_.getListeners(SoemPluginListener.class)) {
+                                                listener.onChangeSoemEcatThread(entry.getKey(), value);
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-
-                        if (!out_.isEmpty()) {
-                            pointer = context_.slavelist[0].outputs.get();
-                            synchronized (lockOut_) {
-                                for (Iterator<Map.Entry<Long, EcatData>> iterator = out_.entrySet().iterator(); iterator.hasNext();) {
-                                    entry = iterator.next();
-                                    pointer.putByte(entry.getKey(), (byte) ((pointer.getByte(entry.getKey()) & entry.getValue().bitMask) | entry.getValue().value));
-                                    iterator.remove();
-                                }
-                            }
-                        }
-
-                        if (context_.slavelist[0].hasdc.get() > 0) {
-                            delta = (context_.DCtime.get() - 50000) % cycletime_;
-                            if (delta > (cycletime_ / 2)) {
-                                delta = delta - cycletime_;
-                            }
-                            if (delta > 0) {
-                                integral++;
-                            }
-                            if (delta < 0) {
-                                integral--;
-                            }
-                            toff = -(delta / 100) - (integral / 20);
-                        }
-                        soem_.ecx_send_processdata(context_);
-
-                        try {
-                            TimeUnit.NANOSECONDS.sleep(cycletime_ + toff);
-                        } catch (InterruptedException ex) {
                         }
                     }
                 } catch (Exception ex) {

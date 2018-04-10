@@ -9,7 +9,7 @@ package ken.mizoguch.soem;
  *
  * @author mizoguch-ken
  */
-public interface SoemEthercatConfig {
+public interface SoemEtherCATConfig {
 
     public static final int EC_NODEOFFSET = 0x1000;
     public static final int EC_TEMPNODE = 0xffff;

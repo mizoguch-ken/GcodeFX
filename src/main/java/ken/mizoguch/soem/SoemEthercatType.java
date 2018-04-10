@@ -13,7 +13,7 @@ import jnr.ffi.util.EnumMapper;
  *
  * @author mizoguch-ken
  */
-public interface SoemEthercatType {
+public interface SoemEtherCATType {
 
     /**
      * return value general error

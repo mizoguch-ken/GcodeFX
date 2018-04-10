@@ -6,15 +6,12 @@
 package ken.mizoguch.soem;
 
 import jnr.ffi.Struct;
-import static ken.mizoguch.soem.SoemEthercatType.EC_MAXBUF;
-import static ken.mizoguch.soem.SoemEthercatType.EC_MAXEEPBITMAP;
-import static ken.mizoguch.soem.SoemEthercatType.EC_MAXEEPBUF;
 
 /**
  *
  * @author mizoguch-ken
  */
-public interface SoemEthercatMain {
+public interface SoemEtherCATMain {
 
     /**
      * max. entries in EtherCAT error list
@@ -727,9 +724,9 @@ public interface SoemEthercatMain {
 
             pushed = new Unsigned8();
             pulled = new Unsigned8();
-            idx = super.array(new Unsigned8[EC_MAXBUF]);
-            data = super.array(new Pointer[EC_MAXBUF]);
-            length = super.array(new Unsigned16[EC_MAXBUF]);
+            idx = super.array(new Unsigned8[SoemEtherCATType.EC_MAXBUF]);
+            data = super.array(new Pointer[SoemEtherCATType.EC_MAXBUF]);
+            length = super.array(new Unsigned16[SoemEtherCATType.EC_MAXBUF]);
         }
     }
 
@@ -740,14 +737,14 @@ public interface SoemEthercatMain {
 
         public final Signed16 head;
         public final Signed16 tail;
-        public final SoemEthercatType.ec_errort[] Error;
+        public final SoemEtherCATType.ec_errort[] Error;
 
         public ec_eringt(jnr.ffi.Runtime runtime) {
             super(runtime);
 
             head = new Signed16();
             tail = new Signed16();
-            Error = super.array(new SoemEthercatType.ec_errort[EC_MAXELIST + 1]);
+            Error = super.array(new SoemEtherCATType.ec_errort[EC_MAXELIST + 1]);
         }
     }
 
@@ -929,12 +926,12 @@ public interface SoemEthercatMain {
             }
             maxgroup = new Signed32();
             _esibuf = new Pointer();
-            esibuf = new SoemLibrary.Uint8[EC_MAXEEPBUF];
+            esibuf = new SoemLibrary.Uint8[SoemEtherCATType.EC_MAXEEPBUF];
             for (i = 0; i < esibuf.length; i++) {
                 esibuf[i] = new SoemLibrary.Uint8(runtime);
             }
             _esimap = new Pointer();
-            esimap = new SoemLibrary.Uint32[EC_MAXEEPBITMAP];
+            esimap = new SoemLibrary.Uint32[SoemEtherCATType.EC_MAXEEPBITMAP];
             for (i = 0; i < esimap.length; i++) {
                 esimap[i] = new SoemLibrary.Uint32(runtime);
             }

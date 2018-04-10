@@ -12,7 +12,7 @@ import jnr.ffi.Union;
  *
  * @author mizoguch-ken
  */
-public interface SoemEthercatSoE {
+public interface SoemEtherCATSoE {
 
     public static final int EC_SOE_DATASTATE_B = 0x01;
     public static final int EC_SOE_NAME_B = 0x02;

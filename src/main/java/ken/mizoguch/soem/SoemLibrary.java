@@ -369,11 +369,17 @@ public interface SoemLibrary {
     }
 
     // SoemEthercat
-    public SoemEthercatMain.ecx_contextt ec_malloc_context();
+    public SoemEtherCATMain.ecx_contextt ec_malloc_context();
 
-    public void ec_free_context(SoemEthercatMain.ecx_contextt context);
+    public void ec_free_context(SoemEtherCATMain.ecx_contextt context);
 
-    public Pointer ec_redport(SoemEthercatMain.ecx_contextt context);
+    public Pointer ec_redport(SoemEtherCATMain.ecx_contextt context);
+
+    public SoemEtherCAT.ecx_parcelt ec_malloc_parcel(SoemEtherCATMain.ecx_contextt context);
+
+    public void ec_free_parcel(SoemEtherCAT.ecx_parcelt parcel);
+
+    public int ec_run(SoemEtherCAT.ecx_parcelt parcel);
 
     // SoemEthercatBase
     public int ecx_setupdatagram(Pointer port, Pointer frame, @u_int8_t int com, @u_int8_t int idx, @u_int16_t int ADP, @u_int16_t int ADO, @u_int16_t int length, Pointer data);
@@ -414,155 +420,155 @@ public interface SoemLibrary {
 
     public int ecx_LRWDC(Pointer port, @u_int32_t long LogAdr, @u_int16_t int length, Pointer data, @u_int16_t int DCrs, Pointer DCtime, int timeout);
 
-    // SoemEthercatMain
-    public SoemEthercatMain.ec_adaptert ec_find_adapters();
+    // SoemEtherCATMain
+    public SoemEtherCATMain.ec_adaptert ec_find_adapters();
 
-    public void ec_free_adapters(SoemEthercatMain.ec_adaptert adapter);
+    public void ec_free_adapters(SoemEtherCATMain.ec_adaptert adapter);
 
     public @u_int8_t
     int ec_nextmbxcnt(@u_int8_t int cnt);
 
     public void ec_clearmbx(@u_int8_t int[] Mbx);
 
-    public void ecx_pusherror(SoemEthercatMain.ecx_contextt context, SoemEthercatType.ec_errort Ec);
+    public void ecx_pusherror(SoemEtherCATMain.ecx_contextt context, SoemEtherCATType.ec_errort Ec);
 
     public @u_int8_t
-    int ecx_poperror(SoemEthercatMain.ecx_contextt context, SoemEthercatType.ec_errort Ec);
+    int ecx_poperror(SoemEtherCATMain.ecx_contextt context, SoemEtherCATType.ec_errort Ec);
 
     public @u_int8_t
-    int ecx_iserror(SoemEthercatMain.ecx_contextt context);
+    int ecx_iserror(SoemEtherCATMain.ecx_contextt context);
 
-    public void ecx_packeterror(SoemEthercatMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIdx, @u_int16_t int ErrorCode);
+    public void ecx_packeterror(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIdx, @u_int16_t int ErrorCode);
 
-    public int ecx_init(SoemEthercatMain.ecx_contextt context, String ifname);
+    public int ecx_init(SoemEtherCATMain.ecx_contextt context, String ifname);
 
-    public int ecx_init_redundant(SoemEthercatMain.ecx_contextt context, Pointer redport, String ifname, String if2name);
+    public int ecx_init_redundant(SoemEtherCATMain.ecx_contextt context, Pointer redport, String ifname, String if2name);
 
-    public void ecx_close(SoemEthercatMain.ecx_contextt context);
+    public void ecx_close(SoemEtherCATMain.ecx_contextt context);
 
     public @u_int8_t
-    int ecx_siigetbyte(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int address);
+    int ecx_siigetbyte(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int address);
 
     public @int16_t
-    int ecx_siifind(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int cat);
+    int ecx_siifind(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int cat);
 
-    public void ecx_siistring(SoemEthercatMain.ecx_contextt context, Pointer str, @u_int16_t int slave, @u_int16_t int Sn);
-
-    public @u_int16_t
-    int ecx_siiFMMU(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, SoemEthercatMain.ec_eepromFMMUt FMMU);
+    public void ecx_siistring(SoemEtherCATMain.ecx_contextt context, Pointer str, @u_int16_t int slave, @u_int16_t int Sn);
 
     public @u_int16_t
-    int ecx_siiSM(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, SoemEthercatMain.ec_eepromSMt SM);
+    int ecx_siiFMMU(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, SoemEtherCATMain.ec_eepromFMMUt FMMU);
 
     public @u_int16_t
-    int ecx_siiSMnext(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, SoemEthercatMain.ec_eepromSMt SM, @u_int16_t int n);
-
-    public int ecx_siiPDO(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, SoemEthercatMain.ec_eepromPDOt PDO, @u_int8_t int t);
-
-    public int ecx_readstate(SoemEthercatMain.ecx_contextt context);
-
-    public int ecx_writestate(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave);
+    int ecx_siiSM(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, SoemEtherCATMain.ec_eepromSMt SM);
 
     public @u_int16_t
-    int ecx_statecheck(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int reqstate, int timeout);
+    int ecx_siiSMnext(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, SoemEtherCATMain.ec_eepromSMt SM, @u_int16_t int n);
 
-    public int ecx_mbxempty(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, int timeout);
+    public int ecx_siiPDO(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, SoemEtherCATMain.ec_eepromPDOt PDO, @u_int8_t int t);
 
-    public int ecx_mbxsend(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int[] mbx, int timeout);
+    public int ecx_readstate(SoemEtherCATMain.ecx_contextt context);
 
-    public int ecx_mbxreceive(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int[] mbx, int timeout);
+    public int ecx_writestate(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave);
 
-    public void ecx_esidump(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int[] esibuf);
+    public @u_int16_t
+    int ecx_statecheck(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int reqstate, int timeout);
+
+    public int ecx_mbxempty(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, int timeout);
+
+    public int ecx_mbxsend(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int[] mbx, int timeout);
+
+    public int ecx_mbxreceive(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int[] mbx, int timeout);
+
+    public void ecx_esidump(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int[] esibuf);
 
     public @u_int32_t
-    long ecx_readeeprom(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int eeproma, int timeout);
+    long ecx_readeeprom(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int eeproma, int timeout);
 
-    public int ecx_writeeeprom(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int eeproma, @u_int16_t int data, int timeout);
+    public int ecx_writeeeprom(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int eeproma, @u_int16_t int data, int timeout);
 
-    public int ecx_eeprom2master(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave);
+    public int ecx_eeprom2master(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave);
 
-    public int ecx_eeprom2pdi(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave);
-
-    public @u_int64_t
-    long ecx_readeepromAP(SoemEthercatMain.ecx_contextt context, @u_int16_t int aiadr, @u_int16_t int eeproma, int timeout);
-
-    public int ecx_writeeepromAP(SoemEthercatMain.ecx_contextt context, @u_int16_t int aiadr, @u_int16_t int eeproma, @u_int16_t int data, int timeout);
+    public int ecx_eeprom2pdi(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave);
 
     public @u_int64_t
-    long ecx_readeepromFP(SoemEthercatMain.ecx_contextt context, @u_int16_t int configadr, @u_int16_t int eeproma, int timeout);
+    long ecx_readeepromAP(SoemEtherCATMain.ecx_contextt context, @u_int16_t int aiadr, @u_int16_t int eeproma, int timeout);
 
-    public int ecx_writeeepromFP(SoemEthercatMain.ecx_contextt context, @u_int16_t int configadr, @u_int16_t int eeproma, @u_int16_t int data, int timeout);
+    public int ecx_writeeepromAP(SoemEtherCATMain.ecx_contextt context, @u_int16_t int aiadr, @u_int16_t int eeproma, @u_int16_t int data, int timeout);
 
-    public void ecx_readeeprom1(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int eeproma);
+    public @u_int64_t
+    long ecx_readeepromFP(SoemEtherCATMain.ecx_contextt context, @u_int16_t int configadr, @u_int16_t int eeproma, int timeout);
+
+    public int ecx_writeeepromFP(SoemEtherCATMain.ecx_contextt context, @u_int16_t int configadr, @u_int16_t int eeproma, @u_int16_t int data, int timeout);
+
+    public void ecx_readeeprom1(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int eeproma);
 
     public @u_int32_t
-    long ecx_readeeprom2(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, int timeout);
+    long ecx_readeeprom2(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, int timeout);
 
-    public int ecx_send_overlap_processdata_group(SoemEthercatMain.ecx_contextt context, @u_int8_t int group);
+    public int ecx_send_overlap_processdata_group(SoemEtherCATMain.ecx_contextt context, @u_int8_t int group);
 
-    public int ecx_receive_processdata_group(SoemEthercatMain.ecx_contextt context, @u_int8_t int group, int timeout);
+    public int ecx_receive_processdata_group(SoemEtherCATMain.ecx_contextt context, @u_int8_t int group, int timeout);
 
-    public int ecx_send_processdata(SoemEthercatMain.ecx_contextt context);
+    public int ecx_send_processdata(SoemEtherCATMain.ecx_contextt context);
 
-    public int ecx_send_overlap_processdata(SoemEthercatMain.ecx_contextt context);
+    public int ecx_send_overlap_processdata(SoemEtherCATMain.ecx_contextt context);
 
-    public int ecx_receive_processdata(SoemEthercatMain.ecx_contextt context, int timeout);
+    public int ecx_receive_processdata(SoemEtherCATMain.ecx_contextt context, int timeout);
 
     // SoemEthercatDC
     public @u_int8_t
-    int ecx_configdc(SoemEthercatMain.ecx_contextt context);
+    int ecx_configdc(SoemEtherCATMain.ecx_contextt context);
 
-    public void ecx_dcsync0(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int act, @u_int32_t long CyclTime, @int32_t int CyclShift);
+    public void ecx_dcsync0(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int act, @u_int32_t long CyclTime, @int32_t int CyclShift);
 
-    public void ecx_dcsync01(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int act, @u_int32_t long CyclTime0, @u_int32_t long CyclTime1, @int32_t int CyclShift);
+    public void ecx_dcsync01(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int act, @u_int32_t long CyclTime0, @u_int32_t long CyclTime1, @int32_t int CyclShift);
 
     // SoemEthercatCoE
-    public void ecx_SDOerror(SoemEthercatMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIdx, @int32_t int AbortCode);
+    public void ecx_SDOerror(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIdx, @int32_t int AbortCode);
 
-    public int ecx_SDOread(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int index, @u_int8_t int subindex, @u_int8_t int CA, Pointer psize, Pointer p, int timeout);
+    public int ecx_SDOread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int index, @u_int8_t int subindex, @u_int8_t int CA, Pointer psize, Pointer p, int timeout);
 
-    public int ecx_SDOwrite(SoemEthercatMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIndex, @u_int8_t int CA, int psize, Pointer p, int Timeout);
+    public int ecx_SDOwrite(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIndex, @u_int8_t int CA, int psize, Pointer p, int Timeout);
 
-    public int ecx_RxPDO(SoemEthercatMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int RxPDOnumber, int psize, Pointer p);
+    public int ecx_RxPDO(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int RxPDOnumber, int psize, Pointer p);
 
-    public int ecx_TxPDO(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int TxPDOnumber, Pointer psize, Pointer p, int timeout);
+    public int ecx_TxPDO(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int TxPDOnumber, Pointer psize, Pointer p, int timeout);
 
-    public int ecx_readPDOmap(SoemEthercatMain.ecx_contextt context, @u_int16_t int Slave, Pointer Osize, Pointer Isize);
+    public int ecx_readPDOmap(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, Pointer Osize, Pointer Isize);
 
-    public int ecx_readPDOmapCA(SoemEthercatMain.ecx_contextt context, @u_int16_t int Slave, int Thread_n, Pointer Osize, Pointer Isize);
+    public int ecx_readPDOmapCA(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, int Thread_n, Pointer Osize, Pointer Isize);
 
-    public int ecx_readODlist(SoemEthercatMain.ecx_contextt context, @u_int16_t int Slave, SoemEthercatCoE.ec_ODlistt pODlist);
+    public int ecx_readODlist(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, SoemEtherCATCoE.ec_ODlistt pODlist);
 
-    public int ecx_readODdescription(SoemEthercatMain.ecx_contextt context, @u_int16_t int Item, SoemEthercatCoE.ec_ODlistt pODlist);
+    public int ecx_readODdescription(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Item, SoemEtherCATCoE.ec_ODlistt pODlist);
 
-    public int ecx_readOEsingle(SoemEthercatMain.ecx_contextt context, @u_int16_t int Item, @u_int8_t int SubI, SoemEthercatCoE.ec_ODlistt pODlist, SoemEthercatCoE.ec_OElistt pOElist);
+    public int ecx_readOEsingle(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Item, @u_int8_t int SubI, SoemEtherCATCoE.ec_ODlistt pODlist, SoemEtherCATCoE.ec_OElistt pOElist);
 
-    public int ecx_readOE(SoemEthercatMain.ecx_contextt context, @u_int16_t int Item, SoemEthercatCoE.ec_ODlistt pODlist, SoemEthercatCoE.ec_OElistt pOElist);
+    public int ecx_readOE(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Item, SoemEtherCATCoE.ec_ODlistt pODlist, SoemEtherCATCoE.ec_OElistt pOElist);
 
     // SoemEthercatFoE
-    public int ecx_FOEdefinehook(SoemEthercatMain.ecx_contextt context, CallBack.FOEhook hook);
+    public int ecx_FOEdefinehook(SoemEtherCATMain.ecx_contextt context, CallBack.FOEhook hook);
 
-    public int ecx_FOEread(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, Pointer filename, @u_int32_t long password, Pointer psize, Pointer p, int timeout);
+    public int ecx_FOEread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, Pointer filename, @u_int32_t long password, Pointer psize, Pointer p, int timeout);
 
-    public int ecx_FOEwrite(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, Pointer filename, @u_int32_t long password, int psize, Pointer p, int timeout);
+    public int ecx_FOEwrite(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, Pointer filename, @u_int32_t long password, int psize, Pointer p, int timeout);
 
     // SoemEthercatSoE
-    public int ecx_SoEread(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int driveNo, @u_int8_t int elementflags, @u_int16_t int idn, Pointer psize, Pointer p, int timeout);
+    public int ecx_SoEread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int driveNo, @u_int8_t int elementflags, @u_int16_t int idn, Pointer psize, Pointer p, int timeout);
 
-    public int ecx_SoEwrite(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int driveNo, @u_int8_t int elementflags, @u_int16_t int idn, int psize, Pointer p, int timeout);
+    public int ecx_SoEwrite(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int driveNo, @u_int8_t int elementflags, @u_int16_t int idn, int psize, Pointer p, int timeout);
 
-    public int ecx_readIDNmap(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, Pointer Osize, Pointer Isize);
+    public int ecx_readIDNmap(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, Pointer Osize, Pointer Isize);
 
     // SoemEthercatConfig
-    public int ecx_config_init(SoemEthercatMain.ecx_contextt context, @u_int8_t int usetable);
+    public int ecx_config_init(SoemEtherCATMain.ecx_contextt context, @u_int8_t int usetable);
 
-    public int ecx_config_map_group(SoemEthercatMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
+    public int ecx_config_map_group(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
 
-    public int ecx_config_overlap_map_group(SoemEthercatMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
+    public int ecx_config_overlap_map_group(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
 
-    public int ecx_recover_slave(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, int timeout);
+    public int ecx_recover_slave(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, int timeout);
 
-    public int ecx_reconfig_slave(SoemEthercatMain.ecx_contextt context, @u_int16_t int slave, int timeout);
+    public int ecx_reconfig_slave(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, int timeout);
 
     // SoemEthercatPrint
     String ec_sdoerror2string(@u_int32_t long sdoerrorcode);
@@ -571,5 +577,5 @@ public interface SoemLibrary {
 
     String ec_soeerror2string(@u_int16_t int errorcode);
 
-    String ecx_elist2string(SoemEthercatMain.ecx_contextt context);
+    String ecx_elist2string(SoemEtherCATMain.ecx_contextt context);
 }

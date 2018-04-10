@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
 import jnr.ffi.LibraryLoader;
@@ -21,20 +22,6 @@ import jnr.ffi.Struct;
 import jnr.ffi.util.EnumMapper;
 import ken.mizoguch.console.Console;
 import ken.mizoguch.gcodefx.JavaLibrary;
-import static ken.mizoguch.soem.SoemEthercatMain.ECT_MBXPROT_COE;
-import static ken.mizoguch.soem.SoemEthercatMain.EC_MAXEEPDO;
-import static ken.mizoguch.soem.SoemEthercatMain.EC_MAXNAME;
-import static ken.mizoguch.soem.SoemEthercatMain.EC_MAXSM;
-import static ken.mizoguch.soem.SoemEthercatType.ECT_SDO_PDOASSIGN;
-import static ken.mizoguch.soem.SoemEthercatType.ECT_SDO_SMCOMMTYPE;
-import static ken.mizoguch.soem.SoemEthercatType.ECT_SII_GENERAL;
-import static ken.mizoguch.soem.SoemEthercatType.ECT_SII_PDO;
-import static ken.mizoguch.soem.SoemEthercatType.EC_TIMEOUTRXM;
-import static ken.mizoguch.soem.SoemEthercatType.EC_TIMEOUTSTATE;
-import static ken.mizoguch.soem.SoemEthercatType.ec_state.EC_STATE_PRE_OP;
-import static ken.mizoguch.soem.SoemEthercatType.ec_state.EC_STATE_SAFE_OP;
-import static ken.mizoguch.soem.SoemOsal.FALSE;
-import static ken.mizoguch.soem.SoemOsal.TRUE;
 import ken.mizoguch.webviewer.plugin.gcodefx.SoemPlugin;
 import ken.mizoguch.webviewer.plugin.gcodefx.SoemPluginListener;
 
@@ -242,11 +229,11 @@ public class Soem implements SoemPlugin {
     private SoemLibrary soem_;
     private jnr.ffi.Runtime runtime_;
 
-    private SoemEthercatMain.ecx_contextt context_;
+    private SoemEtherCAT.ecx_parcelt parcel_;
+    private SoemEtherCATMain.ecx_contextt context_;
     private SoemEcatThread ecatThread_;
 
     private Pointer pIOmap_;
-    private SoemLibrary.Uint8[] IOmap_;
 
     private final Gson gson_ = new Gson();
 
@@ -256,10 +243,10 @@ public class Soem implements SoemPlugin {
     public Soem() {
         soem_ = null;
         runtime_ = null;
+        parcel_ = null;
         context_ = null;
         ecatThread_ = null;
         pIOmap_ = null;
-        IOmap_ = null;
     }
 
     @Override
@@ -293,15 +280,11 @@ public class Soem implements SoemPlugin {
     @Override
     public Boolean init(int ioSize) {
         if (soem_ != null) {
-            if ((context_ == null) && (pIOmap_ == null) && (IOmap_ == null) && (ecatThread_ == null)) {
+            if ((parcel_ == null) && (context_ == null) && (pIOmap_ == null) && (ecatThread_ == null)) {
+                pIOmap_ = Memory.allocateDirect(runtime_, ioSize, true);
                 context_ = soem_.ec_malloc_context().register();
-                pIOmap_ = Memory.allocateDirect(runtime_, ioSize);
-                IOmap_ = new SoemLibrary.Uint8[(int) pIOmap_.size()];
-                for (int i = 0; i < IOmap_.length; i++) {
-                    IOmap_[i] = new SoemLibrary.Uint8(runtime_);
-                    IOmap_[i].useMemory(pIOmap_.slice(i));
-                }
-                ecatThread_ = new SoemEcatThread(soem_, context_);
+                parcel_ = soem_.ec_malloc_parcel(context_).register();
+                ecatThread_ = new SoemEcatThread(soem_, parcel_, context_);
                 return true;
             }
             return false;
@@ -327,6 +310,9 @@ public class Soem implements SoemPlugin {
             if (ecatThread_ != null) {
                 ecatThread_.addSoemEcatListener(listener);
                 if (ecatThread_.init(ifname, cycletime, pIOmap_)) {
+                    parcel_.wkc.set(0);
+                    parcel_.cycletime.set(cycletime);
+                    parcel_.dorun.set(SoemOsal.TRUE);
                     if (Platform.isFxApplicationThread()) {
                         runEcatThread();
                     } else {
@@ -351,34 +337,6 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public Boolean close(SoemPluginListener listener) {
-        if (soem_ != null) {
-            if (ecatThread_ != null) {
-                ecatThread_.exit();
-                ecatThread_.cancel();
-                ecatThread_.removeSoemEcatListener(listener);
-                ecatThread_ = null;
-            }
-            if (IOmap_ != null) {
-                for (SoemLibrary.Uint8 IOmap : IOmap_) {
-                    IOmap.useMemory(null);
-                }
-                IOmap_ = null;
-            }
-            if (pIOmap_ != null) {
-                pIOmap_ = null;
-            }
-            if (context_ != null) {
-                soem_.ecx_close(context_);
-                soem_.ec_free_context(context_);
-                context_ = null;
-            }
-            return true;
-        }
-        return null;
-    }
-
-    @Override
     public Boolean setNotifyCheck(boolean state) {
         if (ecatThread_ != null) {
             return ecatThread_.setNotifyCheck(state);
@@ -387,9 +345,64 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
+    public Boolean close(SoemPluginListener listener) {
+        if (soem_ != null) {
+            if (ecatThread_ != null) {
+                ecatThread_.exit();
+                ecatThread_.cancel();
+                ecatThread_.removeSoemEcatListener(listener);
+                ecatThread_ = null;
+            }
+            if (parcel_ != null) {
+                parcel_.dorun.set(SoemOsal.FALSE);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(10);
+                } catch (InterruptedException ex) {
+                }
+                soem_.ec_free_parcel(parcel_);
+                parcel_ = null;
+            }
+            if (context_ != null) {
+                soem_.ecx_close(context_);
+                soem_.ec_free_context(context_);
+                context_ = null;
+            }
+            if (pIOmap_ != null) {
+                pIOmap_ = null;
+            }
+            return true;
+        }
+        return null;
+    }
+
+    @Override
     public Integer slavecount() {
         if (context_ != null) {
             return context_.slavecount.get();
+        }
+        return null;
+    }
+
+    @Override
+    public Integer state(int slave) {
+        if (context_ != null) {
+            return context_.slavelist[slave].state.get();
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean islost(int slave) {
+        if (context_ != null) {
+            return (context_.slavelist[slave].islost.get() == SoemOsal.TRUE);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean docheckstate() {
+        if (context_ != null) {
+            return (context_.grouplist[0].docheckstate.get() == SoemOsal.TRUE);
         }
         return null;
     }
@@ -455,8 +468,8 @@ public class Soem implements SoemPlugin {
             Map<String, String> adapters = new HashMap<>();
 
             try {
-                SoemEthercatMain.ec_adaptert findAdapters = soem_.ec_find_adapters();
-                SoemEthercatMain.ec_adaptert findAdapter = findAdapters;
+                SoemEtherCATMain.ec_adaptert findAdapters = soem_.ec_find_adapters();
+                SoemEtherCATMain.ec_adaptert findAdapter = findAdapters;
                 while (findAdapter != null) {
                     adapters.put(findAdapter.desc.get(), findAdapter.name.get());
                     findAdapter = findAdapter.getNext(runtime_);
@@ -480,11 +493,11 @@ public class Soem implements SoemPlugin {
 
             try {
                 int wkc, ssigen, cnt, nSM, chk, i, j;
-                SoemEthercatMain.ecx_contextt context = soem_.ec_malloc_context().register();
+                SoemEtherCATMain.ecx_contextt context = soem_.ec_malloc_context().register();
                 if (soem_.ecx_init(context, ifname) > 0) {
                     info.InterfaceName = ifname;
                     Pointer pIOmap = Memory.allocateDirect(runtime_, 4096);
-                    wkc = soem_.ecx_config_init(context, FALSE);
+                    wkc = soem_.ecx_config_init(context, SoemOsal.FALSE);
                     if (wkc > 0) {
                         soem_.ecx_config_map_group(context, pIOmap, 0);
                         soem_.ecx_configdc(context);
@@ -493,11 +506,11 @@ public class Soem implements SoemPlugin {
                         }
                         info.SlaveCount = context.slavecount.get();
                         info.ExpectedWKC = (context.grouplist[0].outputsWKC.get() * 2) + context.grouplist[0].inputsWKC.get();
-                        soem_.ecx_statecheck(context, 0, EC_STATE_SAFE_OP.intValue(), EC_TIMEOUTSTATE * 3);
-                        if (context.slavelist[0].state.get() != EC_STATE_SAFE_OP.intValue()) {
+                        soem_.ecx_statecheck(context, 0, SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE * 3);
+                        if (context.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue()) {
                             soem_.ecx_readstate(context);
                             for (i = 1; i <= context.slavecount.get(); i++) {
-                                if (context.slavelist[i].state.get() != EC_STATE_SAFE_OP.intValue()) {
+                                if (context.slavelist[i].state.get() != SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue()) {
                                     slave = info.newSlave();
                                     slave.Index = i;
                                     slave.State = context.slavelist[i].state.get();
@@ -525,7 +538,7 @@ public class Soem implements SoemPlugin {
                             slave.EEP_MAN = context.slavelist[cnt].eep_man.get();
                             slave.EEP_ID = context.slavelist[cnt].eep_id.get();
                             slave.EEP_REV = context.slavelist[cnt].eep_rev.get();
-                            for (nSM = 0; nSM < EC_MAXSM; nSM++) {
+                            for (nSM = 0; nSM < SoemEtherCATMain.EC_MAXSM; nSM++) {
                                 if (context.slavelist[cnt].SM[nSM].StartAddr.get() > 0) {
                                     sm = slave.newSM();
                                     sm.Index = nSM;
@@ -554,7 +567,7 @@ public class Soem implements SoemPlugin {
                             slave.MailboxWriteLength = context.slavelist[cnt].mbx_l.get();
                             slave.MailboxReadLength = context.slavelist[cnt].mbx_rl.get();
                             slave.MailboxProtocols = context.slavelist[cnt].mbx_proto.get();
-                            ssigen = soem_.ecx_siifind(context, cnt, ECT_SII_GENERAL);
+                            ssigen = soem_.ecx_siifind(context, cnt, SoemEtherCATType.ECT_SII_GENERAL);
                             if (ssigen > 0) {
                                 context.slavelist[cnt].CoEdetails.set(soem_.ecx_siigetbyte(context, cnt, ssigen + 0x07));
                                 context.slavelist[cnt].FoEdetails.set(soem_.ecx_siigetbyte(context, cnt, ssigen + 0x08));
@@ -573,11 +586,11 @@ public class Soem implements SoemPlugin {
                                 slave.SoEDetails = context.slavelist[cnt].SoEdetails.get();
                                 slave.EbusCurrent = context.slavelist[cnt].Ebuscurrent.get();
                                 slave.BlockLRW = context.slavelist[cnt].blockLRW.get();
-                                if (((context.slavelist[cnt].mbx_proto.get() & ECT_MBXPROT_COE) > 0) && printSDO) {
+                                if (((context.slavelist[cnt].mbx_proto.get() & SoemEtherCATMain.ECT_MBXPROT_COE) > 0) && printSDO) {
                                     si_sdo(context, cnt, slave.newSDO());
                                 }
                                 if (printMAP) {
-                                    if ((context.slavelist[cnt].mbx_proto.get() & ECT_MBXPROT_COE) > 0) {
+                                    if ((context.slavelist[cnt].mbx_proto.get() & SoemEtherCATMain.ECT_MBXPROT_COE) > 0) {
                                         si_map_sdo(context, pIOmap, cnt, slave);
                                     } else {
                                         si_map_sii(context, pIOmap, cnt, slave);
@@ -585,12 +598,12 @@ public class Soem implements SoemPlugin {
                                 }
                             }
                         }
-                        context.slavelist[0].state.set(EC_STATE_PRE_OP.intValue());
+                        context.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue());
                         soem_.ecx_writestate(context, 0);
                         chk = 40;
                         do {
-                            soem_.ecx_statecheck(context, 0, EC_STATE_PRE_OP.intValue(), 50000);
-                        } while ((chk-- > 0) && (context.slavelist[0].state.get() != EC_STATE_PRE_OP.intValue()));
+                            soem_.ecx_statecheck(context, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), 50000);
+                        } while ((chk-- > 0) && (context.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue()));
                     } else {
                         info.EcatError = "No slaves found!";
                     }
@@ -607,7 +620,7 @@ public class Soem implements SoemPlugin {
         return null;
     }
 
-    private int si_siiPDO(SoemEthercatMain.ecx_contextt context, int index, int t, int mapoffset, int bitoffset, SlaveInfo.Slave slave) {
+    private int si_siiPDO(SoemEtherCATMain.ecx_contextt context, int index, int t, int mapoffset, int bitoffset, SlaveInfo.Slave slave) {
         SlaveInfo.PDO pdo;
         SlaveInfo.PDO.SII sii;
         int a, w, c, e, er, Size;
@@ -618,11 +631,11 @@ public class Soem implements SoemPlugin {
         int obj_datatype;
         int bitlen;
         int totalsize;
-        SoemEthercatMain.ec_eepromPDOt PDO = new SoemEthercatMain.ec_eepromPDOt(runtime_);
+        SoemEtherCATMain.ec_eepromPDOt PDO = new SoemEtherCATMain.ec_eepromPDOt(runtime_);
         Pointer pPDO = Memory.allocateDirect(runtime_, Struct.size(PDO));
         PDO.useMemory(pPDO);
         int abs_offset, abs_bit;
-        SoemLibrary.UTF8String str_name = new SoemLibrary.UTF8String(runtime_, EC_MAXNAME + 1);
+        SoemLibrary.UTF8String str_name = new SoemLibrary.UTF8String(runtime_, SoemEtherCATMain.EC_MAXNAME + 1);
         Pointer pStr_name = Memory.allocateDirect(runtime_, Struct.size(str_name));
         str_name.useMemory(pStr_name);
 
@@ -632,13 +645,13 @@ public class Soem implements SoemPlugin {
         PDO.nPDO.set(0);
         PDO.Length.set(0);
         PDO.Index[1].set(0);
-        for (c = 0; c < EC_MAXSM; c++) {
+        for (c = 0; c < SoemEtherCATMain.EC_MAXSM; c++) {
             PDO.SMbitsize[c].set(0);
         }
         if (t > 1) {
             t = 1;
         }
-        PDO.Startpos.set(soem_.ecx_siifind(context, index, ECT_SII_PDO + t));
+        PDO.Startpos.set(soem_.ecx_siifind(context, index, SoemEtherCATType.ECT_SII_PDO + t));
         if (PDO.Startpos.get() > 0) {
             a = PDO.Startpos.get();
             w = soem_.ecx_siigetbyte(context, index, a++);
@@ -659,7 +672,7 @@ public class Soem implements SoemPlugin {
                 obj_name = soem_.ecx_siigetbyte(context, index, a++);
                 a += 2;
                 c += 2;
-                if (PDO.SyncM[PDO.nPDO.get()].get() < EC_MAXSM) /* active and in range SM? */ {
+                if (PDO.SyncM[PDO.nPDO.get()].get() < SoemEtherCATMain.EC_MAXSM) /* active and in range SM? */ {
                     str_name.set("");
                     if (obj_name > 0) {
                         soem_.ecx_siistring(context, pStr_name, index, obj_name);
@@ -712,7 +725,7 @@ public class Soem implements SoemPlugin {
                     a += 8 * e;
                     c++;
                 }
-                if (PDO.nPDO.get() >= (EC_MAXEEPDO - 1)) {
+                if (PDO.nPDO.get() >= (SoemEtherCATMain.EC_MAXEEPDO - 1)) {
                     c = PDO.Length.get();
                     /* limit number of PDO entries in buffer */
                 }
@@ -725,7 +738,7 @@ public class Soem implements SoemPlugin {
         return totalsize;
     }
 
-    private int si_map_sii(SoemEthercatMain.ecx_contextt context, Pointer pIOmap, int index, SlaveInfo.Slave slave) {
+    private int si_map_sii(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, int index, SlaveInfo.Slave slave) {
         int retVal = 0;
         int Tsize, outputs_bo, inputs_bo;
         long address;
@@ -759,7 +772,7 @@ public class Soem implements SoemPlugin {
         String hstr;
 
         try {
-            SoemEthercatType.ec_datatype edtype = (SoemEthercatType.ec_datatype) EnumMapper.getInstance(SoemEthercatType.ec_datatype.class).valueOf(dtype);
+            SoemEtherCATType.ec_datatype edtype = (SoemEtherCATType.ec_datatype) EnumMapper.getInstance(SoemEtherCATType.ec_datatype.class).valueOf(dtype);
             switch (edtype) {
                 case ECT_BOOLEAN:
                     hstr = "BOOLEAN";
@@ -839,7 +852,7 @@ public class Soem implements SoemPlugin {
         return hstr;
     }
 
-    private int si_PDOassign(SoemEthercatMain.ecx_contextt context, int index, int PDOassign, int mapoffset, int bitoffset, SlaveInfo.PDO pdo) {
+    private int si_PDOassign(SoemEtherCATMain.ecx_contextt context, int index, int PDOassign, int mapoffset, int bitoffset, SlaveInfo.PDO pdo) {
         SlaveInfo.PDO.SII sii;
         int idxloop, nidx, subidxloop, idx, subidx;
         SoemLibrary.Uint16 rdat;
@@ -849,8 +862,8 @@ public class Soem implements SoemPlugin {
         int bitlen, obj_subidx;
         int obj_idx;
         int abs_offset, abs_bit;
-        SoemEthercatCoE.ec_ODlistt ODlist = new SoemEthercatCoE.ec_ODlistt(runtime_);
-        SoemEthercatCoE.ec_OElistt OElist = new SoemEthercatCoE.ec_OElistt(runtime_);
+        SoemEtherCATCoE.ec_ODlistt ODlist = new SoemEtherCATCoE.ec_ODlistt(runtime_);
+        SoemEtherCATCoE.ec_OElistt OElist = new SoemEtherCATCoE.ec_OElistt(runtime_);
 
         rdat = new SoemLibrary.Uint16(runtime_);
         subcnt = new SoemLibrary.Uint8(runtime_);
@@ -874,7 +887,7 @@ public class Soem implements SoemPlugin {
         rdl.set(Struct.size(rdat));
         rdat.set(0);
         /* read PDO assign subindex 0 ( = number of PDO's) */
-        wkc = soem_.ecx_SDOread(context, index, PDOassign, 0x00, FALSE, pRdl, pRdat, EC_TIMEOUTRXM);
+        wkc = soem_.ecx_SDOread(context, index, PDOassign, 0x00, SoemOsal.FALSE, pRdl, pRdat, SoemEtherCATType.EC_TIMEOUTRXM);
         /* positive result from slave ? */
         if ((wkc > 0) && (rdat.get() > 0)) {
             /* number of available sub indexes */
@@ -885,21 +898,21 @@ public class Soem implements SoemPlugin {
                 rdl.set(Struct.size(rdat));
                 rdat.set(0);
                 /* read PDO assign */
-                soem_.ecx_SDOread(context, index, PDOassign, idxloop, FALSE, pRdl, pRdat, EC_TIMEOUTRXM);
+                soem_.ecx_SDOread(context, index, PDOassign, idxloop, SoemOsal.FALSE, pRdl, pRdat, SoemEtherCATType.EC_TIMEOUTRXM);
                 /* result is index of PDO */
                 idx = rdat.get();
                 if (idx > 0) {
                     rdl.set(Struct.size(subcnt));
                     subcnt.set(0);
                     /* read number of subindexes of PDO */
-                    soem_.ecx_SDOread(context, index, idx, 0x00, FALSE, pRdl, pSubcnt, EC_TIMEOUTRXM);
+                    soem_.ecx_SDOread(context, index, idx, 0x00, SoemOsal.FALSE, pRdl, pSubcnt, SoemEtherCATType.EC_TIMEOUTRXM);
                     subidx = subcnt.get();
                     /* for each subindex */
                     for (subidxloop = 1; subidxloop <= subidx; subidxloop++) {
                         rdl.set(Struct.size(rdat2));
                         rdat2.set(0);
                         /* read SDO that is mapped in PDO */
-                        soem_.ecx_SDOread(context, index, idx, subidxloop, FALSE, pRdl, pRdat2, EC_TIMEOUTRXM);
+                        soem_.ecx_SDOread(context, index, idx, subidxloop, SoemOsal.FALSE, pRdl, pRdat2, SoemEtherCATType.EC_TIMEOUTRXM);
                         /* extract bitlength of SDO */
                         bitlen = (rdat2.get() & 0xff);
                         bsize += bitlen;
@@ -934,7 +947,7 @@ public class Soem implements SoemPlugin {
         return bsize;
     }
 
-    private int si_map_sdo(SoemEthercatMain.ecx_contextt context, Pointer pIOmap, int index, SlaveInfo.Slave slave) {
+    private int si_map_sdo(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, int index, SlaveInfo.Slave slave) {
         SlaveInfo.PDO pdo;
         int wkc;
         SoemLibrary.Int32 rdl;
@@ -962,21 +975,21 @@ public class Soem implements SoemPlugin {
         rdl.set(Struct.size(nSM));
         nSM.set(0);
         /* read SyncManager Communication Type object count */
-        wkc = soem_.ecx_SDOread(context, index, ECT_SDO_SMCOMMTYPE, 0x00, FALSE, pRdl, pNSM, EC_TIMEOUTRXM);
+        wkc = soem_.ecx_SDOread(context, index, SoemEtherCATType.ECT_SDO_SMCOMMTYPE, 0x00, SoemOsal.FALSE, pRdl, pNSM, SoemEtherCATType.EC_TIMEOUTRXM);
         /* positive result from slave ? */
         if ((wkc > 0) && (nSM.get() > 2)) {
             /* make nSM equal to number of defined SM */
             nSM.set(nSM.get() - 1);
             /* limit to maximum number of SM defined, if true the slave can't be configured */
-            if (nSM.get() > EC_MAXSM) {
-                nSM.set(EC_MAXSM);
+            if (nSM.get() > SoemEtherCATMain.EC_MAXSM) {
+                nSM.set(SoemEtherCATMain.EC_MAXSM);
             }
             /* iterate for every SM type defined */
             for (iSM = 2; iSM <= nSM.get(); iSM++) {
                 rdl.set(Struct.size(tSM));
                 tSM.set(0);
                 /* read SyncManager Communication Type */
-                wkc = soem_.ecx_SDOread(context, index, ECT_SDO_SMCOMMTYPE, iSM + 1, FALSE, pRdl, pTSM, EC_TIMEOUTRXM);
+                wkc = soem_.ecx_SDOread(context, index, SoemEtherCATType.ECT_SDO_SMCOMMTYPE, iSM + 1, SoemOsal.FALSE, pRdl, pTSM, SoemEtherCATType.EC_TIMEOUTRXM);
                 if (wkc > 0) {
                     if ((iSM == 2) && (tSM.get() == 2)) // SM2 has type 2 == mailbox out, this is a bug in the slave!
                     {
@@ -990,7 +1003,7 @@ public class Soem implements SoemPlugin {
                         /* read the assign RXPDO */
                         pdo = slave.newRxPDO();
                         pdo.Index = iSM;
-                        Tsize = si_PDOassign(context, index, ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].outputs.get().address() - pIOmap.address()), outputs_bo, pdo);
+                        Tsize = si_PDOassign(context, index, SoemEtherCATType.ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].outputs.get().address() - pIOmap.address()), outputs_bo, pdo);
                         outputs_bo += Tsize;
                     }
                     if (tSM.get() == 4) // inputs
@@ -998,7 +1011,7 @@ public class Soem implements SoemPlugin {
                         /* read the assign TXPDO */
                         pdo = slave.newTxPDO();
                         pdo.Index = iSM;
-                        Tsize = si_PDOassign(context, index, ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].inputs.get().address() - pIOmap.address()), inputs_bo, pdo);
+                        Tsize = si_PDOassign(context, index, SoemEtherCATType.ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].inputs.get().address() - pIOmap.address()), inputs_bo, pdo);
                         inputs_bo += Tsize;
                     }
                 }
@@ -1012,7 +1025,7 @@ public class Soem implements SoemPlugin {
         return retVal;
     }
 
-    private String SDO2string(SoemEthercatMain.ecx_contextt context, int index, int idx, int subidx, int dtype) {
+    private String SDO2string(SoemEtherCATMain.ecx_contextt context, int index, int idx, int subidx, int dtype) {
         StringBuilder hstr;
         SoemLibrary.UTF8String usdo = new SoemLibrary.UTF8String(runtime_, 128);
         SoemLibrary.Int32 l = new SoemLibrary.Int32(runtime_);
@@ -1022,15 +1035,15 @@ public class Soem implements SoemPlugin {
         l.useMemory(pL);
         l.set(Struct.size(usdo));
 
-        soem_.ecx_SDOread(context, index, idx, subidx, FALSE, pL, pUsdo, EC_TIMEOUTRXM);
+        soem_.ecx_SDOread(context, index, idx, subidx, SoemOsal.FALSE, pL, pUsdo, SoemEtherCATType.EC_TIMEOUTRXM);
         if (context.ecaterror.get() > 0) {
             return soem_.ecx_elist2string(context);
         } else {
             try {
-                SoemEthercatType.ec_datatype edtype = (SoemEthercatType.ec_datatype) EnumMapper.getInstance(SoemEthercatType.ec_datatype.class).valueOf(dtype);
+                SoemEtherCATType.ec_datatype edtype = (SoemEtherCATType.ec_datatype) EnumMapper.getInstance(SoemEtherCATType.ec_datatype.class).valueOf(dtype);
                 switch (edtype) {
                     case ECT_BOOLEAN:
-                        if (pUsdo.getByte(0) == TRUE) {
+                        if (pUsdo.getByte(0) == SoemOsal.TRUE) {
                             hstr = new StringBuilder("TRUE");
                         } else {
                             hstr = new StringBuilder("FALSE");
@@ -1097,11 +1110,11 @@ public class Soem implements SoemPlugin {
         }
     }
 
-    private void si_sdo(SoemEthercatMain.ecx_contextt context, int cnt, SlaveInfo.SDO sdo) {
+    private void si_sdo(SoemEtherCATMain.ecx_contextt context, int cnt, SlaveInfo.SDO sdo) {
         SlaveInfo.SDO.OD od;
         SlaveInfo.SDO.OD.OE oe;
-        SoemEthercatCoE.ec_ODlistt ODlist = new SoemEthercatCoE.ec_ODlistt(runtime_);
-        SoemEthercatCoE.ec_OElistt OElist = new SoemEthercatCoE.ec_OElistt(runtime_);
+        SoemEtherCATCoE.ec_ODlistt ODlist = new SoemEtherCATCoE.ec_ODlistt(runtime_);
+        SoemEtherCATCoE.ec_OElistt OElist = new SoemEtherCATCoE.ec_OElistt(runtime_);
         int i, j;
 
         Pointer pODlist = Memory.allocateDirect(runtime_, Struct.size(ODlist));

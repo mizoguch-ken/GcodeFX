@@ -6,13 +6,12 @@
 package ken.mizoguch.soem;
 
 import jnr.ffi.Struct;
-import static ken.mizoguch.soem.SoemEthercatMain.EC_MAXNAME;
 
 /**
  *
  * @author mizoguch-ken
  */
-public interface SoemEthercatCoE {
+public interface SoemEtherCATCoE {
 
     /**
      * max entries in Object Description list
@@ -65,7 +64,7 @@ public interface SoemEthercatCoE {
             DataType = super.array(new Unsigned16[EC_MAXODLIST]);
             ObjectCode = super.array(new Unsigned8[EC_MAXODLIST]);
             MaxSub = super.array(new Unsigned8[EC_MAXODLIST]);
-            Name = super.array(new UTF8String[EC_MAXODLIST], EC_MAXNAME + 1);
+            Name = super.array(new UTF8String[EC_MAXODLIST], SoemEtherCATMain.EC_MAXNAME + 1);
         }
     }
 
@@ -105,7 +104,7 @@ public interface SoemEthercatCoE {
             DataType = super.array(new Unsigned16[EC_MAXOELIST]);
             BitLength = super.array(new Unsigned16[EC_MAXOELIST]);
             ObjAccess = super.array(new Unsigned16[EC_MAXOELIST]);
-            Name = super.array(new UTF8String[EC_MAXOELIST], EC_MAXNAME + 1);
+            Name = super.array(new UTF8String[EC_MAXOELIST], SoemEtherCATMain.EC_MAXNAME + 1);
         }
     }
 }
