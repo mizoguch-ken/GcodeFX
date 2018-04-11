@@ -5,6 +5,7 @@
  */
 package ken.mizoguch.webviewer.plugin.gcodefx;
 
+import java.nio.file.Path;
 import javafx.concurrent.Worker;
 import javafx.scene.web.WebEngine;
 
@@ -13,6 +14,14 @@ import javafx.scene.web.WebEngine;
  * @author mizoguch-ken
  */
 public interface LaddersPlugin {
+
+    public int getHistoryGeneration();
+
+    public void setHistoryGeneration(int historyGeneration);
+
+    public long getIdealCycleTime();
+
+    public void setIdealCycleTime(long idealCycleTime);
 
     public Boolean isRegistered(Object object);
 
@@ -27,4 +36,18 @@ public interface LaddersPlugin {
     public Double getValue(String address);
 
     public void setValue(String address, double value);
+
+    public boolean connectLadder();
+
+    public boolean runStartLadder();
+
+    public void stopLadder();
+
+    public boolean fileNew();
+
+    public boolean fileOpen(Path filePath);
+
+    public boolean fileSave();
+
+    public String getFileName();
 }
