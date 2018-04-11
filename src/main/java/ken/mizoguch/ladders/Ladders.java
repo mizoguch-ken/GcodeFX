@@ -269,126 +269,6 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
     /**
      *
-     * @return
-     */
-    public int getHistoryGeneration() {
-        return historyGeneration_;
-    }
-
-    /**
-     *
-     * @param historyGeneration
-     */
-    public void setHistoryGeneration(int historyGeneration) {
-        historyGeneration_ = historyGeneration;
-        if (ladderCommand_ != null) {
-            ladderCommand_.setHistoryGeneration(historyGeneration_);
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public long getIdealCycleTime() {
-        return idealCycleTime_;
-    }
-
-    /**
-     *
-     * @param idealCycleTime
-     */
-    public void setIdealCycleTime(long idealCycleTime) {
-        idealCycleTime_ = idealCycleTime;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean connectLadder() {
-        LadderPane pane;
-        int index;
-
-        // check connect
-        if (checkConnectLadder(tabLadder, treeTableIo, ioMap_)) {
-            synchronized (lock_) {
-                // connect
-                laddersSize_ = tabLadder.getTabs().size();
-                ladders_ = new Ladder[laddersSize_];
-                for (index = 0; index < laddersSize_; index++) {
-                    pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(index).getContent()).getContent();
-                    ladders_[index] = pane.getLadder().copy();
-                    ladders_[index].connectLadder(ioMap_, treeTableIo);
-                }
-            }
-            register(webEngine_, state_);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     *
-     * @param tabPane
-     * @param ioTreeTable
-     * @param ioMap
-     * @return
-     */
-    public boolean checkConnectLadder(TabPane tabPane, TreeTableView<LadderTreeTableIo> ioTreeTable, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap) {
-        LadderPane pane;
-        int index, size;
-
-        for (index = 0, size = tabPane.getTabs().size(); index < size; index++) {
-            pane = (LadderPane) ((ScrollPane) tabPane.getTabs().get(index).getContent()).getContent();
-            if (pane.getLadder().connectLadder(ioMap, ioTreeTable)) {
-                pane.clearEditing();
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     *
-     */
-    public void runStartLadder() {
-        if ((ladders_ != null) && (!ioMap_.isEmpty())) {
-            isCycling_ = true;
-            if (Platform.isFxApplicationThread()) {
-                startLadder();
-            } else {
-                Platform.runLater(() -> {
-                    startLadder();
-                });
-            }
-        }
-    }
-
-    private void startLadder() {
-        if (getState() == State.READY) {
-            start();
-        } else {
-            restart();
-        }
-    }
-
-    /**
-     *
-     */
-    public void stopLadder() {
-        if (isCycling_) {
-            isCycling_ = false;
-            try {
-                TimeUnit.NANOSECONDS.sleep(idealCycleTime_ + LADDER_VIEW_REFRESH_CYCLE_TIME);
-            } catch (InterruptedException ex) {
-            }
-        }
-    }
-
-    /**
-     *
      * @param oldIdx
      * @param oldAddress
      * @param newAddress
@@ -492,58 +372,6 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         scriptIoMap_.clear();
     }
 
-    private void fileNotFound(Path file) {
-        if (file != null) {
-            writeLog(LadderEnums.FILE_NOT_FOUND.toString() + ": " + file.toString(), true);
-        } else {
-            writeLog(LadderEnums.FILE_NOT_FOUND.toString(), true);
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ButtonType fileSavedCheck() {
-        ButtonType response = null;
-
-        if (isChanged_) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            if (!icons_.isEmpty()) {
-                ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().addAll(icons_);
-            }
-            alert.setTitle(LadderEnums.LADDER.toString());
-            alert.getDialogPane().setHeaderText(null);
-            alert.getDialogPane().setContentText(LadderEnums.SAVE_CHANGE_PROGRAM.toString());
-            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
-            Optional<ButtonType> result = alert.showAndWait();
-            response = result.get();
-        }
-        return response;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public Path getFilePath() {
-        return filePath_;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getFileName() {
-        if (filePath_ == null) {
-            return null;
-        }
-        if (Files.isDirectory(filePath_)) {
-            return null;
-        }
-        return filePath_.getFileName().toString();
-    }
-
     /**
      *
      * @param workFilePath
@@ -571,118 +399,6 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         } else {
             return filePath_.toString();
         }
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean fileNew() {
-        ButtonType response = fileSavedCheck();
-
-        if (response == null) {
-            ladderNew();
-            filePath_ = null;
-            isChanged_ = false;
-            setTitle();
-            return true;
-        } else if (response == ButtonType.YES) {
-            ladderSave();
-            ladderNew();
-            filePath_ = null;
-            isChanged_ = false;
-            setTitle();
-            return true;
-        } else if (response == ButtonType.NO) {
-            ladderNew();
-            filePath_ = null;
-            isChanged_ = false;
-            setTitle();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     *
-     * @param filePath
-     * @return
-     */
-    public boolean fileOpen(Path filePath) {
-        Path file;
-        ButtonType response = fileSavedCheck();
-
-        if (response == null) {
-            file = ladderOpen(tabLadder, treeTableIo, filePath);
-            if (file == null) {
-                if (filePath != null) {
-                    fileNotFound(filePath);
-                }
-            } else {
-                filePath_ = file;
-                isChanged_ = false;
-                setTitle();
-                return true;
-            }
-        } else if (response == ButtonType.YES) {
-            ladderSave();
-            file = ladderOpen(tabLadder, treeTableIo, filePath);
-            if (file == null) {
-                if (filePath != null) {
-                    fileNotFound(filePath);
-                }
-            } else {
-                filePath_ = file;
-                isChanged_ = false;
-                setTitle();
-                return true;
-            }
-        } else if (response == ButtonType.NO) {
-            file = ladderOpen(tabLadder, treeTableIo, filePath);
-            if (file == null) {
-                if (filePath != null) {
-                    fileNotFound(filePath);
-                }
-            } else {
-                filePath_ = file;
-                isChanged_ = false;
-                setTitle();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean fileSave() {
-        Path file = ladderSave();
-
-        if (file != null) {
-            filePath_ = file;
-            isChanged_ = false;
-            setTitle();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     *
-     * @return
-     */
-    public boolean fileSaveAs() {
-        Path file = ladderSaveAs();
-
-        if (file != null) {
-            filePath_ = file;
-            isChanged_ = false;
-            setTitle();
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -1327,22 +1043,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         ladderCommand_.setHistoryGeneration(historyGeneration_);
 
         filePath_ = ladderPath;
-        ladderPath = Paths.get(ladderPath.toUri().resolve("ladder.json"));
-        if (Files.exists(ladderPath)) {
-            // load and start
-            if (ladderOpen(tabLadder, treeTableIo, ioMap_, commentMap_, ladderPath) != null) {
-                if (connectLadder()) {
-                    runStartLadder();
-                }
-                filePath_ = ladderPath;
-
-                setTitle();
-                return true;
-            }
-        } else {
-            // create
-            ladderNew();
-        }
+        ladderNew();
         return false;
     }
 
@@ -1455,6 +1156,29 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 return null;
             }
         };
+    }
+
+    @Override
+    public int getHistoryGeneration() {
+        return historyGeneration_;
+    }
+
+    @Override
+    public void setHistoryGeneration(int historyGeneration) {
+        historyGeneration_ = historyGeneration;
+        if (ladderCommand_ != null) {
+            ladderCommand_.setHistoryGeneration(historyGeneration_);
+        }
+    }
+
+    @Override
+    public long getIdealCycleTime() {
+        return idealCycleTime_;
+    }
+
+    @Override
+    public void setIdealCycleTime(long idealCycleTime) {
+        idealCycleTime_ = idealCycleTime;
     }
 
     @Override
@@ -1646,6 +1370,237 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             scriptIoMap_.get(idx).get(address).setValue(value);
             scriptIoMap_.get(idx).get(address).setCycled(false);
         }
+    }
+
+    @Override
+    public boolean connectLadder() {
+        LadderPane pane;
+        int index;
+
+        // check connect
+        if (checkConnectLadder(tabLadder, treeTableIo, ioMap_)) {
+            synchronized (lock_) {
+                // connect
+                laddersSize_ = tabLadder.getTabs().size();
+                ladders_ = new Ladder[laddersSize_];
+                for (index = 0; index < laddersSize_; index++) {
+                    pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(index).getContent()).getContent();
+                    ladders_[index] = pane.getLadder().copy();
+                    ladders_[index].connectLadder(ioMap_, treeTableIo);
+                }
+            }
+            register(webEngine_, state_);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param tabPane
+     * @param ioTreeTable
+     * @param ioMap
+     * @return
+     */
+    public boolean checkConnectLadder(TabPane tabPane, TreeTableView<LadderTreeTableIo> ioTreeTable, CopyOnWriteArrayList<ConcurrentHashMap<String, LadderIo>> ioMap) {
+        LadderPane pane;
+        int index, size;
+
+        for (index = 0, size = tabPane.getTabs().size(); index < size; index++) {
+            pane = (LadderPane) ((ScrollPane) tabPane.getTabs().get(index).getContent()).getContent();
+            if (pane.getLadder().connectLadder(ioMap, ioTreeTable)) {
+                pane.clearEditing();
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean runStartLadder() {
+        if (!isCycling_ && (ladders_ != null) && (!ioMap_.isEmpty())) {
+            isCycling_ = true;
+            if (Platform.isFxApplicationThread()) {
+                startLadder();
+            } else {
+                Platform.runLater(() -> {
+                    startLadder();
+                });
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void startLadder() {
+        if (getState() == State.READY) {
+            start();
+        } else {
+            restart();
+        }
+    }
+
+    @Override
+    public void stopLadder() {
+        if (isCycling_) {
+            isCycling_ = false;
+            try {
+                TimeUnit.NANOSECONDS.sleep(idealCycleTime_ + LADDER_VIEW_REFRESH_CYCLE_TIME);
+            } catch (InterruptedException ex) {
+            }
+        }
+    }
+
+    private void fileNotFound(Path file) {
+        if (file != null) {
+            writeLog(LadderEnums.FILE_NOT_FOUND.toString() + ": " + file.toString(), true);
+        } else {
+            writeLog(LadderEnums.FILE_NOT_FOUND.toString(), true);
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public ButtonType fileSavedCheck() {
+        ButtonType response = null;
+
+        if (isChanged_) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            if (!icons_.isEmpty()) {
+                ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().addAll(icons_);
+            }
+            alert.setTitle(LadderEnums.LADDER.toString());
+            alert.getDialogPane().setHeaderText(null);
+            alert.getDialogPane().setContentText(LadderEnums.SAVE_CHANGE_PROGRAM.toString());
+            alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+            Optional<ButtonType> result = alert.showAndWait();
+            response = result.get();
+        }
+        return response;
+    }
+
+    @Override
+    public boolean fileNew() {
+        ButtonType response = fileSavedCheck();
+
+        if (response == null) {
+            ladderNew();
+            filePath_ = null;
+            isChanged_ = false;
+            setTitle();
+            return true;
+        } else if (response == ButtonType.YES) {
+            ladderSave();
+            ladderNew();
+            filePath_ = null;
+            isChanged_ = false;
+            setTitle();
+            return true;
+        } else if (response == ButtonType.NO) {
+            ladderNew();
+            filePath_ = null;
+            isChanged_ = false;
+            setTitle();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean fileOpen(Path filePath) {
+        Path file;
+        ButtonType response = fileSavedCheck();
+
+        if (response == null) {
+            file = ladderOpen(tabLadder, treeTableIo, filePath);
+            if (file == null) {
+                if (filePath != null) {
+                    fileNotFound(filePath);
+                }
+            } else {
+                filePath_ = file;
+                isChanged_ = false;
+                setTitle();
+                return true;
+            }
+        } else if (response == ButtonType.YES) {
+            ladderSave();
+            file = ladderOpen(tabLadder, treeTableIo, filePath);
+            if (file == null) {
+                if (filePath != null) {
+                    fileNotFound(filePath);
+                }
+            } else {
+                filePath_ = file;
+                isChanged_ = false;
+                setTitle();
+                return true;
+            }
+        } else if (response == ButtonType.NO) {
+            file = ladderOpen(tabLadder, treeTableIo, filePath);
+            if (file == null) {
+                if (filePath != null) {
+                    fileNotFound(filePath);
+                }
+            } else {
+                filePath_ = file;
+                isChanged_ = false;
+                setTitle();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean fileSave() {
+        Path file = ladderSave();
+
+        if (file != null) {
+            filePath_ = file;
+            isChanged_ = false;
+            setTitle();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean fileSaveAs() {
+        Path file = ladderSaveAs();
+
+        if (file != null) {
+            filePath_ = file;
+            isChanged_ = false;
+            setTitle();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String getFileName() {
+        if (filePath_ == null) {
+            return null;
+        }
+        if (Files.isDirectory(filePath_)) {
+            return null;
+        }
+        return filePath_.getFileName().toString();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Path getFilePath() {
+        return filePath_;
     }
 
     private void writeLog(final String msg, final boolean err) {
