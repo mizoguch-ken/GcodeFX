@@ -763,6 +763,7 @@ public class DesignLaddersController implements Initializable {
         menuToolsStop.setDisable(true);
 
         // io
+        treeTableIo.setCache(true);
         treeTableIoAddress.setText(LadderEnums.IO_ADDRESS.toString());
         treeTableIoComment.setText(LadderEnums.IO_COMMENT.toString());
         treeTableIoValue.setText(LadderEnums.IO_VALUE.toString());
@@ -792,20 +793,19 @@ public class DesignLaddersController implements Initializable {
         return treeTableIo;
     }
 
-    private int getHistoryGeneration() {
-        return historyGeneration_;
-    }
-
-    private void setHistoryGeneration(int historyGeneration) {
+    /**
+     *
+     * @param historyGeneration
+     */
+    public void setHistoryGeneration(int historyGeneration) {
         historyGeneration_ = historyGeneration;
-        ladders_.setHistoryGeneration(historyGeneration_);
     }
 
-    private long getIdealCycleTime() {
-        return idealCycleTime_;
-    }
-
-    private void setIdealCycleTime(long idealCycleTime) {
+    /**
+     *
+     * @param idealCycleTime
+     */
+    public void setIdealCycleTime(long idealCycleTime) {
         idealCycleTime_ = idealCycleTime;
         Platform.runLater(() -> {
             lblIdealCycleTime.setText(Long.toString(idealCycleTime_) + "ns(" + LadderEnums.CYCLE_IDEAL.toString() + ")");
@@ -1047,10 +1047,10 @@ public class DesignLaddersController implements Initializable {
                 ladders_.setWorkFilePath(properties.getProperty("WORK_FILE_PATH", ""));
 
                 // history generation
-                setHistoryGeneration(Integer.parseInt(properties.getProperty("HISTORY_GENERATION", "-1")));
+                ladders_.setHistoryGeneration(Integer.parseInt(properties.getProperty("HISTORY_GENERATION", "-1")));
 
                 // ideal cycletime
-                setIdealCycleTime(Long.parseLong(properties.getProperty("IDEAL_CYCLE_TIME", "0")));
+                ladders_.setIdealCycleTime(Long.parseLong(properties.getProperty("IDEAL_CYCLE_TIME", "0")));
 
                 // menu
                 menuFileRecentFile1.setText(properties.getProperty("MENU_RECENT_FILE_1", ""));
@@ -1099,10 +1099,10 @@ public class DesignLaddersController implements Initializable {
                 properties.setProperty("WORK_FILE_PATH", ladders_.getWorkFilePath());
 
                 // history generation
-                properties.setProperty("HISTORY_GENERATION", Integer.toString(getHistoryGeneration()));
+                properties.setProperty("HISTORY_GENERATION", Integer.toString(ladders_.getHistoryGeneration()));
 
                 // ideal cycletime
-                properties.setProperty("IDEAL_CYCLE_TIME", Long.toString(getIdealCycleTime()));
+                properties.setProperty("IDEAL_CYCLE_TIME", Long.toString(ladders_.getIdealCycleTime()));
 
                 // menu
                 properties.setProperty("MENU_RECENT_FILE_1", menuFileRecentFile1.getText());
