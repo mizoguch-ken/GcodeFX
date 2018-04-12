@@ -1166,6 +1166,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     @Override
     public void setHistoryGeneration(int historyGeneration) {
         historyGeneration_ = historyGeneration;
+        ladderController_.setHistoryGeneration(historyGeneration_);
         if (ladderCommand_ != null) {
             ladderCommand_.setHistoryGeneration(historyGeneration_);
         }
@@ -1179,6 +1180,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     @Override
     public void setIdealCycleTime(long idealCycleTime) {
         idealCycleTime_ = idealCycleTime;
+        ladderController_.setIdealCycleTime(idealCycleTime_);
     }
 
     @Override
@@ -1604,6 +1606,6 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     }
 
     private void writeLog(final String msg, final boolean err) {
-        Console.write(LadderEnums.LADDER.toString(), msg, err);
+        Console.write(LadderEnums.LADDERS.toString(), msg, err);
     }
 }
