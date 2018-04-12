@@ -2135,6 +2135,7 @@ public class LadderPane extends GridPane {
         LadderGridPane gridPane = new LadderGridPane(columnIndex, rowIndex, colspan, rowspan);
         LadderGrid grid = gridPane.getLadderGrid();
 
+        gridPane.setCache(true);
         if ((columnIndex == 0) && (rowIndex == 0)) {
             gridPane.setMinSize(gridContentsWidth_, gridContentsHight_);
             gridPane.setPrefSize(gridContentsWidth_, gridContentsHight_);
