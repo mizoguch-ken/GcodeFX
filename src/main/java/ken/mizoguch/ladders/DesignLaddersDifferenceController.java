@@ -166,9 +166,11 @@ public class DesignLaddersDifferenceController implements Initializable {
 
     private void initDesign() {
         // io
+        treeTableIoOriginal.setCache(true);
         labelIoLadderOriginal.setText(LadderEnums.IO_REFERENCE.toString());
         treeTableIoAddressOriginal.setText(LadderEnums.IO_ADDRESS.toString());
         treeTableIoCommentOriginal.setText(LadderEnums.IO_COMMENT.toString());
+        treeTableIoRevised.setCache(true);
         labelIoLadderRevised.setText(LadderEnums.IO_CURRENT.toString());
         treeTableIoAddressRevised.setText(LadderEnums.IO_ADDRESS.toString());
         treeTableIoCommentRevised.setText(LadderEnums.IO_COMMENT.toString());
