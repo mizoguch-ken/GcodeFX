@@ -27,7 +27,15 @@ public class LadderJsonComment {
         this.idx = idx;
         this.address = address;
         this.comment = comment;
-        this.value = value;
+        if (value.isNaN()) {
+            this.value = 0.0;
+        } else if (value == Double.NEGATIVE_INFINITY) {
+            this.value = Double.MIN_VALUE;
+        } else if (value == Double.POSITIVE_INFINITY) {
+            this.value = Double.MAX_VALUE;
+        } else {
+            this.value = value;
+        }
     }
 
     /**
