@@ -1267,7 +1267,7 @@ public class LadderCommand {
                                         if (ladders_.isComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress())) {
                                             grid.setComment(ladders_.getComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress()));
                                         } else {
-                                            changeComment(ladder.getIdx(), copyGrid.getAddress(), copyGrid.getComment());
+                                            changeComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress(), copyGrid.getComment());
                                         }
                                     }
                                 }
@@ -1337,7 +1337,7 @@ public class LadderCommand {
                                         if (ladders_.isComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress())) {
                                             grid.setComment(ladders_.getComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress()));
                                         } else {
-                                            changeComment(ladder.getIdx(), copyGrid.getAddress(), copyGrid.getComment());
+                                            changeComment(Ladders.LADDER_GLOBAL_ADDRESS_INDEX, copyGrid.getAddress(), copyGrid.getComment());
                                         }
                                     }
                                 }
