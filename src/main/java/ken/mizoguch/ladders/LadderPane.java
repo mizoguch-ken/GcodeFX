@@ -1422,9 +1422,9 @@ public class LadderPane extends GridPane {
                         previousGrid = previousGrids_.get(previousGrids_.size() - 1);
                         if ((previousGrid.getBlock() != Ladders.LADDER_BLOCK.CONTENTS) && (previousGrid.getBlock() != Ladders.LADDER_BLOCK.EMPTY) && (previousGrid.getBlock() != Ladders.LADDER_BLOCK.CONNECT_LINE)) {
                             ladders_.getTableIo().getItems().clear();
-                            addListIo(previousGrid.getAddress(), previousGrid);
+                            addTableIo(previousGrid.getAddress(), previousGrid);
                             for (int i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
-                                addListIo(previousGrid.getBlockFunctions()[i].getAddress(), previousGrid);
+                                addTableIo(previousGrid.getBlockFunctions()[i].getAddress(), previousGrid);
                             }
                         }
                     }
@@ -2259,7 +2259,7 @@ public class LadderPane extends GridPane {
         return gridPane;
     }
 
-    private void addListIo(String address, LadderGrid previousGrid) {
+    private void addTableIo(String address, LadderGrid previousGrid) {
         if (address != null) {
             TableView<LadderTableIo> tableIo;
             LadderGrid grid;

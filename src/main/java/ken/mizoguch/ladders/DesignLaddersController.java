@@ -661,6 +661,52 @@ public class DesignLaddersController implements Initializable {
         });
 
         // io
+        treeTableIo.setOnKeyPressed((KeyEvent event) -> {
+            LadderTreeTableIo treTableIo, treTableIoParent;
+            LadderPane pane;
+            LadderGrid grid;
+            String address;
+            int idx, siz, index, size, index2, size2;
+
+            event.consume();
+            if (!event.isShiftDown() && event.isShortcutDown() && !event.isAltDown()) {
+                switch (event.getCode()) {
+                    case F:
+                        treTableIo = treeTableIo.getSelectionModel().getSelectedItem().getValue();
+                        treTableIoParent = treeTableIo.getSelectionModel().getSelectedItem().getParent().getValue();
+                        if (treTableIoParent != treeTableIo.getRoot().getValue()) {
+                            tableIo.getItems().clear();
+
+                            address = treTableIo.getAddress();
+                            if (address.startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                                for (index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
+                                    pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(index).getContent()).getContent();
+                                    if (pane.getLadder().getName().equals(treTableIoParent.getAddress())) {
+                                        for (index2 = 0, size2 = pane.getChildren().size(); index2 < size2; index2++) {
+                                            grid = ((LadderGridPane) pane.getChildren().get(index2)).getLadderGrid();
+                                            if (address.equals(grid.getAddress())) {
+                                                tableIo.getItems().add(new LadderTableIo(treTableIoParent.getAddress(), address, grid.getBlock().toString(), grid.getColumnIndex(), grid.getRowIndex()));
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            } else {
+                                for (idx = 0, siz = tabLadder.getTabs().size(); idx < siz; idx++) {
+                                    pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(idx).getContent()).getContent();
+                                    for (index = 0, size = pane.getChildren().size(); index < size; index++) {
+                                        grid = ((LadderGridPane) pane.getChildren().get(index)).getLadderGrid();
+                                        if (address.equals(grid.getAddress())) {
+                                            tableIo.getItems().add(new LadderTableIo(pane.getLadder().getName(), address, grid.getBlock().toString(), grid.getColumnIndex(), grid.getRowIndex()));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
+            }
+        });
         treeTableIoAddress.setCellFactory((param) -> {
             return new TextFieldTreeTableCell<>(new LadderAddressStringConverter());
         });
@@ -756,6 +802,7 @@ public class DesignLaddersController implements Initializable {
             LadderGridPane gridPane;
             LadderTableIo tblIo;
 
+            event.consume();
             switch (event.getCode()) {
                 case UP:
                 case DOWN:
@@ -780,6 +827,7 @@ public class DesignLaddersController implements Initializable {
             LadderGridPane gridPane;
             LadderTableIo tblIo;
 
+            event.consume();
             switch (event.getClickCount()) {
                 case 1:
                     tblIo = tableIo.getSelectionModel().getSelectedItem();
