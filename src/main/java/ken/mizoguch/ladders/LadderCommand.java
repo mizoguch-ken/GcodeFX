@@ -1878,6 +1878,7 @@ public class LadderCommand {
             history_.getOriginal().addBlock(backupBlock(previousGrid));
         }
 
+        grid.clear();
         if (isConnect) {
             grid.setBlock(Ladders.LADDER_BLOCK.CONNECT_LINE);
         } else {
@@ -1917,6 +1918,7 @@ public class LadderCommand {
             history_.getOriginal().addBlock(backupBlock(previousGrid));
         }
 
+        previousGrid.clear();
         if (isConnect) {
             previousGrid.setBlock(Ladders.LADDER_BLOCK.CONNECT_LINE);
         } else {
@@ -2084,9 +2086,13 @@ public class LadderCommand {
 
         if (blockFunctions != null) {
             boolean changed = false;
+            int i;
 
             result = true;
-            for (int i = 0, size = blockFunctions.size(); i < size; i++) {
+            for (i = blockFunctions.size(); i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                grid.getBlockFunctions()[i - 1].clear();
+            }
+            for (i = 0; i < blockFunctions.size(); i++) {
                 if (blockFunctions.get(i).address != null) {
                     if (!blockFunctions.get(i).address.equals(grid.getBlockFunctions()[i].getAddress())) {
                         if (!changed && !isDisableHistory_ && !isBlockChanging_) {
@@ -2162,6 +2168,7 @@ public class LadderCommand {
                         history_.getOriginal().addBlock(backupBlock(grid));
                     }
 
+                    grid.getBlockFunctions()[index].setAddress(LadderGrid.LADDER_GRID_INITIAL_ADDRESS);
                     grid.getBlockFunctions()[index].setValue(Double.parseDouble(mRealNumber.group(1)));
                     grid.getBlockFunctions()[index].setRadix(10);
                     grid.getBlockFunctions()[index].setNumber(true);
@@ -2190,6 +2197,7 @@ public class LadderCommand {
                         history_.getOriginal().addBlock(backupBlock(grid));
                     }
 
+                    grid.getBlockFunctions()[index].setAddress(LadderGrid.LADDER_GRID_INITIAL_ADDRESS);
                     grid.getBlockFunctions()[index].setValue(Long.parseLong(mRealNumber.group(2), 16));
                     grid.getBlockFunctions()[index].setRadix(16);
                     grid.getBlockFunctions()[index].setNumber(true);
@@ -2218,6 +2226,7 @@ public class LadderCommand {
                         history_.getOriginal().addBlock(backupBlock(grid));
                     }
 
+                    grid.getBlockFunctions()[index].setAddress(LadderGrid.LADDER_GRID_INITIAL_ADDRESS);
                     grid.getBlockFunctions()[index].setValue(Long.parseLong(mRealNumber.group(3), 2));
                     grid.getBlockFunctions()[index].setRadix(2);
                     grid.getBlockFunctions()[index].setNumber(true);
@@ -2248,6 +2257,8 @@ public class LadderCommand {
                 }
 
                 grid.getBlockFunctions()[index].setAddress(functionValue);
+                grid.getBlockFunctions()[index].setValue(LadderGrid.LADDER_GRID_INITIAL_BLOCK_FUNCTION_VALUE);
+                grid.getBlockFunctions()[index].setRadix(LadderGrid.LADDER_GRID_INITIAL_BLOCK_FUNCTION_RADIX);
                 grid.getBlockFunctions()[index].setNumber(false);
                 gridPane.changeBlockFunction();
 
@@ -2652,6 +2663,7 @@ public class LadderCommand {
     public boolean restoreBlock(LadderJsonBlock jsonBlock, LadderPane pane, boolean isEditing, boolean isVerticalCheck) {
         LadderGrid grid;
         LadderGridPane gridPane;
+        int i;
 
         if ((jsonBlock.getColumnIndex() == null) || (jsonBlock.getRowIndex() == null)) {
             writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [columnIndex][rowIndex]", true);
@@ -2691,6 +2703,15 @@ public class LadderCommand {
         }
 
         switch (grid.getBlock()) {
+            case EMPTY:
+            case CONNECT_LINE:
+                grid.setAddress(LadderGrid.LADDER_GRID_INITIAL_ADDRESS);
+                grid.setBlockValue(LadderGrid.LADDER_GRID_INITIAL_BLOCK_VALUE);
+                for (i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                    grid.getBlockFunctions()[i].clear();
+                }
+                grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
+                break;
             case LOAD:
             case LOAD_NOT:
             case LOAD_RISING:
@@ -2711,6 +2732,11 @@ public class LadderCommand {
                     return false;
                 }
                 blockChangeAddress(pane.getLadder(), grid, gridPane, jsonBlock.getAddress());
+
+                for (i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                    grid.getBlockFunctions()[i].clear();
+                }
+                grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
                 break;
             case COMPARISON_EQUAL:
             case COMPARISON_NOT_EQUAL:
@@ -2748,6 +2774,8 @@ public class LadderCommand {
                     writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [blockFunctionAddress][blockFunctionValue][blockFunctionValueRadix]", true);
                     return false;
                 }
+
+                grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
                 break;
             case SCRIPT:
                 if (jsonBlock.getAddress() == null) {
@@ -2755,6 +2783,10 @@ public class LadderCommand {
                     return false;
                 }
                 blockChangeAddress(pane.getLadder(), grid, gridPane, jsonBlock.getAddress());
+
+                for (i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                    grid.getBlockFunctions()[i].clear();
+                }
 
                 if (jsonBlock.getBlockScript() == null) {
                     writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [blockScript]", true);

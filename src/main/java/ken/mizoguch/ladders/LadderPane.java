@@ -7,12 +7,13 @@ package ken.mizoguch.ladders;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Pattern;
+import javafx.application.Platform;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -315,67 +316,67 @@ public class LadderPane extends GridPane {
                                 previousGridPane = findGridPane(previousGrid);
                                 switch (previousGrid.getBlock()) {
                                     case LOAD:
-                                        defaultValue.append("LD");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.LOAD.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case LOAD_NOT:
-                                        defaultValue.append("/LD");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.LOAD_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case LOAD_RISING:
-                                        defaultValue.append("@LD");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.LOAD_RISING.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case LOAD_RISING_NOT:
-                                        defaultValue.append("/@LD");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.LOAD_RISING_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case LOAD_FALLING:
-                                        defaultValue.append("%LD");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.LOAD_FALLING.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case LOAD_FALLING_NOT:
-                                        defaultValue.append("/%LD");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.LOAD_FALLING_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case OUT:
-                                        defaultValue.append("OUT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.OUT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case OUT_NOT:
-                                        defaultValue.append("/OUT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.OUT_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case OUT_RISING:
-                                        defaultValue.append("@OUT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.OUT_RISING.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case OUT_RISING_NOT:
-                                        defaultValue.append("/@OUT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.OUT_RISING_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case OUT_FALLING:
-                                        defaultValue.append("%OUT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.OUT_FALLING.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case OUT_FALLING_NOT:
-                                        defaultValue.append("/%OUT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.OUT_FALLING_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case COMPARISON_EQUAL:
-                                        defaultValue.append("=");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_EQUAL.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -396,7 +397,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_NOT_EQUAL:
-                                        defaultValue.append("<>");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_NOT_EQUAL.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -417,7 +418,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_LESS:
-                                        defaultValue.append("<");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_LESS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -438,7 +439,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_LESS_EQUAL:
-                                        defaultValue.append("<=");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_LESS_EQUAL.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -459,7 +460,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_GREATER:
-                                        defaultValue.append(">");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_GREATER.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -480,7 +481,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_GREATER_EQUAL:
-                                        defaultValue.append(">=");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_GREATER_EQUAL.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -501,7 +502,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_AND_BITS:
-                                        defaultValue.append("&");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_AND_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -522,7 +523,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_OR_BITS:
-                                        defaultValue.append("|");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_OR_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -543,7 +544,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COMPARISON_XOR_BITS:
-                                        defaultValue.append("^");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COMPARISON_XOR_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -564,17 +565,17 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case SET:
-                                        defaultValue.append("SET");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.SET.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case RESET:
-                                        defaultValue.append("RES");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.RESET.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case AND_BITS:
-                                        defaultValue.append("AND");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.AND_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -611,7 +612,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case OR_BITS:
-                                        defaultValue.append("OR");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.OR_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -648,7 +649,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case XOR_BITS:
-                                        defaultValue.append("XOR");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.XOR_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -685,7 +686,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case NOT_BITS:
-                                        defaultValue.append("NOT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.NOT_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -706,7 +707,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case ADDITION:
-                                        defaultValue.append("ADD");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.ADDITION.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -743,7 +744,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case SUBTRACTION:
-                                        defaultValue.append("SUB");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.SUBTRACTION.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -780,7 +781,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case MULTIPLICATION:
-                                        defaultValue.append("MUL");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.MULTIPLICATION.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -817,7 +818,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case DIVISION:
-                                        defaultValue.append("DIV");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.DIVISION.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -854,7 +855,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case AVERAGE:
-                                        defaultValue.append("AVE");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.AVERAGE.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -891,7 +892,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case SHIFT_LEFT_BITS:
-                                        defaultValue.append("SFL");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.SHIFT_LEFT_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -928,7 +929,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case SHIFT_RIGHT_BITS:
-                                        defaultValue.append("SFR");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.SHIFT_RIGHT_BITS.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -965,7 +966,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case SIGMOID:
-                                        defaultValue.append("SIG");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.SIGMOID.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -1002,12 +1003,12 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case RANDOM:
-                                        defaultValue.append("RAND");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.RANDOM.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         break;
                                     case TIMER:
-                                        defaultValue.append("TIM");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.TIMER.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -1028,7 +1029,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case TIMER_NOT:
-                                        defaultValue.append("/TIM");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.TIMER_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -1049,7 +1050,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COUNTER:
-                                        defaultValue.append("CNT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COUNTER.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -1070,7 +1071,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case COUNTER_NOT:
-                                        defaultValue.append("/CNT");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.COUNTER_NOT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -1091,7 +1092,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case MOVE:
-                                        defaultValue.append("MOV");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.MOVE.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress());
                                         defaultValue.append(" ");
@@ -1112,7 +1113,7 @@ public class LadderPane extends GridPane {
                                         }
                                         break;
                                     case SCRIPT:
-                                        defaultValue.append("SCR");
+                                        defaultValue.append(Ladders.LADDER_BLOCK.SCRIPT.toCommand());
                                         defaultValue.append(" ");
                                         defaultValue.append(previousGrid.getAddress()).append(";");
                                         defaultValue.append(" ");
@@ -1416,6 +1417,18 @@ public class LadderPane extends GridPane {
                         ladderCommand_.blocksCopy(previousGrids_);
                     }
                     break;
+                case F:
+                    if (!event.isShiftDown() && event.isShortcutDown() && !event.isAltDown()) {
+                        previousGrid = previousGrids_.get(previousGrids_.size() - 1);
+                        if ((previousGrid.getBlock() != Ladders.LADDER_BLOCK.CONTENTS) && (previousGrid.getBlock() != Ladders.LADDER_BLOCK.EMPTY) && (previousGrid.getBlock() != Ladders.LADDER_BLOCK.CONNECT_LINE)) {
+                            ladders_.getTableIo().getItems().clear();
+                            addListIo(previousGrid.getAddress(), previousGrid);
+                            for (int i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                                addListIo(previousGrid.getBlockFunctions()[i].getAddress(), previousGrid);
+                            }
+                        }
+                    }
+                    break;
                 case V:
                     if (!event.isShiftDown() && event.isShortcutDown() && !event.isAltDown()) {
                         previousGrid = previousGrids_.get(previousGrids_.size() - 1);
@@ -1507,295 +1520,295 @@ public class LadderPane extends GridPane {
                         mBlock = PATTERN_BLOCK.split(mInput[cInput]);
                         if ((columnIndex > 0) && (mInput.length >= 1) && (mBlock.length >= 2)) {
                             if (!PATTERN_REAL_NUMBER.matcher(mBlock[1]).find()) {
-                                switch (mBlock[0].toLowerCase(Locale.getDefault())) {
-                                    case "ld":
+                                switch (Ladders.LADDER_BLOCK.get(mBlock[0])) {
+                                    case LOAD:
                                         if (columnIndex < (ladder_.getColumn() - 1)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.LOAD;
                                             }
                                         }
                                         break;
-                                    case "/ld":
+                                    case LOAD_NOT:
                                         if (columnIndex < (ladder_.getColumn() - 1)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.LOAD_NOT;
                                             }
                                         }
                                         break;
-                                    case "@ld":
+                                    case LOAD_RISING:
                                         if (columnIndex < (ladder_.getColumn() - 1)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.LOAD_RISING;
                                             }
                                         }
                                         break;
-                                    case "/@ld":
+                                    case LOAD_RISING_NOT:
                                         if (columnIndex < (ladder_.getColumn() - 1)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.LOAD_RISING_NOT;
                                             }
                                         }
                                         break;
-                                    case "%ld":
+                                    case LOAD_FALLING:
                                         if (columnIndex < (ladder_.getColumn() - 1)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.LOAD_FALLING;
                                             }
                                         }
                                         break;
-                                    case "/%ld":
+                                    case LOAD_FALLING_NOT:
                                         if (columnIndex < (ladder_.getColumn() - 1)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.LOAD_FALLING_NOT;
                                             }
                                         }
                                         break;
-                                    case "out":
+                                    case OUT:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.OUT;
                                             }
                                         }
                                         break;
-                                    case "/out":
+                                    case OUT_NOT:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.OUT_NOT;
                                             }
                                         }
                                         break;
-                                    case "@out":
+                                    case OUT_RISING:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.OUT_RISING;
                                             }
                                         }
                                         break;
-                                    case "/@out":
+                                    case OUT_RISING_NOT:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.OUT_RISING_NOT;
                                             }
                                         }
                                         break;
-                                    case "%out":
+                                    case OUT_FALLING:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.OUT_FALLING;
                                             }
                                         }
                                         break;
-                                    case "/%out":
+                                    case OUT_FALLING_NOT:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.OUT_FALLING_NOT;
                                             }
                                         }
                                         break;
-                                    case "=":
+                                    case COMPARISON_EQUAL:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_EQUAL;
                                             }
                                         }
                                         break;
-                                    case "<>":
+                                    case COMPARISON_NOT_EQUAL:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_NOT_EQUAL;
                                             }
                                         }
                                         break;
-                                    case "<":
+                                    case COMPARISON_LESS:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_LESS;
                                             }
                                         }
                                         break;
-                                    case "<=":
+                                    case COMPARISON_LESS_EQUAL:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_LESS_EQUAL;
                                             }
                                         }
                                         break;
-                                    case ">":
+                                    case COMPARISON_GREATER:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_GREATER;
                                             }
                                         }
                                         break;
-                                    case ">=":
+                                    case COMPARISON_GREATER_EQUAL:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_GREATER_EQUAL;
                                             }
                                         }
                                         break;
-                                    case "&":
+                                    case COMPARISON_AND_BITS:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_AND_BITS;
                                             }
                                         }
                                         break;
-                                    case "|":
+                                    case COMPARISON_OR_BITS:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_OR_BITS;
                                             }
                                         }
                                         break;
-                                    case "^":
+                                    case COMPARISON_XOR_BITS:
                                         if ((columnIndex < (ladder_.getColumn() - 1)) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COMPARISON_XOR_BITS;
                                             }
                                         }
                                         break;
-                                    case "set":
+                                    case SET:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.SET;
                                             }
                                         }
                                         break;
-                                    case "res":
+                                    case RESET:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.RESET;
                                             }
                                         }
                                         break;
-                                    case "and":
+                                    case AND_BITS:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.AND_BITS;
                                             }
                                         }
                                         break;
-                                    case "or":
+                                    case OR_BITS:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.OR_BITS;
                                             }
                                         }
                                         break;
-                                    case "xor":
+                                    case XOR_BITS:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.XOR_BITS;
                                             }
                                         }
                                         break;
-                                    case "not":
+                                    case NOT_BITS:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.NOT_BITS;
                                             }
                                         }
                                         break;
-                                    case "add":
+                                    case ADDITION:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.ADDITION;
                                             }
                                         }
                                         break;
-                                    case "sub":
+                                    case SUBTRACTION:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.SUBTRACTION;
                                             }
                                         }
                                         break;
-                                    case "mul":
+                                    case MULTIPLICATION:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.MULTIPLICATION;
                                             }
                                         }
                                         break;
-                                    case "div":
+                                    case DIVISION:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.DIVISION;
                                             }
                                         }
                                         break;
-                                    case "ave":
+                                    case AVERAGE:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.AVERAGE;
                                             }
                                         }
                                         break;
-                                    case "sfl":
+                                    case SHIFT_LEFT_BITS:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.SHIFT_LEFT_BITS;
                                             }
                                         }
                                         break;
-                                    case "sfr":
+                                    case SHIFT_RIGHT_BITS:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.SHIFT_RIGHT_BITS;
                                             }
                                         }
                                         break;
-                                    case "sig":
+                                    case SIGMOID:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 4)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty() && !mBlock[3].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.SIGMOID;
                                             }
                                         }
                                         break;
-                                    case "rand":
+                                    case RANDOM:
                                         if (columnIndex < ladder_.getColumn()) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.RANDOM;
                                             }
                                         }
                                         break;
-                                    case "tim":
+                                    case TIMER:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.TIMER;
                                             }
                                         }
                                         break;
-                                    case "/tim":
+                                    case TIMER_NOT:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.TIMER_NOT;
                                             }
                                         }
                                         break;
-                                    case "cnt":
+                                    case COUNTER:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COUNTER;
                                             }
                                         }
                                         break;
-                                    case "/cnt":
+                                    case COUNTER_NOT:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.COUNTER_NOT;
                                             }
                                         }
                                         break;
-                                    case "mov":
+                                    case MOVE:
                                         if ((columnIndex < ladder_.getColumn()) && (mBlock.length >= 3)) {
                                             if (!mBlock[0].isEmpty() && !mBlock[1].isEmpty() && !mBlock[2].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.MOVE;
                                             }
                                         }
                                         break;
-                                    case "scr":
+                                    case SCRIPT:
                                         if ((columnIndex < ladder_.getColumn()) && (mInput.length >= 2)) {
                                             if (!mInput[1].isEmpty() && !mBlock[0].isEmpty() && !mBlock[1].isEmpty()) {
                                                 block = Ladders.LADDER_BLOCK.SCRIPT;
@@ -1842,6 +1855,13 @@ public class LadderPane extends GridPane {
                                     ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LadderGrid.LADDER_GRID_INITIAL_COMMENT);
                                 }
 
+                                // function value
+                                grid.getBlockFunctions()[0].clear();
+                                grid.getBlockFunctions()[1].clear();
+
+                                // script
+                                grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
+
                                 // select
                                 ladderCommand_.blockChangeSelect(null, this, grid.getRightLadderGrid(), false);
                                 break;
@@ -1875,6 +1895,10 @@ public class LadderPane extends GridPane {
 
                                 // function value
                                 ladderCommand_.blockChangeFunctionValue(ladder_, grid, gridPane, mBlock[2], 0);
+                                grid.getBlockFunctions()[1].clear();
+
+                                // script
+                                grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
 
                                 // select
                                 ladderCommand_.blockChangeSelect(null, this, grid.getRightLadderGrid(), false);
@@ -1920,6 +1944,13 @@ public class LadderPane extends GridPane {
                                     } else {
                                         ladderCommand_.blockChangeComment(ladder_, grid, gridPane, LadderGrid.LADDER_GRID_INITIAL_COMMENT);
                                     }
+
+                                    // function value
+                                    grid.getBlockFunctions()[0].clear();
+                                    grid.getBlockFunctions()[1].clear();
+
+                                    // script
+                                    grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
                                 }
                                 break;
                             case AND_BITS:
@@ -1967,9 +1998,10 @@ public class LadderPane extends GridPane {
 
                                     // function value
                                     ladderCommand_.blockChangeFunctionValue(ladder_, grid, gridPane, mBlock[2], 0);
-
-                                    // function2 value
                                     ladderCommand_.blockChangeFunctionValue(ladder_, grid, gridPane, mBlock[3], 1);
+
+                                    // script
+                                    grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
                                 }
                                 break;
                             case NOT_BITS:
@@ -2012,6 +2044,10 @@ public class LadderPane extends GridPane {
 
                                     // function value
                                     ladderCommand_.blockChangeFunctionValue(ladder_, grid, gridPane, mBlock[2], 0);
+                                    grid.getBlockFunctions()[1].clear();
+
+                                    // script
+                                    grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
                                 }
                                 break;
                         }
@@ -2221,6 +2257,78 @@ public class LadderPane extends GridPane {
         add(gridPane, columnIndex, rowIndex, colspan, rowspan);
         ladder_.addLadderGrid(grid);
         return gridPane;
+    }
+
+    private void addListIo(String address, LadderGrid previousGrid) {
+        if (address != null) {
+            TableView<LadderTableIo> tableIo;
+            LadderGrid grid;
+            int idx, siz, index, size, i;
+
+            tableIo = ladders_.getTableIo();
+            if (address.startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                for (index = 0, size = getChildren().size(); index < size; index++) {
+                    grid = ((LadderGridPane) getChildren().get(index)).getLadderGrid();
+                    if (address.equals(grid.getAddress())) {
+                        tableIo.getItems().add(new LadderTableIo(ladder_.getName(), address, grid.getBlock().toString(), grid.getColumnIndex(), grid.getRowIndex()));
+                        if ((previousGrid.getColumnIndex() == grid.getColumnIndex()) && (previousGrid.getRowIndex() == grid.getRowIndex())) {
+                            int sel = tableIo.getItems().size() - 1;
+                            Platform.runLater(() -> {
+                                tableIo.scrollTo(sel);
+                                tableIo.getSelectionModel().select(sel);
+                            });
+                        }
+                    } else {
+                        for (i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                            if (address.equals(grid.getBlockFunctions()[i].getAddress())) {
+                                tableIo.getItems().add(new LadderTableIo(ladder_.getName(), address, grid.getBlock().toString(), grid.getColumnIndex(), grid.getRowIndex()));
+                                if ((previousGrid.getColumnIndex() == grid.getColumnIndex()) && (previousGrid.getRowIndex() == grid.getRowIndex())) {
+                                    int sel = tableIo.getItems().size() - 1;
+                                    Platform.runLater(() -> {
+                                        tableIo.scrollTo(sel);
+                                        tableIo.getSelectionModel().select(sel);
+                                    });
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+            } else {
+                LadderPane pane;
+
+                for (idx = 0, siz = ladders_.getTabLadder().getTabs().size(); idx < siz; idx++) {
+                    pane = (LadderPane) ((ScrollPane) ladders_.getTabLadder().getTabs().get(idx).getContent()).getContent();
+                    for (index = 0, size = pane.getChildren().size(); index < size; index++) {
+                        grid = ((LadderGridPane) pane.getChildren().get(index)).getLadderGrid();
+                        if (address.equals(grid.getAddress())) {
+                            tableIo.getItems().add(new LadderTableIo(pane.getLadder().getName(), address, grid.getBlock().toString(), grid.getColumnIndex(), grid.getRowIndex()));
+                            if ((ladder_.getIdx() == pane.getLadder().getIdx()) && (previousGrid.getColumnIndex() == grid.getColumnIndex()) && (previousGrid.getRowIndex() == grid.getRowIndex())) {
+                                int sel = tableIo.getItems().size() - 1;
+                                Platform.runLater(() -> {
+                                    tableIo.scrollTo(sel);
+                                    tableIo.getSelectionModel().select(sel);
+                                });
+                            }
+                        } else {
+                            for (i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                                if (address.equals(grid.getBlockFunctions()[i].getAddress())) {
+                                    tableIo.getItems().add(new LadderTableIo(pane.getLadder().getName(), address, grid.getBlock().toString(), grid.getColumnIndex(), grid.getRowIndex()));
+                                    if ((ladder_.getIdx() == pane.getLadder().getIdx()) && (previousGrid.getColumnIndex() == grid.getColumnIndex()) && (previousGrid.getRowIndex() == grid.getRowIndex())) {
+                                        int sel = tableIo.getItems().size() - 1;
+                                        Platform.runLater(() -> {
+                                            tableIo.scrollTo(sel);
+                                            tableIo.getSelectionModel().select(sel);
+                                        });
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

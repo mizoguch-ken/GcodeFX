@@ -8,6 +8,8 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.input.KeyCodeCombination?>
@@ -150,16 +152,31 @@
       </MenuBar>
       <SplitPane fx:id="splitIoLadder" dividerPositions="0.382" VBox.vgrow="ALWAYS">
         <items>
-            <TreeTableView fx:id="treeTableIo" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false">
-              <columns>
-                <TreeTableColumn fx:id="treeTableIoAddress" prefWidth="75.0" sortable="false" text="Address" />
-                <TreeTableColumn fx:id="treeTableIoComment" prefWidth="75.0" sortable="false" text="Comment" />
-                  <TreeTableColumn fx:id="treeTableIoValue" prefWidth="75.0" sortable="false" text="Value" />
-              </columns>
-               <columnResizePolicy>
-                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TreeTableView>
+            <SplitPane fx:id="splitIoIo" dividerPositions="0.618" orientation="VERTICAL">
+               <items>
+                  <TreeTableView fx:id="treeTableIo" editable="true" prefHeight="200.0" prefWidth="200.0" showRoot="false">
+                    <columns>
+                      <TreeTableColumn fx:id="treeTableIoAddress" prefWidth="75.0" sortable="false" text="Address" />
+                      <TreeTableColumn fx:id="treeTableIoComment" prefWidth="75.0" sortable="false" text="Comment" />
+                        <TreeTableColumn fx:id="treeTableIoValue" prefWidth="75.0" sortable="false" text="Value" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TreeTableView>
+                  <TableView fx:id="tableIo">
+                    <columns>
+                      <TableColumn fx:id="tableIoName" editable="false" sortable="false" text="Name" />
+                      <TableColumn fx:id="tableIoAddress" editable="false" prefWidth="75.0" sortable="false" text="Address" />
+                        <TableColumn fx:id="tableIoBlock" editable="false" prefWidth="75.0" sortable="false" text="Block" />
+                        <TableColumn fx:id="tableIoPosition" editable="false" prefWidth="75.0" sortable="false" text="Position" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </items>
+            </SplitPane>
             <TabPane fx:id="tabLadder" tabClosingPolicy="UNAVAILABLE" />
         </items>
       </SplitPane>

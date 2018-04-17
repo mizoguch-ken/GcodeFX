@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,6 +35,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
@@ -70,58 +72,78 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      */
     public static enum LADDER_BLOCK {
         // Contents
-        CONTENTS,
+        CONTENTS(""),
         // Empty
-        EMPTY,
+        EMPTY(""),
         // Connect
-        CONNECT_LINE,
+        CONNECT_LINE(""),
         // Load
-        LOAD,
-        LOAD_NOT,
-        LOAD_RISING,
-        LOAD_RISING_NOT,
-        LOAD_FALLING,
-        LOAD_FALLING_NOT,
+        LOAD("LD"),
+        LOAD_NOT("/LD"),
+        LOAD_RISING("@LD"),
+        LOAD_RISING_NOT("/@LD"),
+        LOAD_FALLING("%LD"),
+        LOAD_FALLING_NOT("/%LD"),
         // Out
-        OUT,
-        OUT_NOT,
-        OUT_RISING,
-        OUT_RISING_NOT,
-        OUT_FALLING,
-        OUT_FALLING_NOT,
+        OUT("OUT"),
+        OUT_NOT("/OUT"),
+        OUT_RISING("@OUT"),
+        OUT_RISING_NOT("/@OUT"),
+        OUT_FALLING("%OUT"),
+        OUT_FALLING_NOT("/%OUT"),
         // Load Function
-        COMPARISON_EQUAL,
-        COMPARISON_NOT_EQUAL,
-        COMPARISON_LESS,
-        COMPARISON_LESS_EQUAL,
-        COMPARISON_GREATER,
-        COMPARISON_GREATER_EQUAL,
-        COMPARISON_AND_BITS,
-        COMPARISON_OR_BITS,
-        COMPARISON_XOR_BITS,
+        COMPARISON_EQUAL("="),
+        COMPARISON_NOT_EQUAL("<>"),
+        COMPARISON_LESS("<"),
+        COMPARISON_LESS_EQUAL("<="),
+        COMPARISON_GREATER(">"),
+        COMPARISON_GREATER_EQUAL(">="),
+        COMPARISON_AND_BITS("&"),
+        COMPARISON_OR_BITS("|"),
+        COMPARISON_XOR_BITS("^"),
         // Out Function
-        SET,
-        RESET,
-        AND_BITS,
-        OR_BITS,
-        XOR_BITS,
-        NOT_BITS,
-        ADDITION,
-        SUBTRACTION,
-        MULTIPLICATION,
-        DIVISION,
-        AVERAGE,
-        SHIFT_LEFT_BITS,
-        SHIFT_RIGHT_BITS,
-        SIGMOID,
-        RANDOM,
-        TIMER,
-        TIMER_NOT,
-        COUNTER,
-        COUNTER_NOT,
-        MOVE,
+        SET("SET"),
+        RESET("RES"),
+        AND_BITS("AND"),
+        OR_BITS("OR"),
+        XOR_BITS("XOR"),
+        NOT_BITS("NOT"),
+        ADDITION("ADD"),
+        SUBTRACTION("SUB"),
+        MULTIPLICATION("MUL"),
+        DIVISION("DIV"),
+        AVERAGE("AVE"),
+        SHIFT_LEFT_BITS("SFL"),
+        SHIFT_RIGHT_BITS("SFR"),
+        SIGMOID("SIG"),
+        RANDOM("RND"),
+        TIMER("TIM"),
+        TIMER_NOT("/TIM"),
+        COUNTER("CNT"),
+        COUNTER_NOT("/CNT"),
+        MOVE("MOV"),
         // Collaboration
-        SCRIPT;
+        SCRIPT("SCR");
+
+        private final String command_;
+
+        private LADDER_BLOCK(final String command) {
+            command_ = command;
+        }
+
+        public String toCommand() {
+            return command_;
+        }
+
+        public static LADDER_BLOCK get(String command) {
+            command = command.toUpperCase(Locale.getDefault());
+            for (LADDER_BLOCK value : LADDER_BLOCK.values()) {
+                if (value.command_.equals(command)) {
+                    return value;
+                }
+            }
+            return EMPTY;
+        }
     }
 
     /**
@@ -144,8 +166,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     }
 
     private final DesignLaddersController ladderController_;
-    private final TabPane tabLadder;
-    private final TreeTableView<LadderTreeTableIo> treeTableIo;
+    private final TabPane tabLadder_;
+    private final TreeTableView<LadderTreeTableIo> treeTableIo_;
+    private final TableView<LadderTableIo> tableIo_;
 
     private Stage stage_;
     private List<Image> icons_;
@@ -176,9 +199,10 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      */
     public Ladders(DesignLaddersController ladderController) {
         ladderController_ = ladderController;
-        tabLadder = ladderController_.getTabLadder();
-        treeTableIo = ladderController_.getTreeTableIo();
-        treeTableIo.setRoot(new TreeItem());
+        tabLadder_ = ladderController_.getTabLadder();
+        treeTableIo_ = ladderController_.getTreeTableIo();
+        treeTableIo_.setRoot(new TreeItem());
+        tableIo_ = ladderController.getTableIo();
 
         stage_ = null;
         icons_ = null;
@@ -208,7 +232,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @return
      */
     public TabPane getTabLadder() {
-        return tabLadder;
+        return tabLadder_;
     }
 
     /**
@@ -216,7 +240,15 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @return
      */
     public TreeTableView<LadderTreeTableIo> getTreeTableIo() {
-        return treeTableIo;
+        return treeTableIo_;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public TableView<LadderTableIo> getTableIo() {
+        return tableIo_;
     }
 
     /**
@@ -334,10 +366,10 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     public void setValueDirect(int idx, String address, double value) {
         if (!ioMap_.get(idx).containsKey(address)) {
             ioMap_.get(idx).put(address, new LadderIo(address));
-            treeTableIo.getRoot().getChildren().get(idx).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address, value)));
+            treeTableIo_.getRoot().getChildren().get(idx).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address, value)));
         }
 
-        ovScript_ = treeTableIo.getRoot().getChildren().get(idx).getChildren();
+        ovScript_ = treeTableIo_.getRoot().getChildren().get(idx).getChildren();
         for (scriptIndex_ = 0, scriptSize_ = ovScript_.size(); scriptIndex_ < scriptSize_; scriptIndex_++) {
             if (address.equals(ovScript_.get(scriptIndex_).getValue().getAddress())) {
                 ovScript_.get(scriptIndex_).getValue().setValue(value);
@@ -363,8 +395,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             registerSoemOut_.clear();
         }
 
-        tabLadder.getTabs().clear();
-        treeTableIo.getRoot().getChildren().clear();
+        tabLadder_.getTabs().clear();
+        treeTableIo_.getRoot().getChildren().clear();
         ladderCommand_.clearHistoryManager();
         ladders_ = null;
         ioMap_.clear();
@@ -408,7 +440,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         allClear();
 
         // global
-        treeTableIo.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
+        treeTableIo_.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
         ioMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
         commentMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
         scriptIoMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
@@ -424,16 +456,16 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         StringBuilder name = new StringBuilder(LadderEnums.LADDERS.toString());
         int index, size;
 
-        for (index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
+        for (index = 0, size = tabLadder_.getTabs().size(); index < size; index++) {
             if (checkTabName(name.toString())) {
                 break;
             }
             name.delete(0, name.length());
             name.append(LadderEnums.LADDERS.toString()).append(" ").append(index + 1);
         }
-        index = tabLadder.getTabs().size() + 1;
+        index = tabLadder_.getTabs().size() + 1;
         LadderPane pane = ladderCommand_.ladderCreate(index, name.toString(), LADDER_DEFAULT_GRID_COLUMN, LADDER_DEFAULT_GRID_ROW, LADDER_DEFAULT_GRID_MIN_SIZE, LADDER_DEFAULT_GRID_MAX_SIZE, LADDER_DEFAULT_GRID_CONTENTS_WIDTH, LADDER_DEFAULT_GRID_CONTENTS_HIGHT);
-        tabLadder.getSelectionModel().select(pane.getLadder().getIdx() - 1);
+        tabLadder_.getSelectionModel().select(pane.getLadder().getIdx() - 1);
         isChanged_ = true;
 
         setTitle();
@@ -477,7 +509,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         if (result.isPresent()) {
             String name = result.get().trim();
             if (checkTabName(name)) {
-                treeTableIo.getRoot().getChildren().get(pane.getLadder().getIdx()).getValue().setAddress(name.replace(" ", "_"));
+                treeTableIo_.getRoot().getChildren().get(pane.getLadder().getIdx()).getValue().setAddress(name.replace(" ", "_"));
                 pane.setChanged(true);
                 ladderCommand_.ladderChangeName(pane, name);
                 isChanged_ = true;
@@ -500,8 +532,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     public boolean ladderChangeTabName(int idx, String name) {
         name = name.trim();
         if (checkTabName(name)) {
-            LadderPane pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(idx - 1).getContent()).getContent();
-            treeTableIo.getRoot().getChildren().get(idx).getValue().setAddress(name.replace(" ", "_"));
+            LadderPane pane = (LadderPane) ((ScrollPane) tabLadder_.getTabs().get(idx - 1).getContent()).getContent();
+            treeTableIo_.getRoot().getChildren().get(idx).getValue().setAddress(name.replace(" ", "_"));
             pane.setChanged(true);
             ladderCommand_.ladderChangeName(pane, name);
             isChanged_ = true;
@@ -524,8 +556,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             int index, size;
 
             name = name.replace(" ", "_");
-            for (index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
-                if (((LadderPane) ((ScrollPane) tabLadder.getTabs().get(index).getContent()).getContent()).getLadder().getName().equals(name)) {
+            for (index = 0, size = tabLadder_.getTabs().size(); index < size; index++) {
+                if (((LadderPane) ((ScrollPane) tabLadder_.getTabs().get(index).getContent()).getContent()).getLadder().getName().equals(name)) {
                     return false;
                 }
             }
@@ -562,7 +594,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             allClear();
 
             // global
-            treeTableIo.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
+            treeTableIo_.getRoot().getChildren().add(LADDER_GLOBAL_ADDRESS_INDEX, new TreeItem<>(new LadderTreeTableIo(LadderEnums.ADDRESS_GLOBAL.toString().replace(" ", "_"), LADDER_GLOBAL_ADDRESS_INDEX)));
             ioMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
             commentMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
             scriptIoMap_.add(LADDER_GLOBAL_ADDRESS_INDEX, new ConcurrentHashMap<>());
@@ -591,7 +623,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     private Path ladderSave(Path file) {
         if (file != null) {
             try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(Files.newOutputStream(file), "UTF-8");
-                    BufferedReader bufferedReader = new BufferedReader(new StringReader(gson_.toJson(ladderJsonSave(tabLadder, ioMap_, commentMap_))))) {
+                    BufferedReader bufferedReader = new BufferedReader(new StringReader(gson_.toJson(ladderJsonSave(tabLadder_, ioMap_, commentMap_))))) {
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
                     outputStreamWriter.write(line);
@@ -604,8 +636,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 LadderPane pane;
                 int index, size;
 
-                for (index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
-                    tab = tabLadder.getTabs().get(index);
+                for (index = 0, size = tabLadder_.getTabs().size(); index < size; index++) {
+                    tab = tabLadder_.getTabs().get(index);
                     pane = (LadderPane) ((ScrollPane) tab.getContent()).getContent();
                     pane.setChanged(false);
                     tab.setText(pane.getLadder().getName());
@@ -734,9 +766,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         int idx = ladder.getIdx();
 
         if (idx > 1) {
-            TreeItem<LadderTreeTableIo> treeItem = treeTableIo.getRoot().getChildren().get(idx);
-            treeTableIo.getRoot().getChildren().set(idx, treeTableIo.getRoot().getChildren().get(idx - 1));
-            treeTableIo.getRoot().getChildren().set(idx - 1, treeItem);
+            TreeItem<LadderTreeTableIo> treeItem = treeTableIo_.getRoot().getChildren().get(idx);
+            treeTableIo_.getRoot().getChildren().set(idx, treeTableIo_.getRoot().getChildren().get(idx - 1));
+            treeTableIo_.getRoot().getChildren().set(idx - 1, treeItem);
 
             ConcurrentHashMap<String, LadderIo> ioMap = ioMap_.get(idx);
             ioMap_.set(idx, ioMap_.get(idx - 1));
@@ -768,9 +800,9 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         int idx = ladder.getIdx();
 
         if (idx < getTabLadder().getTabs().size()) {
-            TreeItem<LadderTreeTableIo> treeItem = treeTableIo.getRoot().getChildren().get(idx);
-            treeTableIo.getRoot().getChildren().set(idx, treeTableIo.getRoot().getChildren().get(idx + 1));
-            treeTableIo.getRoot().getChildren().set(idx + 1, treeItem);
+            TreeItem<LadderTreeTableIo> treeItem = treeTableIo_.getRoot().getChildren().get(idx);
+            treeTableIo_.getRoot().getChildren().set(idx, treeTableIo_.getRoot().getChildren().get(idx + 1));
+            treeTableIo_.getRoot().getChildren().set(idx + 1, treeItem);
 
             ConcurrentHashMap<String, LadderIo> ioMap = ioMap_.get(idx);
             ioMap_.set(idx, ioMap_.get(idx + 1));
@@ -821,8 +853,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @param tabPane
      */
     public void ladderChangeSelectPrevious(TabPane tabPane) {
-        int index = tabLadder.getSelectionModel().getSelectedIndex();
-        int size = tabLadder.getTabs().size();
+        int index = tabLadder_.getSelectionModel().getSelectedIndex();
+        int size = tabLadder_.getTabs().size();
 
         if (index > 0) {
             ladderCommand_.ladderChangeSelect(index - 1);
@@ -842,7 +874,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             isChanged_ = true;
 
             if (tab == null) {
-                tab = tabLadder.getSelectionModel().getSelectedItem();
+                tab = tabLadder_.getSelectionModel().getSelectedItem();
                 if (tab != null) {
                     pane = (LadderPane) ((ScrollPane) tab.getContent()).getContent();
                 }
@@ -870,7 +902,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             isChanged_ = true;
 
             if (tab == null) {
-                tab = tabLadder.getSelectionModel().getSelectedItem();
+                tab = tabLadder_.getSelectionModel().getSelectedItem();
                 if (tab != null) {
                     pane = (LadderPane) ((ScrollPane) tab.getContent()).getContent();
                 }
@@ -911,15 +943,15 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
      * @return
      */
     public boolean onKeyPressed(LadderPane pane, KeyEvent event, ScrollPane scrollPane) {
-        Tab tab = tabLadder.getSelectionModel().getSelectedItem();
+        Tab tab = tabLadder_.getSelectionModel().getSelectedItem();
         if (tab != null) {
             switch (event.getCode()) {
                 case TAB:
                     if (!event.isShiftDown() && event.isShortcutDown() && !event.isAltDown()) {
-                        ladderChangeSelectNext(tabLadder);
+                        ladderChangeSelectNext(tabLadder_);
                         return true;
                     } else if (event.isShiftDown() && event.isShortcutDown() && !event.isAltDown()) {
-                        ladderChangeSelectPrevious(tabLadder);
+                        ladderChangeSelectPrevious(tabLadder_);
                         return true;
                     }
                     break;
@@ -931,8 +963,11 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                     break;
                 case F4:
                     if (!event.isShiftDown() && event.isShortcutDown() && !event.isAltDown()) {
-                        ladderRemoveTab(tabLadder.getSelectionModel().getSelectedIndex());
-                        return true;
+                        if (!isCycling_) {
+                            ladderRemoveTab(tabLadder_.getSelectionModel().getSelectedIndex());
+                            return true;
+                        }
+                        return false;
                     }
                     break;
                 case LEFT:
@@ -1229,7 +1264,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                         if (!address.startsWith(LADDER_LOCAL_ADDRESS_PREFIX) && !address.contains(" ")) {
                             if (!ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).containsKey(address)) {
                                 ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).put(address, new LadderIo(address));
-                                treeTableIo.getRoot().getChildren().get(LADDER_GLOBAL_ADDRESS_INDEX).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address)));
+                                treeTableIo_.getRoot().getChildren().get(LADDER_GLOBAL_ADDRESS_INDEX).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address)));
                             }
 
                             int slave = (int) objects[2];
@@ -1275,7 +1310,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                         if (!address.startsWith(LADDER_LOCAL_ADDRESS_PREFIX) && !address.contains(" ")) {
                             if (!ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).containsKey(address)) {
                                 ioMap_.get(LADDER_GLOBAL_ADDRESS_INDEX).put(address, new LadderIo(address));
-                                treeTableIo.getRoot().getChildren().get(LADDER_GLOBAL_ADDRESS_INDEX).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address)));
+                                treeTableIo_.getRoot().getChildren().get(LADDER_GLOBAL_ADDRESS_INDEX).getChildren().add(new TreeItem<>(new LadderTreeTableIo(address)));
                             }
 
                             int slave = (int) objects[2];
@@ -1356,10 +1391,10 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     public void setValue(int idx, String address, double value) {
         if (!ioMap_.get(idx).containsKey(address)) {
             ioMap_.get(idx).put(address, new LadderIo(address));
-            treeTableIo.getRoot().getChildren().get(idx).getChildren().add(new TreeItem(new LadderTreeTableIo(address, value)));
+            treeTableIo_.getRoot().getChildren().get(idx).getChildren().add(new TreeItem(new LadderTreeTableIo(address, value)));
         }
 
-        ovScript_ = treeTableIo.getRoot().getChildren().get(idx).getChildren();
+        ovScript_ = treeTableIo_.getRoot().getChildren().get(idx).getChildren();
         for (scriptIndex_ = 0, scriptSize_ = ovScript_.size(); scriptIndex_ < scriptSize_; scriptIndex_++) {
             if (address.equals(ovScript_.get(scriptIndex_).getValue().getAddress())) {
                 ovScript_.get(scriptIndex_).getValue().setValue(value);
@@ -1380,15 +1415,15 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         int index;
 
         // check connect
-        if (checkConnectLadder(tabLadder, treeTableIo, ioMap_)) {
+        if (checkConnectLadder(tabLadder_, treeTableIo_, ioMap_)) {
             synchronized (lock_) {
                 // connect
-                laddersSize_ = tabLadder.getTabs().size();
+                laddersSize_ = tabLadder_.getTabs().size();
                 ladders_ = new Ladder[laddersSize_];
                 for (index = 0; index < laddersSize_; index++) {
-                    pane = (LadderPane) ((ScrollPane) tabLadder.getTabs().get(index).getContent()).getContent();
+                    pane = (LadderPane) ((ScrollPane) tabLadder_.getTabs().get(index).getContent()).getContent();
                     ladders_[index] = pane.getLadder().copy();
-                    ladders_[index].connectLadder(ioMap_, treeTableIo);
+                    ladders_[index].connectLadder(ioMap_, treeTableIo_);
                 }
             }
             register(webEngine_, state_);
@@ -1517,7 +1552,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         ButtonType response = fileSavedCheck();
 
         if (response == null) {
-            file = ladderOpen(tabLadder, treeTableIo, filePath);
+            file = ladderOpen(tabLadder_, treeTableIo_, filePath);
             if (file == null) {
                 if (filePath != null) {
                     fileNotFound(filePath);
@@ -1530,7 +1565,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
             }
         } else if (response == ButtonType.YES) {
             ladderSave();
-            file = ladderOpen(tabLadder, treeTableIo, filePath);
+            file = ladderOpen(tabLadder_, treeTableIo_, filePath);
             if (file == null) {
                 if (filePath != null) {
                     fileNotFound(filePath);
@@ -1542,7 +1577,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 return true;
             }
         } else if (response == ButtonType.NO) {
-            file = ladderOpen(tabLadder, treeTableIo, filePath);
+            file = ladderOpen(tabLadder_, treeTableIo_, filePath);
             if (file == null) {
                 if (filePath != null) {
                     fileNotFound(filePath);

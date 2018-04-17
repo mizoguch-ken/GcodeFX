@@ -35,12 +35,15 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -145,6 +148,8 @@ public class DesignLaddersController implements Initializable {
     @FXML
     private SplitPane splitIoLadder;
     @FXML
+    private SplitPane splitIoIo;
+    @FXML
     private TreeTableView<LadderTreeTableIo> treeTableIo;
     @FXML
     private TreeTableColumn<LadderTreeTableIo, String> treeTableIoAddress;
@@ -152,6 +157,16 @@ public class DesignLaddersController implements Initializable {
     private TreeTableColumn<LadderTreeTableIo, String> treeTableIoComment;
     @FXML
     private TreeTableColumn<LadderTreeTableIo, Double> treeTableIoValue;
+    @FXML
+    private TableView<LadderTableIo> tableIo;
+    @FXML
+    private TableColumn<LadderTableIo, String> tableIoName;
+    @FXML
+    private TableColumn<LadderTableIo, String> tableIoAddress;
+    @FXML
+    private TableColumn<LadderTableIo, String> tableIoBlock;
+    @FXML
+    private TableColumn<LadderTableIo, String> tableIoPosition;
     @FXML
     private TabPane tabLadder;
     // status
@@ -172,7 +187,7 @@ public class DesignLaddersController implements Initializable {
     public class StageSettings {
 
         private boolean stageMaximized;
-        private double stageWidth, stageHeight, rootWidth, rootHeight, ioLadderDividerPositions;
+        private double stageWidth, stageHeight, rootWidth, rootHeight, ioLadderDividerPositions, ioIoDividerPositions;
 
         /**
          *
@@ -357,6 +372,34 @@ public class DesignLaddersController implements Initializable {
                 }
             }
         }
+
+        /**
+         *
+         * @return
+         */
+        public double getIoIoDividerPositions() {
+            return ioIoDividerPositions;
+        }
+
+        /**
+         *
+         * @param value
+         * @param update
+         */
+        public void setIoIoDividerPositions(double value, boolean update) {
+            if (update || isShown_) {
+                ioIoDividerPositions = value;
+                if (update) {
+                    if (Platform.isFxApplicationThread()) {
+                        splitIoIo.getDividers().get(0).setPosition(ioIoDividerPositions);
+                    } else {
+                        Platform.runLater(() -> {
+                            splitIoIo.getDividers().get(0).setPosition(ioIoDividerPositions);
+                        });
+                    }
+                }
+            }
+        }
     }
 
     private Stage stage_;
@@ -390,6 +433,7 @@ public class DesignLaddersController implements Initializable {
         });
         stage_.setOnShown((WindowEvent event) -> {
             stageSettings_.setIoLadderDividerPositions(stageSettings_.getIoLadderDividerPositions(), true);
+            stageSettings_.setIoIoDividerPositions(stageSettings_.getIoIoDividerPositions(), true);
             isShown_ = true;
         });
         stage_.setOnHiding((WindowEvent event) -> {
@@ -422,6 +466,11 @@ public class DesignLaddersController implements Initializable {
         splitIoLadder.getDividers().get(0).positionProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             if (newValue != null) {
                 stageSettings_.setIoLadderDividerPositions(newValue.doubleValue(), false);
+            }
+        });
+        splitIoIo.getDividers().get(0).positionProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            if (newValue != null) {
+                stageSettings_.setIoIoDividerPositions(newValue.doubleValue(), false);
             }
         });
 
@@ -612,13 +661,13 @@ public class DesignLaddersController implements Initializable {
         });
 
         // io
-        treeTableIoAddress.setCellFactory((TreeTableColumn<LadderTreeTableIo, String> param) -> {
+        treeTableIoAddress.setCellFactory((param) -> {
             return new TextFieldTreeTableCell<>(new LadderAddressStringConverter());
         });
-        treeTableIoAddress.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+        treeTableIoAddress.setCellValueFactory((param) -> {
             return param.getValue().getValue().addressProperty();
         });
-        treeTableIoAddress.setOnEditCommit((TreeTableColumn.CellEditEvent<LadderTreeTableIo, String> event) -> {
+        treeTableIoAddress.setOnEditCommit((event) -> {
             if ((event.getOldValue() != null) && (event.getNewValue() != null)) {
                 if (!event.getOldValue().equals(event.getNewValue())) {
                     TreeItem<LadderTreeTableIo> parent = event.getRowValue().getParent();
@@ -661,13 +710,13 @@ public class DesignLaddersController implements Initializable {
                 }
             }
         });
-        treeTableIoComment.setCellFactory((TreeTableColumn<LadderTreeTableIo, String> param) -> {
+        treeTableIoComment.setCellFactory((param) -> {
             return new TextFieldTreeTableCell<>(new LadderCommentStringConverter());
         });
-        treeTableIoComment.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, String> param) -> {
+        treeTableIoComment.setCellValueFactory((param) -> {
             return param.getValue().getValue().commentProperty();
         });
-        treeTableIoComment.setOnEditCommit((TreeTableColumn.CellEditEvent<LadderTreeTableIo, String> event) -> {
+        treeTableIoComment.setOnEditCommit((event) -> {
             if ((event.getOldValue() != null) && (event.getNewValue() != null)) {
                 if (!event.getOldValue().equals(event.getNewValue())) {
                     TreeItem<LadderTreeTableIo> parent = event.getRowValue().getParent();
@@ -688,18 +737,77 @@ public class DesignLaddersController implements Initializable {
                 }
             }
         });
-        treeTableIoValue.setCellFactory((TreeTableColumn<LadderTreeTableIo, Double> param) -> {
+        treeTableIoValue.setCellFactory((param) -> {
             return new TextFieldTreeTableCell<>(new LadderValueStringConverter());
         });
-        treeTableIoValue.setCellValueFactory((TreeTableColumn.CellDataFeatures<LadderTreeTableIo, Double> param) -> {
+        treeTableIoValue.setCellValueFactory((param) -> {
             return param.getValue().getValue().valueProperty().asObject();
         });
-        treeTableIoValue.setOnEditCommit((TreeTableColumn.CellEditEvent<LadderTreeTableIo, Double> event) -> {
+        treeTableIoValue.setOnEditCommit((event) -> {
             if ((event.getOldValue() != null) && (event.getNewValue() != null)) {
                 if (!event.getOldValue().equals(event.getNewValue())) {
                     ladders_.setValue(event.getRowValue().getValue().getAddress(), event.getNewValue());
                 }
             }
+        });
+        tableIo.setOnKeyReleased((KeyEvent event) -> {
+            ScrollPane scrollPane;
+            LadderPane pane;
+            LadderGridPane gridPane;
+            LadderTableIo tblIo;
+
+            switch (event.getCode()) {
+                case UP:
+                case DOWN:
+                    tblIo = tableIo.getSelectionModel().getSelectedItem();
+                    for (int index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
+                        scrollPane = (ScrollPane) tabLadder.getTabs().get(index).getContent();
+                        pane = (LadderPane) scrollPane.getContent();
+                        if (pane.getLadder().getName().equals(tblIo.getName())) {
+                            gridPane = pane.findGridPane(tblIo.getColumn(), tblIo.getRow());
+                            if (gridPane != null) {
+                                tabLadder.getSelectionModel().select(index);
+                                ladders_.getLadderCommand().blockChangeSelect(scrollPane, pane, gridPane.getLadderGrid(), false);
+                            }
+                        }
+                    }
+                    break;
+            }
+        });
+        tableIo.setOnMouseClicked((MouseEvent event) -> {
+            ScrollPane scrollPane;
+            LadderPane pane;
+            LadderGridPane gridPane;
+            LadderTableIo tblIo;
+
+            switch (event.getClickCount()) {
+                case 1:
+                    tblIo = tableIo.getSelectionModel().getSelectedItem();
+                    for (int index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
+                        scrollPane = (ScrollPane) tabLadder.getTabs().get(index).getContent();
+                        pane = (LadderPane) scrollPane.getContent();
+                        if (pane.getLadder().getName().equals(tblIo.getName())) {
+                            gridPane = pane.findGridPane(tblIo.getColumn(), tblIo.getRow());
+                            if (gridPane != null) {
+                                tabLadder.getSelectionModel().select(index);
+                                ladders_.getLadderCommand().blockChangeSelect(scrollPane, pane, gridPane.getLadderGrid(), false);
+                            }
+                        }
+                    }
+                    break;
+            }
+        });
+        tableIoName.setCellValueFactory((param) -> {
+            return param.getValue().nameProperty();
+        });
+        tableIoAddress.setCellValueFactory((param) -> {
+            return param.getValue().addressProperty();
+        });
+        tableIoBlock.setCellValueFactory((param) -> {
+            return param.getValue().blockProperty();
+        });
+        tableIoPosition.setCellValueFactory((param) -> {
+            return param.getValue().positionProperty();
         });
 
         // ladder
@@ -767,6 +875,11 @@ public class DesignLaddersController implements Initializable {
         treeTableIoAddress.setText(LadderEnums.IO_ADDRESS.toString());
         treeTableIoComment.setText(LadderEnums.IO_COMMENT.toString());
         treeTableIoValue.setText(LadderEnums.IO_VALUE.toString());
+        tableIo.setCache(true);
+        tableIoName.setText(LadderEnums.IO_NAME.toString());
+        tableIoAddress.setText(LadderEnums.IO_ADDRESS.toString());
+        tableIoBlock.setText(LadderEnums.IO_BLOCK.toString());
+        tableIoPosition.setText(LadderEnums.IO_POSITION.toString());
     }
 
     /**
@@ -791,6 +904,14 @@ public class DesignLaddersController implements Initializable {
      */
     public TreeTableView<LadderTreeTableIo> getTreeTableIo() {
         return treeTableIo;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public TableView<LadderTableIo> getTableIo() {
+        return tableIo;
     }
 
     /**
@@ -1011,6 +1132,7 @@ public class DesignLaddersController implements Initializable {
         stageSettings_.setRootWidth(640.0, true);
         stageSettings_.setRootHeight(480.0, true);
         stageSettings_.setIoLadderDividerPositions(0.382, true);
+        stageSettings_.setIoIoDividerPositions(0.618, true);
 
         // history generation
         historyGeneration_ = -1;
@@ -1044,6 +1166,7 @@ public class DesignLaddersController implements Initializable {
                 stageSettings_.setRootWidth(Double.parseDouble(properties.getProperty("PANE_ROOT_WIDTH", "640.0")), true);
                 stageSettings_.setRootHeight(Double.parseDouble(properties.getProperty("PANE_ROOT_HEIGHT", "480.0")), true);
                 stageSettings_.setIoLadderDividerPositions(Double.parseDouble(properties.getProperty("SPLIT_DIVIDER_IO_LADDER", "0.382")), true);
+                stageSettings_.setIoIoDividerPositions(Double.parseDouble(properties.getProperty("SPLIT_DIVIDER_IO_IO", "0.618")), true);
                 ladders_.setWorkFilePath(properties.getProperty("WORK_FILE_PATH", ""));
 
                 // history generation
@@ -1077,6 +1200,7 @@ public class DesignLaddersController implements Initializable {
             stageSettings_.setRootWidth(stageSettings_.getRootWidth(), true);
             stageSettings_.setRootHeight(stageSettings_.getRootHeight(), true);
             stageSettings_.setIoLadderDividerPositions(stageSettings_.getIoLadderDividerPositions(), true);
+            stageSettings_.setIoIoDividerPositions(stageSettings_.getIoIoDividerPositions(), true);
         }
         return false;
     }
@@ -1096,6 +1220,7 @@ public class DesignLaddersController implements Initializable {
                 properties.setProperty("PANE_ROOT_WIDTH", Double.toString(stageSettings_.getRootWidth()));
                 properties.setProperty("PANE_ROOT_HEIGHT", Double.toString(stageSettings_.getRootHeight()));
                 properties.setProperty("SPLIT_DIVIDER_IO_LADDER", Double.toString(stageSettings_.getIoLadderDividerPositions()));
+                properties.setProperty("SPLIT_DIVIDER_IO_IO", Double.toString(stageSettings_.getIoIoDividerPositions()));
                 properties.setProperty("WORK_FILE_PATH", ladders_.getWorkFilePath());
 
                 // history generation
