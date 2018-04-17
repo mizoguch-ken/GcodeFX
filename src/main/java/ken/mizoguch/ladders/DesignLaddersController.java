@@ -668,7 +668,6 @@ public class DesignLaddersController implements Initializable {
             String address;
             int idx, siz, index, size, index2, size2;
 
-            event.consume();
             if (!event.isShiftDown() && event.isShortcutDown() && !event.isAltDown()) {
                 switch (event.getCode()) {
                     case F:
