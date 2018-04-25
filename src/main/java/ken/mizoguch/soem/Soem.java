@@ -443,10 +443,35 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public Long notify(int slave, long bitsOffset, long bitsMask, boolean register) {
-        if ((context_ != null) && (ecatThread_ != null)) {
-            if ((bitsOffset >= 0) && (bitsOffset < context_.slavelist[slave].Ibytes.get())) {
-                return ecatThread_.notify(slave, bitsOffset, bitsMask, register);
+    public Long out(int slave, long bitsOffset, long bitsMask) {
+        if (context_ != null) {
+            if ((bitsOffset >= 0) && (bitsOffset < context_.slavelist[slave].Obits.get())) {
+                if (context_.slavelist[slave].outputs.get() != null) {
+                    long bits = (context_.slavelist[slave].Obits.get() - bitsOffset);
+                    if ((bitsMask > 0) && (bits > 0)) {
+                        if (bits < 64) {
+                            bitsMask &= (1 << bits) - 1;
+                        }
+
+                        if (bitsMask < 0xff) {
+                            return ((context_.slavelist[slave].outputs.get().getByte(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffff) {
+                            return ((context_.slavelist[slave].outputs.get().getShort(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffff) {
+                            return ((context_.slavelist[slave].outputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffff) {
+                            return ((context_.slavelist[slave].outputs.get().getInt(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffffffL) {
+                            return ((context_.slavelist[slave].outputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffffffffL) {
+                            return ((context_.slavelist[slave].outputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else if (bitsMask < 0xffffffffffffffL) {
+                            return ((context_.slavelist[slave].outputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        } else {
+                            return ((context_.slavelist[slave].outputs.get().getLong(bitsOffset / 8) >> (context_.slavelist[slave].Ostartbit.get() + (bitsOffset % 8))) & bitsMask);
+                        }
+                    }
+                }
             }
         }
         return null;

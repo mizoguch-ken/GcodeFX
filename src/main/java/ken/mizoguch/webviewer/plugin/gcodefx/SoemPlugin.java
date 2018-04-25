@@ -36,7 +36,7 @@ public interface SoemPlugin {
 
     public Long in(int slave, long bitsOffset, long bitsMask);
 
-    public Long notify(int slave, long bitsOffset, long bitsMask, boolean register);
+    public Long out(int slave, long bitsOffset, long bitsMask);
 
     public Long out(int slave, long bitsOffset, long bitsMask, long value);
 

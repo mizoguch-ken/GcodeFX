@@ -54,12 +54,10 @@ public class SoemEcatThread extends Service<Void> {
     }
 
     private final SoemLibrary soem_;
-    private final Object lockNotify_ = new Object();
     private final Object lockOut_ = new Object();
     private final SoemEtherCAT.ecx_parcelt parcel_;
     private final SoemEtherCATMain.ecx_contextt context_;
     private final ConcurrentMap<Integer, EcatPO2SO> po2so_;
-    private final ConcurrentMap<Long, EcatData> notify_;
     private final ConcurrentMap<Long, EcatData> out_;
     private SoemEcatCheck ecatCheck_;
     private boolean init_, exit_;
@@ -76,7 +74,6 @@ public class SoemEcatThread extends Service<Void> {
         parcel_ = parcel;
         context_ = context;
         po2so_ = new ConcurrentHashMap<>();
-        notify_ = new ConcurrentHashMap<>();
         out_ = new ConcurrentHashMap<>();
         ecatCheck_ = null;
         init_ = false;
@@ -255,96 +252,6 @@ public class SoemEcatThread extends Service<Void> {
      * @param slave
      * @param bitsOffset
      * @param bitsMask
-     * @param register
-     * @return
-     */
-    public Long notify(int slave, long bitsOffset, long bitsMask, boolean register) {
-        Pointer pointer = context_.slavelist[slave].inputs.get();
-        if (pointer != null) {
-            long address = pointer.address() - context_.slavelist[0].inputs.get().address() + (bitsOffset / 8);
-            int startbit = context_.slavelist[slave].Istartbit.get() + ((int) (bitsOffset % 8));
-            long bits = (context_.slavelist[slave].Ibits.get() - bitsOffset);
-            long value;
-            int bytes, cnt;
-
-            if ((bitsMask > 0) && (bits > 0)) {
-                if (bits < 64) {
-                    bitsMask &= (1 << bits) - 1;
-                }
-
-                if (bitsMask < 0xff) {
-                    bytes = 1;
-                } else if (bitsMask < 0xffff) {
-                    bytes = 2;
-                } else if (bitsMask < 0xffffff) {
-                    bytes = 3;
-                } else if (bitsMask < 0xffffffff) {
-                    bytes = 4;
-                } else if (bitsMask < 0xffffffffffL) {
-                    bytes = 5;
-                } else if (bitsMask < 0xffffffffffffL) {
-                    bytes = 6;
-                } else if (bitsMask < 0xffffffffffffffL) {
-                    bytes = 7;
-                } else {
-                    bytes = 8;
-                }
-
-                bitsMask <<= startbit;
-                synchronized (lockNotify_) {
-                    if (register) {
-                        switch (bytes) {
-                            case 1:
-                                value = pointer.getByte(bitsOffset / 8) & bitsMask;
-                                break;
-                            case 2:
-                                value = pointer.getShort(bitsOffset / 8) & bitsMask;
-                                break;
-                            case 3:
-                            case 4:
-                                value = pointer.getInt(bitsOffset / 8) & bitsMask;
-                                break;
-                            case 5:
-                            case 6:
-                            case 7:
-                            case 8:
-                                value = pointer.getLong(bitsOffset / 8) & bitsMask;
-                                break;
-                            default:
-                                value = 0;
-                                break;
-                        }
-
-                        for (cnt = 0; cnt < bytes; cnt++) {
-                            if (notify_.containsKey(address + cnt)) {
-                                notify_.get(address + cnt).bitMask |= (bitsMask >>> (cnt * Byte.SIZE)) & 0xff;
-                                notify_.get(address + cnt).value |= (value >>> (cnt * Byte.SIZE)) & 0xff;
-                            } else {
-                                notify_.put(address + cnt, new EcatData((int) ((bitsMask >>> (cnt * Byte.SIZE)) & 0xff), (int) ((value >>> (cnt * Byte.SIZE)) & 0xff)));
-                            }
-                        }
-                    } else {
-                        for (cnt = 0; cnt < bytes; cnt++) {
-                            if (notify_.containsKey(address + cnt)) {
-                                notify_.get(address + cnt).bitMask &= ~(bitsMask >>> (cnt * Byte.SIZE)) & 0xff;
-                                if ((notify_.get(address + cnt).bitMask) == 0) {
-                                    notify_.remove(address + cnt);
-                                }
-                            }
-                        }
-                    }
-                }
-                return address;
-            }
-        }
-        return null;
-    }
-
-    /**
-     *
-     * @param slave
-     * @param bitsOffset
-     * @param bitsMask
      * @param value
      * @return
      */
@@ -427,22 +334,6 @@ public class SoemEcatThread extends Service<Void> {
                                 }
                             }
                             parcel_.isprocess.set(SoemOsal.TRUE);
-
-                            if (!notify_.isEmpty()) {
-                                pointer = context_.slavelist[0].inputs.get();
-                                synchronized (lockNotify_) {
-                                    for (Iterator<Map.Entry<Long, EcatData>> iterator = notify_.entrySet().iterator(); iterator.hasNext();) {
-                                        entry = iterator.next();
-                                        value = pointer.getByte(entry.getKey()) & entry.getValue().bitMask;
-                                        if (entry.getValue().value != value) {
-                                            entry.getValue().value = value;
-                                            for (SoemPluginListener listener : eventListenerList_.getListeners(SoemPluginListener.class)) {
-                                                listener.onChangeSoemEcatThread(entry.getKey(), value);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
                         }
                     }
                 } catch (Exception ex) {

@@ -15,13 +15,6 @@ public interface SoemPluginListener extends EventListener {
 
     /**
      *
-     * @param address
-     * @param value
-     */
-    public void onChangeSoemEcatThread(long address, int value);
-
-    /**
-     *
      * @param slave
      */
     public void errorSafeOpErrorSoemEcatCheck(int slave);
