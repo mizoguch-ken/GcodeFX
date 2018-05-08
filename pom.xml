@@ -66,6 +66,10 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
+                                        <Implementation-Title>${project.name}</Implementation-Title>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                        <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                                        <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
                                         <Built-By>${project.organization.name}</Built-By>
                                         <Main-Class>${mainClass}</Main-Class>
                                     </manifestEntries>
