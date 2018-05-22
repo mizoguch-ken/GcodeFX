@@ -202,6 +202,7 @@ public class LadderPane extends GridPane {
                             case LOAD_RISING_NOT:
                             case LOAD_FALLING:
                             case LOAD_FALLING_NOT:
+                                grid.setBlockValue(io.getValue());
                                 grid.setBlockLd(io.isLd());
                                 gridPane.changeBlockIO();
                                 break;

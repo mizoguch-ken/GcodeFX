@@ -443,15 +443,19 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockHeight(getHeight());
                 break;
             case LOAD:
-                // address
+                // address value
                 // -| |-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -480,15 +484,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case LOAD_NOT:
-                // address
+                // address value
                 // -|/|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -521,15 +529,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case LOAD_RISING:
-                // address
+                // address value
                 // -|↑|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -570,15 +582,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case LOAD_RISING_NOT:
-                // address
+                // address value
                 // -|/↑|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -623,15 +639,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case LOAD_FALLING:
-                // address
+                // address value
                 // -|↓|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -672,15 +692,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case LOAD_FALLING_NOT:
-                // address
+                // address value
                 // -|/↓|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -725,15 +749,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case OUT:
-                // address
+                // address value
                 // -( )
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -762,15 +790,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case OUT_NOT:
-                // address
+                // address value
                 // -( )
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -803,15 +835,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case OUT_RISING:
-                // address
+                // address value
                 // -(↑)
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -852,15 +888,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case OUT_RISING_NOT:
-                // address
+                // address value
                 // -(/↑)
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -905,15 +945,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case OUT_FALLING:
-                // address
+                // address value
                 // -(↓)
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -954,15 +998,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case OUT_FALLING_NOT:
-                // address
+                // address value
                 // -(/↓)
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -1007,22 +1055,26 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case COMPARISON_EQUAL:
-                // address
+                // address value
                 // -|= address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1053,22 +1105,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_NOT_EQUAL:
-                // address
+                // address value
                 // -|<> address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1099,22 +1155,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_LESS:
-                // address
+                // address value
                 // -|< address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1145,22 +1205,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_LESS_EQUAL:
-                // address
+                // address value
                 // -|<= address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1191,22 +1255,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_GREATER:
-                // address
+                // address value
                 // -|> address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1237,22 +1305,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_GREATER_EQUAL:
-                // address
+                // address value
                 // -|>= address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1283,22 +1355,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_AND_BITS:
-                // address
+                // address value
                 // -|& address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1329,22 +1405,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_OR_BITS:
-                // address
+                // address value
                 // -|| address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1375,22 +1455,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COMPARISON_XOR_BITS:
-                // address
+                // address value
                 // -|^ address|-
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1421,15 +1505,19 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case SET:
-                // address
+                // address value
                 // -|SET|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -1458,15 +1546,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case RESET:
-                // address
+                // address value
                 // -|RES|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -1495,26 +1587,30 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case AND_BITS:
-                // address
+                // address value
                 // -|AND address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1541,26 +1637,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case OR_BITS:
-                // address
+                // address value
                 // -|OR address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1587,26 +1687,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case XOR_BITS:
-                // address
+                // address value
                 // -|XOR address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1633,22 +1737,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case NOT_BITS:
-                // address
+                // address value
                 // -|NOT address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1675,26 +1783,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case ADDITION:
-                // address
+                // address value
                 // -|ADD address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1721,26 +1833,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case SUBTRACTION:
-                // address
+                // address value
                 // -|SUB address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1767,26 +1883,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case MULTIPLICATION:
-                // address
+                // address value
                 // -|MUL address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1813,26 +1933,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case DIVISION:
-                // address
+                // address value
                 // -|DIV address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1859,26 +1983,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case AVERAGE:
-                // address
+                // address value
                 // -|AVE address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1905,26 +2033,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case SHIFT_LEFT_BITS:
-                // address
+                // address value
                 // -|SFL address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1951,26 +2083,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case SHIFT_RIGHT_BITS:
-                // address
+                // address value
                 // -|SFR address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -1997,26 +2133,30 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case SIGMOID:
-                // address
+                // address value
                 // -|SIG address address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -2043,15 +2183,19 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case RANDOM:
-                // address
+                // address value
                 // -|RND|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -2080,15 +2224,19 @@ public class LadderGridPane extends AnchorPane {
                 changeComment();
                 break;
             case TIMER:
-                // address
+                // address value
                 // -|TIM time|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -2122,15 +2270,19 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case TIMER_NOT:
-                // address
+                // address value
                 // -|/TIM time|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -2168,15 +2320,19 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COUNTER:
-                // address
+                // address value
                 // -|CNT count|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -2210,15 +2366,19 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case COUNTER_NOT:
-                // address
+                // address value
                 // -|/CNT count|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -2256,22 +2416,26 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case MOVE:
-                // address
+                // address value
                 // -|MOV address|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
                 grpBlock_.getChildren().add(label); // comment
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
                 line = new Line();
                 line.setStroke(baseStrokeColor_);
@@ -2298,15 +2462,19 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockFunction();
                 break;
             case SCRIPT:
-                // address
+                // address value
                 // -|SCR function|
                 // comment
                 rectangle = new Rectangle();
                 grpBlock_.getChildren().add(rectangle); // I/O
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
-                label.setTextAlignment(TextAlignment.CENTER);
+                label.setTextAlignment(TextAlignment.LEFT);
                 grpBlock_.getChildren().add(label); // address
+                label = new Label();
+                label.setAlignment(Pos.CENTER_RIGHT);
+                label.setTextAlignment(TextAlignment.RIGHT);
+                grpBlock_.getChildren().add(label); // value
                 label = new Label();
                 label.setAlignment(Pos.CENTER);
                 label.setTextAlignment(TextAlignment.CENTER);
@@ -2356,6 +2524,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case LOAD_NOT:
             case LOAD_RISING_NOT:
@@ -2367,6 +2536,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case OUT:
             case OUT_NOT:
@@ -2377,14 +2547,15 @@ public class LadderGridPane extends AnchorPane {
                 if (ladderGrid_.isBlockLd()) {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(onColor_);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(onColor_);
-                    ((Arc) grpBlock_.getChildren().get(4)).setFill(onColor_);
                     ((Arc) grpBlock_.getChildren().get(5)).setFill(onColor_);
+                    ((Arc) grpBlock_.getChildren().get(6)).setFill(onColor_);
                 } else {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
-                    ((Arc) grpBlock_.getChildren().get(4)).setFill(null);
                     ((Arc) grpBlock_.getChildren().get(5)).setFill(null);
+                    ((Arc) grpBlock_.getChildren().get(6)).setFill(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_EQUAL:
                 if (ladderGrid_.getBlockValue() == ladderGrid_.getBlockFunctions()[0].getValue()) {
@@ -2394,6 +2565,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_NOT_EQUAL:
                 if (ladderGrid_.getBlockValue() != ladderGrid_.getBlockFunctions()[0].getValue()) {
@@ -2403,6 +2575,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_LESS:
                 if (ladderGrid_.getBlockValue() < ladderGrid_.getBlockFunctions()[0].getValue()) {
@@ -2412,6 +2585,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_LESS_EQUAL:
                 if (ladderGrid_.getBlockValue() <= ladderGrid_.getBlockFunctions()[0].getValue()) {
@@ -2421,6 +2595,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_GREATER:
                 if (ladderGrid_.getBlockValue() > ladderGrid_.getBlockFunctions()[0].getValue()) {
@@ -2430,6 +2605,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_GREATER_EQUAL:
                 if (ladderGrid_.getBlockValue() >= ladderGrid_.getBlockFunctions()[0].getValue()) {
@@ -2439,6 +2615,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_AND_BITS:
                 if ((((long) ladderGrid_.getBlockValue()) & ((long) ladderGrid_.getBlockFunctions()[0].getValue())) != 0) {
@@ -2448,6 +2625,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_OR_BITS:
                 if ((((long) ladderGrid_.getBlockValue()) | ((long) ladderGrid_.getBlockFunctions()[0].getValue())) != 0) {
@@ -2457,6 +2635,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case COMPARISON_XOR_BITS:
                 if ((((long) ladderGrid_.getBlockValue()) ^ ((long) ladderGrid_.getBlockFunctions()[0].getValue())) != 0) {
@@ -2466,6 +2645,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
             case SET:
             case RESET:
@@ -2495,6 +2675,7 @@ public class LadderGridPane extends AnchorPane {
                     ((Rectangle) grpBlock_.getChildren().get(0)).setFill(null);
                     ((Rectangle) grpBlock_.getChildren().get(0)).setStroke(null);
                 }
+                ((Label) grpBlock_.getChildren().get(2)).setText(Double.toString(ladderGrid_.getBlockValue()));
                 break;
         }
     }
@@ -2516,115 +2697,102 @@ public class LadderGridPane extends AnchorPane {
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width);
                 break;
             case LOAD_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width6);
                 ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width);
+                ((Line) grpBlock_.getChildren().get(8)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width6);
                 break;
             case LOAD_RISING:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width);
-                ((Line) grpBlock_.getChildren().get(7)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width2);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width);
                 ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2);
                 ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 + width12);
+                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(10)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(10)).setEndX(width2 + width12);
                 break;
             case LOAD_RISING_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width6);
                 ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width);
+                ((Line) grpBlock_.getChildren().get(8)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2);
                 ((Line) grpBlock_.getChildren().get(10)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(10)).setEndX(width2 + width12);
+                ((Line) grpBlock_.getChildren().get(10)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(11)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(11)).setEndX(width2 + width12);
                 break;
             case LOAD_FALLING:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width);
-                ((Line) grpBlock_.getChildren().get(7)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width2);
-                ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2 - width12);
-                ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 + width12);
-                break;
-            case LOAD_FALLING_NOT:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
-                ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width6);
                 ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width);
                 ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
                 ((Line) grpBlock_.getChildren().get(8)).setEndX(width2);
                 ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
@@ -2632,113 +2800,150 @@ public class LadderGridPane extends AnchorPane {
                 ((Line) grpBlock_.getChildren().get(10)).setStartX(width2);
                 ((Line) grpBlock_.getChildren().get(10)).setEndX(width2 + width12);
                 break;
+            case LOAD_FALLING_NOT:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width);
+                ((Line) grpBlock_.getChildren().get(8)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2);
+                ((Line) grpBlock_.getChildren().get(10)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(10)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(11)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(11)).setEndX(width2 + width12);
+                break;
             case OUT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width3);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterX(width3);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
                 ((Arc) grpBlock_.getChildren().get(5)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width - width3);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width3);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusX(width6);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterX(width - width3);
                 break;
             case OUT_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width3);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterX(width3);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
                 ((Arc) grpBlock_.getChildren().get(5)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width3);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width3);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusX(width6);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterX(width - width3);
+                ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width3);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width3);
                 break;
             case OUT_RISING:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width3);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterX(width3);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
                 ((Arc) grpBlock_.getChildren().get(5)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width2);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width3);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusX(width6);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterX(width - width3);
                 ((Line) grpBlock_.getChildren().get(7)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width2);
                 ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2 + width12);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 + width12);
                 break;
             case OUT_RISING_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width3);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterX(width3);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
                 ((Arc) grpBlock_.getChildren().get(5)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width3);
-                ((Line) grpBlock_.getChildren().get(7)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width2);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width3);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusX(width6);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterX(width - width3);
+                ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width3);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width3);
                 ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2);
                 ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 + width12);
+                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(10)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(10)).setEndX(width2 + width12);
                 break;
             case OUT_FALLING:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width3);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterX(width3);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
                 ((Arc) grpBlock_.getChildren().get(5)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width2);
-                ((Line) grpBlock_.getChildren().get(7)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width2 - width12);
-                ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
-                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2 + width12);
-                break;
-            case OUT_FALLING_NOT:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width3);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width3);
-                ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterX(width3);
-                ((Arc) grpBlock_.getChildren().get(5)).setRadiusX(width6);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width3);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width3);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width3);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusX(width6);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterX(width - width3);
                 ((Line) grpBlock_.getChildren().get(7)).setStartX(width2);
                 ((Line) grpBlock_.getChildren().get(7)).setEndX(width2);
                 ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
                 ((Line) grpBlock_.getChildren().get(8)).setEndX(width2 - width12);
                 ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
                 ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 + width12);
+                break;
+            case OUT_FALLING_NOT:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width3);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width3);
+                ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
+                ((Arc) grpBlock_.getChildren().get(5)).setRadiusX(width6);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterX(width3);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusX(width6);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterX(width - width3);
+                ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width3);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width3);
+                ((Line) grpBlock_.getChildren().get(8)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width2);
+                ((Line) grpBlock_.getChildren().get(9)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(9)).setEndX(width2 - width12);
+                ((Line) grpBlock_.getChildren().get(10)).setStartX(width2);
+                ((Line) grpBlock_.getChildren().get(10)).setEndX(width2 + width12);
                 break;
             case COMPARISON_EQUAL:
             case COMPARISON_NOT_EQUAL:
@@ -2752,20 +2957,22 @@ public class LadderGridPane extends AnchorPane {
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Label) grpBlock_.getChildren().get(4)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(4)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(6)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width6);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width);
-                ((Label) grpBlock_.getChildren().get(8)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(8)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width - width6);
+                ((Line) grpBlock_.getChildren().get(8)).setStartX(width - width6);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width);
+                ((Label) grpBlock_.getChildren().get(9)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(9)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
                 break;
             case SET:
             case RESET:
@@ -2773,16 +2980,18 @@ public class LadderGridPane extends AnchorPane {
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(3)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width - width3 + width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width - width3 + width6);
-                ((Label) grpBlock_.getChildren().get(6)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(6)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width3 + width6);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width3 + width6);
+                ((Label) grpBlock_.getChildren().get(7)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(7)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
                 break;
             case AND_BITS:
             case OR_BITS:
@@ -2798,11 +3007,36 @@ public class LadderGridPane extends AnchorPane {
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Label) grpBlock_.getChildren().get(4)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(4)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
+                ((Label) grpBlock_.getChildren().get(5)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(5)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(7)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width6);
+                ((Line) grpBlock_.getChildren().get(8)).setStartX(width - width3 + width6);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width - width3 + width6);
+                ((Label) grpBlock_.getChildren().get(9)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(9)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
+                break;
+            case NOT_BITS:
+            case TIMER:
+            case COUNTER:
+            case MOVE:
+            case SCRIPT:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
                 ((Label) grpBlock_.getChildren().get(4)).setLayoutX(width6 + baseStrokeWidth_);
                 ((Label) grpBlock_.getChildren().get(4)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
@@ -2813,46 +3047,27 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(8)).setLayoutX(width6 + baseStrokeWidth_);
                 ((Label) grpBlock_.getChildren().get(8)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
                 break;
-            case NOT_BITS:
-            case TIMER:
-            case COUNTER:
-            case MOVE:
-            case SCRIPT:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
-                ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width3 + width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width3 + width6);
-                ((Label) grpBlock_.getChildren().get(7)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(7)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
-                break;
             case TIMER_NOT:
             case COUNTER_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutX(width6);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setWidth(width - width3);
                 ((Label) grpBlock_.getChildren().get(1)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
-                ((Line) grpBlock_.getChildren().get(4)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartX(width6);
+                ((Label) grpBlock_.getChildren().get(1)).setPrefWidth(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setLayoutX(width - width3);
+                ((Label) grpBlock_.getChildren().get(2)).setPrefWidth(width3 - baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                ((Label) grpBlock_.getChildren().get(4)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(4)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
                 ((Line) grpBlock_.getChildren().get(5)).setEndX(width6);
-                ((Line) grpBlock_.getChildren().get(6)).setStartX(width - width3 + width6);
-                ((Line) grpBlock_.getChildren().get(6)).setEndX(width - width3 + width6);
+                ((Line) grpBlock_.getChildren().get(6)).setStartX(width6);
+                ((Line) grpBlock_.getChildren().get(6)).setEndX(width6);
                 ((Line) grpBlock_.getChildren().get(7)).setStartX(width - width3 + width6);
-                ((Line) grpBlock_.getChildren().get(7)).setEndX(width6);
-                ((Label) grpBlock_.getChildren().get(8)).setLayoutX(width6 + baseStrokeWidth_);
-                ((Label) grpBlock_.getChildren().get(8)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
+                ((Line) grpBlock_.getChildren().get(7)).setEndX(width - width3 + width6);
+                ((Line) grpBlock_.getChildren().get(8)).setStartX(width - width3 + width6);
+                ((Line) grpBlock_.getChildren().get(8)).setEndX(width6);
+                ((Label) grpBlock_.getChildren().get(9)).setLayoutX(width6 + baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(9)).setPrefWidth(width - width3 - (baseStrokeWidth_ * 2.0));
                 break;
         }
     }
@@ -2878,16 +3093,18 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height2);
                 break;
             case LOAD_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
@@ -2895,18 +3112,20 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4);
                 break;
             case LOAD_RISING:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
@@ -2914,22 +3133,24 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(8)).setEndY(height4 + height12);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4);
                 ((Line) grpBlock_.getChildren().get(9)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(9)).setEndY(height4 + height12);
+                ((Line) grpBlock_.getChildren().get(10)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(10)).setEndY(height4 + height12);
                 break;
             case LOAD_RISING_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
@@ -2937,16 +3158,154 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(9)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(9)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(10)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(10)).setEndY(height4 + height12);
+                ((Line) grpBlock_.getChildren().get(11)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(11)).setEndY(height4 + height12);
+                break;
+            case LOAD_FALLING:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
+                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(9)).setStartY(height - height4);
+                ((Line) grpBlock_.getChildren().get(9)).setEndY(height - height4 - height12);
+                ((Line) grpBlock_.getChildren().get(10)).setStartY(height - height4);
+                ((Line) grpBlock_.getChildren().get(10)).setEndY(height - height4 - height12);
+                break;
+            case LOAD_FALLING_NOT:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
+                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height2);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(9)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(9)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(10)).setStartY(height - height4);
+                ((Line) grpBlock_.getChildren().get(10)).setEndY(height - height4 - height12);
+                ((Line) grpBlock_.getChildren().get(11)).setStartY(height - height4);
+                ((Line) grpBlock_.getChildren().get(11)).setEndY(height - height4 - height12);
+                break;
+            case OUT:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
+                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterY(height2);
+                break;
+            case OUT_NOT:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
+                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
+                break;
+            case OUT_RISING:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
+                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterY(height2);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height4 + height12);
+                ((Line) grpBlock_.getChildren().get(9)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(9)).setEndY(height4 + height12);
+                break;
+            case OUT_RISING_NOT:
+                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
+                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
+                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterY(height2);
                 ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
                 ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
@@ -2956,22 +3315,22 @@ public class LadderGridPane extends AnchorPane {
                 ((Line) grpBlock_.getChildren().get(10)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(10)).setEndY(height4 + height12);
                 break;
-            case LOAD_FALLING:
+            case OUT_FALLING:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height2);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterY(height2);
                 ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
                 ((Line) grpBlock_.getChildren().get(8)).setStartY(height - height4);
@@ -2979,22 +3338,22 @@ public class LadderGridPane extends AnchorPane {
                 ((Line) grpBlock_.getChildren().get(9)).setStartY(height - height4);
                 ((Line) grpBlock_.getChildren().get(9)).setEndY(height - height4 - height12);
                 break;
-            case LOAD_FALLING_NOT:
+            case OUT_FALLING_NOT:
                 ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
                 ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height2);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
+                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
+                ((Arc) grpBlock_.getChildren().get(6)).setRadiusY(height4);
+                ((Arc) grpBlock_.getChildren().get(6)).setCenterY(height2);
                 ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
                 ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
@@ -3003,126 +3362,6 @@ public class LadderGridPane extends AnchorPane {
                 ((Line) grpBlock_.getChildren().get(9)).setEndY(height - height4 - height12);
                 ((Line) grpBlock_.getChildren().get(10)).setStartY(height - height4);
                 ((Line) grpBlock_.getChildren().get(10)).setEndY(height - height4 - height12);
-                break;
-            case OUT:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
-                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
-                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterY(height2);
-                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
-                break;
-            case OUT_NOT:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
-                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
-                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterY(height2);
-                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
-                break;
-            case OUT_RISING:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
-                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
-                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterY(height2);
-                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(7)).setEndY(height4 + height12);
-                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(8)).setEndY(height4 + height12);
-                break;
-            case OUT_RISING_NOT:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
-                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
-                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterY(height2);
-                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(8)).setEndY(height4 + height12);
-                ((Line) grpBlock_.getChildren().get(9)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(9)).setEndY(height4 + height12);
-                break;
-            case OUT_FALLING:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
-                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
-                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterY(height2);
-                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(7)).setStartY(height - height4);
-                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4 - height12);
-                ((Line) grpBlock_.getChildren().get(8)).setStartY(height - height4);
-                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4 - height12);
-                break;
-            case OUT_FALLING_NOT:
-                ((Rectangle) grpBlock_.getChildren().get(0)).setLayoutY(height4);
-                ((Rectangle) grpBlock_.getChildren().get(0)).setHeight(height - height2);
-                ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
-                ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
-                ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Arc) grpBlock_.getChildren().get(4)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(4)).setCenterY(height2);
-                ((Arc) grpBlock_.getChildren().get(5)).setRadiusY(height4);
-                ((Arc) grpBlock_.getChildren().get(5)).setCenterY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(8)).setStartY(height - height4);
-                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4 - height12);
-                ((Line) grpBlock_.getChildren().get(9)).setStartY(height - height4);
-                ((Line) grpBlock_.getChildren().get(9)).setEndY(height - height4 - height12);
                 break;
             case COMPARISON_EQUAL:
             case COMPARISON_NOT_EQUAL:
@@ -3138,22 +3377,24 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height2 - height12);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(4)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(4)).setLayoutY(height2 - height12);
+                ((Label) grpBlock_.getChildren().get(4)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(5)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
-                ((Line) grpBlock_.getChildren().get(7)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(7)).setEndY(height2);
-                ((Label) grpBlock_.getChildren().get(8)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(8)).setLayoutY(height5);
-                ((Label) grpBlock_.getChildren().get(8)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height2);
+                ((Label) grpBlock_.getChildren().get(9)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(9)).setLayoutY(height5);
+                ((Label) grpBlock_.getChildren().get(9)).setPrefHeight(height6);
                 break;
             case SET:
             case RESET:
@@ -3163,17 +3404,19 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(3)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(3)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
+                ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
-                ((Label) grpBlock_.getChildren().get(6)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(6)).setLayoutY(height5);
-                ((Label) grpBlock_.getChildren().get(6)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(7)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(7)).setLayoutY(height5);
+                ((Label) grpBlock_.getChildren().get(7)).setPrefHeight(height6);
                 break;
             case AND_BITS:
             case OR_BITS:
@@ -3191,23 +3434,25 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height2 - height12);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(4)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(4)).setLayoutY(height2 + height12);
+                ((Label) grpBlock_.getChildren().get(4)).setLayoutY(height2 - height12);
                 ((Label) grpBlock_.getChildren().get(4)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(5)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(5)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(5)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(5)).setLayoutY(height2 + height12);
+                ((Label) grpBlock_.getChildren().get(5)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(6)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(6)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
-                ((Label) grpBlock_.getChildren().get(8)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(8)).setLayoutY(height5);
-                ((Label) grpBlock_.getChildren().get(8)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(9)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(9)).setLayoutY(height5);
+                ((Label) grpBlock_.getChildren().get(9)).setPrefHeight(height6);
                 break;
             case NOT_BITS:
             case TIMER:
@@ -3219,20 +3464,22 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height2 - height12);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(4)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(4)).setLayoutY(height2 - height12);
+                ((Label) grpBlock_.getChildren().get(4)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(5)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
-                ((Label) grpBlock_.getChildren().get(7)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(7)).setLayoutY(height5);
-                ((Label) grpBlock_.getChildren().get(7)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(8)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(8)).setLayoutY(height5);
+                ((Label) grpBlock_.getChildren().get(8)).setPrefHeight(height6);
                 break;
             case TIMER_NOT:
             case COUNTER_NOT:
@@ -3241,22 +3488,24 @@ public class LadderGridPane extends AnchorPane {
                 ((Label) grpBlock_.getChildren().get(1)).setFont(Font.font(height6));
                 ((Label) grpBlock_.getChildren().get(1)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(2)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(2)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(2)).setPrefHeight(height6);
                 ((Label) grpBlock_.getChildren().get(3)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height2 - height12);
+                ((Label) grpBlock_.getChildren().get(3)).setLayoutY(height - height4);
                 ((Label) grpBlock_.getChildren().get(3)).setPrefHeight(height6);
-                ((Line) grpBlock_.getChildren().get(4)).setStartY(height2);
-                ((Line) grpBlock_.getChildren().get(4)).setEndY(height2);
-                ((Line) grpBlock_.getChildren().get(5)).setStartY(height4);
-                ((Line) grpBlock_.getChildren().get(5)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(4)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(4)).setLayoutY(height2 - height12);
+                ((Label) grpBlock_.getChildren().get(4)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(5)).setStartY(height2);
+                ((Line) grpBlock_.getChildren().get(5)).setEndY(height2);
                 ((Line) grpBlock_.getChildren().get(6)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(6)).setEndY(height - height4);
                 ((Line) grpBlock_.getChildren().get(7)).setStartY(height4);
                 ((Line) grpBlock_.getChildren().get(7)).setEndY(height - height4);
-                ((Label) grpBlock_.getChildren().get(8)).setFont(Font.font(height6));
-                ((Label) grpBlock_.getChildren().get(8)).setLayoutY(height5);
-                ((Label) grpBlock_.getChildren().get(8)).setPrefHeight(height6);
+                ((Line) grpBlock_.getChildren().get(8)).setStartY(height4);
+                ((Line) grpBlock_.getChildren().get(8)).setEndY(height - height4);
+                ((Label) grpBlock_.getChildren().get(9)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(9)).setLayoutY(height5);
+                ((Label) grpBlock_.getChildren().get(9)).setPrefHeight(height6);
                 break;
         }
     }
@@ -3441,7 +3690,7 @@ public class LadderGridPane extends AnchorPane {
             case COUNTER_NOT:
             case MOVE:
             case SCRIPT:
-                ((Label) grpBlock_.getChildren().get(2)).setText(ladderGrid_.getComment());
+                ((Label) grpBlock_.getChildren().get(3)).setText(ladderGrid_.getComment());
                 break;
         }
     }
@@ -3465,17 +3714,17 @@ public class LadderGridPane extends AnchorPane {
                 if (ladderGrid_.getBlockFunctions()[0].isNumber()) {
                     switch (ladderGrid_.getBlockFunctions()[0].getRadix()) {
                         case 10:
-                            ((Label) grpBlock_.getChildren().get(3)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue()));
+                            ((Label) grpBlock_.getChildren().get(4)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue()));
                             break;
                         case 16:
-                            ((Label) grpBlock_.getChildren().get(3)).setText("0x" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 16));
+                            ((Label) grpBlock_.getChildren().get(4)).setText("0x" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 16));
                             break;
                         case 2:
-                            ((Label) grpBlock_.getChildren().get(3)).setText("0b" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 2));
+                            ((Label) grpBlock_.getChildren().get(4)).setText("0b" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 2));
                             break;
                     }
                 } else {
-                    ((Label) grpBlock_.getChildren().get(3)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
+                    ((Label) grpBlock_.getChildren().get(4)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
                 }
                 break;
             case AND_BITS:
@@ -3492,33 +3741,33 @@ public class LadderGridPane extends AnchorPane {
                 if (ladderGrid_.getBlockFunctions()[0].isNumber()) {
                     switch (ladderGrid_.getBlockFunctions()[0].getRadix()) {
                         case 10:
-                            ((Label) grpBlock_.getChildren().get(3)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue()));
+                            ((Label) grpBlock_.getChildren().get(4)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue()));
                             break;
                         case 16:
-                            ((Label) grpBlock_.getChildren().get(3)).setText("0x" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 16));
+                            ((Label) grpBlock_.getChildren().get(4)).setText("0x" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 16));
                             break;
                         case 2:
-                            ((Label) grpBlock_.getChildren().get(3)).setText("0b" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 2));
+                            ((Label) grpBlock_.getChildren().get(4)).setText("0b" + Long.toString((long) ladderGrid_.getBlockFunctions()[0].getValue(), 2));
                             break;
                     }
                 } else {
-                    ((Label) grpBlock_.getChildren().get(3)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
+                    ((Label) grpBlock_.getChildren().get(4)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
                 }
 
                 if (ladderGrid_.getBlockFunctions()[1].isNumber()) {
                     switch (ladderGrid_.getBlockFunctions()[1].getRadix()) {
                         case 10:
-                            ((Label) grpBlock_.getChildren().get(4)).setText(Double.toString(ladderGrid_.getBlockFunctions()[1].getValue()));
+                            ((Label) grpBlock_.getChildren().get(5)).setText(Double.toString(ladderGrid_.getBlockFunctions()[1].getValue()));
                             break;
                         case 16:
-                            ((Label) grpBlock_.getChildren().get(4)).setText("0x" + Long.toString((long) ladderGrid_.getBlockFunctions()[1].getValue(), 16));
+                            ((Label) grpBlock_.getChildren().get(5)).setText("0x" + Long.toString((long) ladderGrid_.getBlockFunctions()[1].getValue(), 16));
                             break;
                         case 2:
-                            ((Label) grpBlock_.getChildren().get(4)).setText("0b" + Long.toString((long) ladderGrid_.getBlockFunctions()[1].getValue(), 2));
+                            ((Label) grpBlock_.getChildren().get(5)).setText("0b" + Long.toString((long) ladderGrid_.getBlockFunctions()[1].getValue(), 2));
                             break;
                     }
                 } else {
-                    ((Label) grpBlock_.getChildren().get(4)).setText(ladderGrid_.getBlockFunctions()[1].getAddress());
+                    ((Label) grpBlock_.getChildren().get(5)).setText(ladderGrid_.getBlockFunctions()[1].getAddress());
                 }
                 break;
             case TIMER:
@@ -3527,20 +3776,20 @@ public class LadderGridPane extends AnchorPane {
                     if (!ladderGrid_.isBlockLd()) {
                         switch (ladderGrid_.getBlockFunctions()[0].getRadix()) {
                             case 10:
-                                ((Label) grpBlock_.getChildren().get(3)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()));
+                                ((Label) grpBlock_.getChildren().get(4)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()));
                                 break;
                             case 16:
-                                ((Label) grpBlock_.getChildren().get(3)).setText("0x" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 16));
+                                ((Label) grpBlock_.getChildren().get(4)).setText("0x" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 16));
                                 break;
                             case 2:
-                                ((Label) grpBlock_.getChildren().get(3)).setText("0b" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 2));
+                                ((Label) grpBlock_.getChildren().get(4)).setText("0b" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 2));
                                 break;
                         }
                     } else {
-                        ((Label) grpBlock_.getChildren().get(3)).setText("0");
+                        ((Label) grpBlock_.getChildren().get(4)).setText("0");
                     }
                 } else {
-                    ((Label) grpBlock_.getChildren().get(3)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
+                    ((Label) grpBlock_.getChildren().get(4)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
                 }
                 break;
             case TIMER_NOT:
@@ -3549,30 +3798,30 @@ public class LadderGridPane extends AnchorPane {
                     if (ladderGrid_.isBlockLd()) {
                         switch (ladderGrid_.getBlockFunctions()[0].getRadix()) {
                             case 10:
-                                ((Label) grpBlock_.getChildren().get(3)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()));
+                                ((Label) grpBlock_.getChildren().get(4)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()));
                                 break;
                             case 16:
-                                ((Label) grpBlock_.getChildren().get(3)).setText("0x" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 16));
+                                ((Label) grpBlock_.getChildren().get(4)).setText("0x" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 16));
                                 break;
                             case 2:
-                                ((Label) grpBlock_.getChildren().get(3)).setText("0b" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 2));
+                                ((Label) grpBlock_.getChildren().get(4)).setText("0b" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue() - ladderGrid_.getCumulativeValue()), 2));
                                 break;
                         }
                     } else {
                         switch (ladderGrid_.getBlockFunctions()[0].getRadix()) {
                             case 10:
-                                ((Label) grpBlock_.getChildren().get(3)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue()));
+                                ((Label) grpBlock_.getChildren().get(4)).setText(Double.toString(ladderGrid_.getBlockFunctions()[0].getValue()));
                                 break;
                             case 16:
-                                ((Label) grpBlock_.getChildren().get(3)).setText("0x" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue()), 16));
+                                ((Label) grpBlock_.getChildren().get(4)).setText("0x" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue()), 16));
                                 break;
                             case 2:
-                                ((Label) grpBlock_.getChildren().get(3)).setText("0b" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue()), 2));
+                                ((Label) grpBlock_.getChildren().get(4)).setText("0b" + Long.toString((long) (ladderGrid_.getBlockFunctions()[0].getValue()), 2));
                                 break;
                         }
                     }
                 } else {
-                    ((Label) grpBlock_.getChildren().get(3)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
+                    ((Label) grpBlock_.getChildren().get(4)).setText(ladderGrid_.getBlockFunctions()[0].getAddress());
                 }
                 break;
         }
@@ -3584,7 +3833,7 @@ public class LadderGridPane extends AnchorPane {
     public void changeBlockScript() {
         switch (ladderGrid_.getBlock()) {
             case SCRIPT:
-                ((Label) grpBlock_.getChildren().get(3)).setText(ladderGrid_.getBlockScript());
+                ((Label) grpBlock_.getChildren().get(4)).setText(ladderGrid_.getBlockScript());
                 break;
         }
     }
