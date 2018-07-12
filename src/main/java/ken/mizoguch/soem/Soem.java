@@ -408,6 +408,35 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
+    public Byte[] sdoRead(int slave, int index, int subIndex, int byteSize) {
+        if (context_ != null) {
+            Pointer psize = Memory.allocate(runtime_, Integer.BYTES);
+            Pointer p = Memory.allocate(runtime_, byteSize);
+
+            psize.putInt(0, byteSize);
+            if (soem_.ecx_SDOread(context_, slave, index, subIndex, SoemOsal.FALSE, psize, p, SoemEtherCATType.EC_TIMEOUTRXM) > 0) {
+                Byte[] result = new Byte[psize.getInt(0)];
+                for (int i = 0; i < result.length; i++) {
+                    result[i] = p.getByte(i);
+                }
+                return result;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Integer sdoWrite(int slave, int index, int subIndex, int byteSize, byte[] value) {
+        if (context_ != null) {
+            Pointer p = Memory.allocate(runtime_, byteSize);
+
+            p.put(0, value, 0, value.length);
+            return soem_.ecx_SDOwrite(context_, slave, index, subIndex, SoemOsal.FALSE, byteSize, p, SoemEtherCATType.EC_TIMEOUTRXM);
+        }
+        return null;
+    }
+
+    @Override
     public Long in(int slave, long bitsOffset, long bitsMask) {
         if (context_ != null) {
             if ((bitsOffset >= 0) && (bitsOffset < context_.slavelist[slave].Ibits.get())) {

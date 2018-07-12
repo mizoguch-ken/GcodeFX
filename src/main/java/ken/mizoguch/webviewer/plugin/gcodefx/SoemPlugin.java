@@ -34,6 +34,10 @@ public interface SoemPlugin {
 
     public Boolean docheckstate();
 
+    public Byte[] sdoRead(int slave, int index, int subIndex, int byteSize);
+
+    public Integer sdoWrite(int slave, int index, int subIndex, int byteSize, byte[] value);
+
     public Long in(int slave, long bitsOffset, long bitsMask);
 
     public Long out(int slave, long bitsOffset, long bitsMask);
