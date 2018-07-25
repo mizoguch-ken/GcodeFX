@@ -178,6 +178,15 @@ Address value 0 is False, Otherwise it is True.
 To display the input box, press the Enter key on the ladder.  
 入力ボックスを表示するには、ラダーでEnterキーを押します。  
   
+Block connection is Ctrl + arrow keys.  
+ブロック接続はCtrl + 矢印キーです。  
+  
+Flip with / key.  
+/ キーで反転  
+  
+Rising / Falling with Ctrl + / keys.  
+Ctrl + / キーで立上がり/立下り。  
+  
 ### Load 入力
 |Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>書き方<br>([]はオプション)|
 |:-|:-|:-|:-|
@@ -199,7 +208,7 @@ To display the input box, press the Enter key on the ladder.
 ### Load Function 入力機能
 |Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>(addr/const Is addr or const)<br>書き方<br>([]はオプション)<br>(addr/constは addr または const)|
 |:-|:-|:-|:-|
-|COMPARISON_EQUAL| addr<br>-\|= addr1/const1\|-|if addr == addr1/const1 then True else False|= addr addr1/const1[;comment]|
+|COMPARISON_EQUAL| addr<br>-\|= addr1/const1\|-|if addr = addr1/const1 then True else False|= addr addr1/const1[;comment]|
 |COMPARISON_NOT_EQUAL| addr<br>-\|<> addr1/const1\|-|if addr <> addr1/const1 then True else False|<> addr addr1/const1[;comment]|
 |COMPARISON_LESS| addr<br>-\|< addr1/const1\|-|if addr < addr1/const1 then True else False|< addr addr1/const1[;comment]|
 |COMPARISON_LESS_EQUAL| addr<br>-\|<= addr1/const1\|-|if addr <= addr1/const1 then True else False|<= addr addr1/const1[;comment]|
