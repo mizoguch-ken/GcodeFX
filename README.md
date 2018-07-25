@@ -246,6 +246,6 @@ WEBをスクリプトで登録する必要があります。
 ```
 ladders.registerWeb();
 ```
-|Name<br>名前|Block<br>ブロック| |Writing ([] Is optional./ Is )<br>書き方 ([]はオプション)|
+|Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional.)<br>書き方<br>([]はオプション)|
 |:-|:-|:-|:-|
 |SCRIPT| addr<br>-\|SCR script\|| |scr addr;script[;comment]|
