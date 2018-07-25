@@ -167,3 +167,76 @@ O1
 [web] フォルダの中の [debugger]->[index.html] を開く  
 9. [***. dbg] Select file  
 [***. dbg] ファイルを選択  
+
+## Ladders ラダー
+It is input from the left side of the block and is output from the right side.  
+ブロックの左側から入力され、右側から出力されます。  
+  
+Address value 0 is False, Otherwise it is True.  
+アドレスの値が0の場合は False です。 それ以外の場合は True です。  
+  
+To display the input box, press the Enter key on the ladder.  
+入力ボックスを表示するには、ラダーでEnterキーを押します。  
+  
+### Load 入力
+|Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>書き方<br>([]はオプション)|
+|:-|:-|:-|:-|
+|LOAD| addr<br>-\|   \|-| |ld addr[;comment]|
+|LOAD_NOT| addr<br>-\|/  \|-| |/ld addr[;comment]|
+|LOAD_RISING| addr<br>-\| ↑ \|-| |@ld addr[;comment]|
+|LOAD_RISING_NOT| addr<br>-\|/↑ \|-| |/@ld addr[;comment]|
+|LOAD_FALLING| addr<br>-\| ↓ \|-| |%ld addr[;comment]|
+|LOAD_FALLING_NOT| addr<br>-\|/↓ \|-| |/%ld addr[;comment]|
+### Out 出力
+|Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>書き方<br>([]はオプション)|
+|:-|:-|:-|:-|
+|OUT| addr<br>-(   )| |out addr[;comment]|
+|OUT_NOT| addr<br>-(/  )| |/out addr[;comment]|
+|OUT_RISING| addr<br>-( ↑ )| |@out addr[;comment]|
+|OUT_RISING_NOT| addr<br>-(/↑ )| |/@out addr[;comment]|
+|OUT_FALLING| addr<br>-( ↓ )| |%out addr[;comment]|
+|OUT_FALLING_NOT| addr<br>-(/↓ )| |/%out addr[;comment]|
+### Load Function 入力機能
+|Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>(addr/const Is addr or const)<br>書き方<br>([]はオプション)<br>(addr/constは addr または const)|
+|:-|:-|:-|:-|
+|COMPARISON_EQUAL| addr<br>-\|= addr1/const1\|-|if addr == addr1/const1 then True else False|= addr addr1/const1[;comment]|
+|COMPARISON_NOT_EQUAL| addr<br>-\|<> addr1/const1\|-|if addr <> addr1/const1 then True else False|<> addr addr1/const1[;comment]|
+|COMPARISON_LESS| addr<br>-\|< addr1/const1\|-|if addr < addr1/const1 then True else False|< addr addr1/const1[;comment]|
+|COMPARISON_LESS_EQUAL| addr<br>-\|<= addr1/const1\|-|if addr <= addr1/const1 then True else False|<= addr addr1/const1[;comment]|
+|COMPARISON_GREATER| addr<br>-\|> addr1/const1\|-|if addr > addr1/const1 then True else False|> addr addr1/const1[;comment]|
+|COMPARISON_GREATER_EQUAL| addr<br>-\|>= addr1/const1\|-|if addr >= addr1/const1 then True else False|>= addr addr1/const1[;comment]|
+|COMPARISON_AND_BITS| addr<br>-\|& addr1/const1\|-|if addr & addr1/const1 then True else False|& addr addr1/const1[;comment]|
+|COMPARISON_OR_BITS| addr<br>-\|\| addr1/const1\|-|if addr \| addr1/const1 then True else False|\| addr addr1/const1[;comment]|
+|COMPARISON_XOR_BITS| addr<br>-\|^ addr1/const1\|-|if addr ^ addr1/const1 then True else False|^ addr addr1/const1[;comment]|
+### Out Function 出力機能
+|Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>(addr/const Is addr or const)<br>書き方<br>([]はオプション)<br>(addr/constは addr または const)|
+|:-|:-|:-|:-|
+|SET| addr<br>-\|SET \|| |set addr[;comment]|
+|RESET| addr<br>-\|RES \|| |res addr[;comment]|
+|AND_BITS| addr<br>-\|AND addr1/const1 addr2/const2\||addr=addr1/const1 & addr2/const2|and addr addr1/const1 addr2/const2[;comment]|
+|OR_BITS| addr<br>-\|OR addr1/const1 addr2/const2\||addr=addr1/const1 \| addr2/const2|or addr addr1/const1 addr2/const2[;comment]|
+|XOR_BITS| addr<br>-\|XOR addr1/const1 addr2/const2\||addr=addr1/const1 ^ addr2/const2|xor addr addr1/const1 addr2/const2[;comment]|
+|NOT_BITS| addr<br>-\|NOT addr1/const1\||addr=~addr1/const1|not addr addr1/const1[;comment]|
+|ADDITION| addr<br>-\|ADD addr1/const1 addr2/const2\||addr=addr1/const1 + addr2/const2|add addr addr1/const1 addr2/const2[;comment]|
+|SUBTRACTION| addr<br>-\|SUB addr1/const1 addr2/const2\||addr=addr1/const1 - addr2/const2|sub addr addr1/const1 addr2/const2[;comment]|
+|MULTIPLICATION| addr<br>-\|MUL addr1/const1 addr2/const2\||addr=addr1/const1 * addr2/const2|mul addr addr1/const1 addr2/const2[;comment]|
+|DIVISION| addr<br>-\|DIV addr1/const1 addr2/const2\||addr=addr1/const1 / addr2/const2|div addr addr1/const1 addr2/const2[;comment]|
+|AVERAGE| addr<br>-\|AVE addr1/const1 addr2/const2\||addr=(addr1/const1 + addr2/const2) / 2|ave addr addr1/const1 addr2/const2[;comment]|
+|SHIFT_LEFT_BITS| addr<br>-\|SFL addr1/const1 addr2/const2\||addr=addr1/const1 << addr2/const2|sfl addr addr1/const1 addr2/const2[;comment]|
+|SHIFT_RIGHT_BITS| addr<br>-\|SFR addr1/const1 addr2/const2\||addr=addr1/const1 >> addr2/const2|sfr addr addr1/const1 addr2/const2[;comment]|
+|SIGMOID| addr<br>-\|SIG addr1/const1 addr2/const2\||addr=(Tanh(addr1/const1 * addr2/const2 / 2) + 1) / 2|sig addr addr1/const1 addr2/const2[;comment]|
+|RANDOM| addr<br>-\|RND \||addr=Random()|rnd addr[;comment]|
+|TIMER| addr<br>-\|TIM addr1/const1\|| |tim addr addr1/const1[;comment]|
+|TIMER_NOT| addr<br>-\|/TIM addr1/const1\|| |/tim addr addr1/const1[;comment]|
+|COUNTER| addr<br>-\|CNT addr1/const1\|| |cnt addr addr1/const1[;comment]|
+|COUNTER_NOT| addr<br>-\|/CNT addr1/const1\|| |/cnt addr addr1/const1[;comment]|
+|MOVE| addr<br>-\|MOV addr1/const1\||addr=addr1/const1|mov addr addr1/const1[;comment]|
+### Collaboration 連携
+It is necessary to register WEB in script.  
+WEBをスクリプトで登録する必要があります。  
+```
+ladders.registerWeb();
+```
+|Name<br>名前|Block<br>ブロック| |Writing ([] Is optional./ Is )<br>書き方 ([]はオプション)|
+|:-|:-|:-|:-|
+|SCRIPT| addr<br>-\|SCR script\|| |scr addr;script[;comment]|
