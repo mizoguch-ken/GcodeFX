@@ -190,21 +190,21 @@ Ctrl + / キーで立上がり/立下り。
 ### Load 入力
 |Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>書き方<br>([]はオプション)|
 |:-|:-|:-|:-|
-|LOAD| addr<br>-\|   \|-| |ld addr[;comment]|
-|LOAD_NOT| addr<br>-\|/  \|-| |/ld addr[;comment]|
-|LOAD_RISING| addr<br>-\| ↑ \|-| |@ld addr[;comment]|
-|LOAD_RISING_NOT| addr<br>-\|/↑ \|-| |/@ld addr[;comment]|
-|LOAD_FALLING| addr<br>-\| ↓ \|-| |%ld addr[;comment]|
-|LOAD_FALLING_NOT| addr<br>-\|/↓ \|-| |/%ld addr[;comment]|
+|LOAD| addr<br>-\|   \|-|if addr<>0 then True else False|ld addr[;comment]|
+|LOAD_NOT| addr<br>-\|/  \|-|if addr<>0 then False else True|/ld addr[;comment]|
+|LOAD_RISING| addr<br>-\| ↑ \|-|if Rising-addr then True else False|@ld addr[;comment]|
+|LOAD_RISING_NOT| addr<br>-\|/↑ \|-|if Rising-addr then False else True|/@ld addr[;comment]|
+|LOAD_FALLING| addr<br>-\| ↓ \|-|if Falling-addr then True else False|%ld addr[;comment]|
+|LOAD_FALLING_NOT| addr<br>-\|/↓ \|-|if Falling-addr then False else True|/%ld addr[;comment]|
 ### Out 出力
 |Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>書き方<br>([]はオプション)|
 |:-|:-|:-|:-|
-|OUT| addr<br>-(   )| |out addr[;comment]|
-|OUT_NOT| addr<br>-(/  )| |/out addr[;comment]|
-|OUT_RISING| addr<br>-( ↑ )| |@out addr[;comment]|
-|OUT_RISING_NOT| addr<br>-(/↑ )| |/@out addr[;comment]|
-|OUT_FALLING| addr<br>-( ↓ )| |%out addr[;comment]|
-|OUT_FALLING_NOT| addr<br>-(/↓ )| |/%out addr[;comment]|
+|OUT| addr<br>-(   )|if True then addr=1 else addr=0|out addr[;comment]|
+|OUT_NOT| addr<br>-(/  )|if True then addr=0 else addr=1|/out addr[;comment]|
+|OUT_RISING| addr<br>-( ↑ )|if Rising then addr=1 else addr=0|@out addr[;comment]|
+|OUT_RISING_NOT| addr<br>-(/↑ )|if Rising then addr=0 else addr=1|/@out addr[;comment]|
+|OUT_FALLING| addr<br>-( ↓ )|if Falling then addr=1 else addr=0|%out addr[;comment]|
+|OUT_FALLING_NOT| addr<br>-(/↓ )|if Falling then addr=0 else addr=1|/%out addr[;comment]|
 ### Load Function 入力機能
 |Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>(addr/const Is addr or const)<br>書き方<br>([]はオプション)<br>(addr/constは addr または const)|
 |:-|:-|:-|:-|
@@ -220,8 +220,8 @@ Ctrl + / キーで立上がり/立下り。
 ### Out Function 出力機能
 |Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional)<br>(addr/const Is addr or const)<br>書き方<br>([]はオプション)<br>(addr/constは addr または const)|
 |:-|:-|:-|:-|
-|SET| addr<br>-\|SET \|| |set addr[;comment]|
-|RESET| addr<br>-\|RES \|| |res addr[;comment]|
+|SET| addr<br>-\|SET \||addr=1|set addr[;comment]|
+|RESET| addr<br>-\|RES \||addr=0|res addr[;comment]|
 |AND_BITS| addr<br>-\|AND addr1/const1 addr2/const2\||addr=addr1/const1 & addr2/const2|and addr addr1/const1 addr2/const2[;comment]|
 |OR_BITS| addr<br>-\|OR addr1/const1 addr2/const2\||addr=addr1/const1 \| addr2/const2|or addr addr1/const1 addr2/const2[;comment]|
 |XOR_BITS| addr<br>-\|XOR addr1/const1 addr2/const2\||addr=addr1/const1 ^ addr2/const2|xor addr addr1/const1 addr2/const2[;comment]|
