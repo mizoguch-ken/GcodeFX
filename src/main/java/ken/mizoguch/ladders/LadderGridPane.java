@@ -2505,6 +2505,7 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockHeight(getHeight());
                 changeAddress();
                 changeComment();
+                changeBlockScript();
                 break;
         }
     }
