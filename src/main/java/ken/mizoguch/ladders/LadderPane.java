@@ -172,6 +172,7 @@ public class LadderPane extends GridPane {
         LadderGridPane gridPane;
         double viewMinX, viewMinY, viewMaxX, viewMaxY;
         double gridMinX, gridMinY, gridMaxX, gridMaxY;
+        String address;
         int idx, index, size;
 
         viewMinX = -scrollPane.getViewportBounds().getMinX();
@@ -217,8 +218,13 @@ public class LadderPane extends GridPane {
                             case COMPARISON_XOR_BITS:
                                 grid.setBlockValue(io.getValue());
                                 if (!grid.getBlockFunctions()[0].isNumber()) {
-                                    if (ioMap.get(idx).containsKey(grid.getBlockFunctions()[0].getAddress())) {
-                                        grid.getBlockFunctions()[0].setValue(ioMap.get(idx).get(grid.getBlockFunctions()[0].getAddress()).getValue());
+                                    address = grid.getBlockFunctions()[0].getAddress();
+                                    idx = Ladders.LADDER_GLOBAL_ADDRESS_INDEX;
+                                    if (address.startsWith(Ladders.LADDER_LOCAL_ADDRESS_PREFIX)) {
+                                        idx = ladder_.getIdx();
+                                    }
+                                    if (ioMap.get(idx).containsKey(address)) {
+                                        grid.getBlockFunctions()[0].setValue(ioMap.get(idx).get(address).getValue());
                                     }
                                 }
                                 gridPane.changeBlockIO();
