@@ -27,8 +27,8 @@ public class LadderIo {
     private boolean isDefaultLd_, isLd_, isLdRising_, isLdFalling_, isOldLd_;
 
     private Object scriptObject_;
-    private String script_;
-    private boolean isExecuteScript_, isCycled_;
+    private final StringBuffer script_;
+    private boolean isCycled_;
 
     private final String undefined_ = "undefined";
 
@@ -48,8 +48,7 @@ public class LadderIo {
         isLdRising_ = false;
         isLdFalling_ = false;
         isOldLd_ = false;
-        script_ = null;
-        isExecuteScript_ = false;
+        script_ = new StringBuffer();
         isCycled_ = false;
     }
 
@@ -326,30 +325,31 @@ public class LadderIo {
     public boolean setScript(String script) {
         if (webEngine_ != null) {
             isDefaultLd_ = false;
-            if ((!isExecuteScript_) && (script != null)) {
-                isExecuteScript_ = true;
-                script_ = script;
+            if (script != null) {
+                script_.append(script).append(";");
                 Platform.runLater(() -> {
-                    if ((webEngine_ != null) && (script_ != null)) {
-                        if (state_ == Worker.State.SUCCEEDED) {
-                            try {
-                                scriptObject_ = webEngine_.executeScript(script_);
-                                if (!undefined_.equals(scriptObject_)) {
-                                    if (scriptObject_ instanceof Integer) {
-                                        value_ = (Integer) scriptObject_;
-                                    } else if (scriptObject_ instanceof Double) {
-                                        value_ = (Double) scriptObject_;
+                    if (script_.length() > 0) {
+                        if (webEngine_ != null) {
+                            if (state_ == Worker.State.SUCCEEDED) {
+                                try {
+                                    scriptObject_ = webEngine_.executeScript(script_.toString());
+                                    if (!undefined_.equals(scriptObject_)) {
+                                        if (scriptObject_ instanceof Integer) {
+                                            value_ = (Integer) scriptObject_;
+                                        } else if (scriptObject_ instanceof Double) {
+                                            value_ = (Double) scriptObject_;
+                                        }
                                     }
+                                } catch (JSException | ClassCastException ex) {
+                                    Console.writeStackTrace(LadderEnums.LADDER.toString(), ex);
                                 }
-                            } catch (JSException | ClassCastException ex) {
-                                Console.writeStackTrace(LadderEnums.LADDER.toString(), ex);
                             }
+                            isLd_ = (value_ != 0.0);
+                            chehckEdge();
+                            isOldLd_ = isLd_;
                         }
-                        isLd_ = (value_ != 0.0);
-                        chehckEdge();
-                        isOldLd_ = isLd_;
+                        script_.delete(0, script_.length());
                     }
-                    isExecuteScript_ = false;
                 });
                 return true;
             }
