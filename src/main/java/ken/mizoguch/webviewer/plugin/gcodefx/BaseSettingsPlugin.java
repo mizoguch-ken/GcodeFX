@@ -74,4 +74,8 @@ public interface BaseSettingsPlugin {
     public Boolean isSerialObserveDSRCheck();
 
     public void setSerialObserveDSRCheck(Boolean check);
+
+    public Boolean isSerialObserveDC2DC4Check();
+
+    public void setSerialObserveDC2DC4Check(Boolean check);
 }

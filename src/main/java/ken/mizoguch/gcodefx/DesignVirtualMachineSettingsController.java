@@ -99,6 +99,8 @@ public class DesignVirtualMachineSettingsController implements Initializable {
     @FXML
     private CheckBox chkSerialObserveDSR;
     @FXML
+    private CheckBox chkSerialObserveDC2DC4;
+    @FXML
     private Label lblBackGroundFile;
     @FXML
     private TextField txtBackGroundFile1;
@@ -913,6 +915,9 @@ public class DesignVirtualMachineSettingsController implements Initializable {
         });
         chkSerialObserveDSR.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
             baseSettings_.setSerialObserveDSRCheck(newValue, false);
+        });
+        chkSerialObserveDC2DC4.selectedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            baseSettings_.setSerialObserveDC2DC4Check(newValue, false);
         });
         txtBackGroundFile1.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
             virtualMachineSettings_.setBackGroundFileValue(0, newValue, false);
@@ -1842,6 +1847,8 @@ public class DesignVirtualMachineSettingsController implements Initializable {
         chkSerialObserveCTS.setText(DesignEnums.SERIAL_OBSERVE_CTS.toString());
         chkSerialObserveDSR.setTooltip(new Tooltip(DesignEnums.SERIAL_OBSERVE_DSR_TIP.toString()));
         chkSerialObserveDSR.setText(DesignEnums.SERIAL_OBSERVE_DSR.toString());
+        chkSerialObserveDC2DC4.setTooltip(new Tooltip(DesignEnums.SERIAL_OBSERVE_DC2DC4_TIP.toString()));
+        chkSerialObserveDC2DC4.setText(DesignEnums.SERIAL_OBSERVE_DC2DC4.toString());
         lblBackGroundFile.setText(DesignEnums.BACK_GROUND_FILE.toString());
         txtBackGroundFile1.setTooltip(new Tooltip(DesignEnums.BACK_GROUND_FILE_TIP.toString()));
         btnBackGroundFile1.setTooltip(new Tooltip(DesignEnums.BACK_GROUND_FILE_BROWSE_TIP.toString()));
@@ -2357,6 +2364,7 @@ public class DesignVirtualMachineSettingsController implements Initializable {
         chkSerialCharacter.setSelected(baseSettings_.isSerialCharacterCheck());
         chkSerialObserveCTS.setSelected(baseSettings_.isSerialObserveCTSCheck());
         chkSerialObserveDSR.setSelected(baseSettings_.isSerialObserveDSRCheck());
+        chkSerialObserveDC2DC4.setSelected(baseSettings_.isSerialObserveDC2DC4Check());
         txtBackGroundFile1.setText(virtualMachineSettings_.getBackGroundFileValue(0));
         txtBackGroundFile2.setText(virtualMachineSettings_.getBackGroundFileValue(1));
         txtBackGroundFile3.setText(virtualMachineSettings_.getBackGroundFileValue(2));
@@ -2696,6 +2704,7 @@ public class DesignVirtualMachineSettingsController implements Initializable {
         chkSerialCharacter.setDisable(!bln);
         chkSerialObserveCTS.setDisable(!bln);
         chkSerialObserveDSR.setDisable(!bln);
+        chkSerialObserveDC2DC4.setDisable(!bln);
     }
 
     public void runViewToolChange() {

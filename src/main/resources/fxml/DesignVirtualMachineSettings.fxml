@@ -121,6 +121,7 @@
                               <CheckBox fx:id="chkSerialCharacter" mnemonicParsing="false" text="1 character send" />
                               <CheckBox fx:id="chkSerialObserveCTS" mnemonicParsing="false" text="CTS Status Monitor" />
                               <CheckBox fx:id="chkSerialObserveDSR" mnemonicParsing="false" text="DSR Status Monitor" />
+                              <CheckBox fx:id="chkSerialObserveDC2DC4" mnemonicParsing="false" text="DC2/DC4 Status Monitor" />
                            </children>
                         </HBox>
                         <Separator />

@@ -609,6 +609,7 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
         private Boolean serialCharacterCheck;
         private Boolean serialObserveCTSCheck;
         private Boolean serialObserveDSRCheck;
+        private Boolean serialObserveDC2DC4Check;
         private String serialBaudrateValue;
         private String serialDataBitsValue;
         private String serialStopBitsValue;
@@ -874,6 +875,20 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
 
         public void setSerialObserveDSRCheck(Boolean check, boolean update) {
             serialObserveDSRCheck = check;
+        }
+
+        @Override
+        public Boolean isSerialObserveDC2DC4Check() {
+            return serialObserveDC2DC4Check;
+        }
+
+        @Override
+        public void setSerialObserveDC2DC4Check(Boolean check) {
+            setSerialObserveDC2DC4Check(check, true);
+        }
+
+        public void setSerialObserveDC2DC4Check(Boolean check, boolean update) {
+            serialObserveDC2DC4Check = check;
         }
     }
 
@@ -4160,6 +4175,7 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
         baseSettings_.setSerialCharacterCheck(false, false);
         baseSettings_.setSerialObserveCTSCheck(false, false);
         baseSettings_.setSerialObserveDSRCheck(false, false);
+        baseSettings_.setSerialObserveDC2DC4Check(false, false);
         String[] backGroundFiles = new String[3];
         for (i = 0; i < backGroundFiles.length; i++) {
             backGroundFiles[i] = "";
@@ -4379,6 +4395,7 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
                 baseSettings_.setSerialCharacterCheck(Boolean.parseBoolean(properties.getProperty("SERIAL_CHARACTER", "false")), true);
                 baseSettings_.setSerialObserveCTSCheck(Boolean.parseBoolean(properties.getProperty("SERIAL_OBSERVE_CTS", "false")), true);
                 baseSettings_.setSerialObserveDSRCheck(Boolean.parseBoolean(properties.getProperty("SERIAL_OBSERVE_DSR", "false")), true);
+                baseSettings_.setSerialObserveDC2DC4Check(Boolean.parseBoolean(properties.getProperty("SERIAL_OBSERVE_DC2DC4", "false")), true);
                 virtualMachineSettings_.setBackGroundFileValue(0, properties.getProperty("BACKGROUND_FILE_1", ""), true);
                 virtualMachineSettings_.setBackGroundFileValue(1, properties.getProperty("BACKGROUND_FILE_2", ""), true);
                 virtualMachineSettings_.setBackGroundFileValue(2, properties.getProperty("BACKGROUND_FILE_3", ""), true);
@@ -4706,6 +4723,7 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
             baseSettings_.setSerialCharacterCheck(baseSettings_.isSerialCharacterCheck(), true);
             baseSettings_.setSerialObserveCTSCheck(baseSettings_.isSerialObserveCTSCheck(), true);
             baseSettings_.setSerialObserveDSRCheck(baseSettings_.isSerialObserveDSRCheck(), true);
+            baseSettings_.setSerialObserveDC2DC4Check(baseSettings_.isSerialObserveDC2DC4Check(), true);
             virtualMachineSettings_.setBackGroundFileValue(virtualMachineSettings_.getBackGroundFileValue(), true);
             virtualMachineSettings_.setExternalSubProgramDirectoryValue(virtualMachineSettings_.getExternalSubProgramDirectoryValue(), true);
         }
@@ -4774,6 +4792,7 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
                 properties.setProperty("SERIAL_CHARACTER", Boolean.toString(baseSettings_.isSerialCharacterCheck()));
                 properties.setProperty("SERIAL_OBSERVE_CTS", Boolean.toString(baseSettings_.isSerialObserveCTSCheck()));
                 properties.setProperty("SERIAL_OBSERVE_DSR", Boolean.toString(baseSettings_.isSerialObserveDSRCheck()));
+                properties.setProperty("SERIAL_OBSERVE_DC2DC4", Boolean.toString(baseSettings_.isSerialObserveDC2DC4Check()));
                 properties.setProperty("BACKGROUND_FILE_1", virtualMachineSettings_.getBackGroundFileValue(0));
                 properties.setProperty("BACKGROUND_FILE_2", virtualMachineSettings_.getBackGroundFileValue(1));
                 properties.setProperty("BACKGROUND_FILE_3", virtualMachineSettings_.getBackGroundFileValue(2));
@@ -5272,7 +5291,7 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
 
     synchronized private void serialOpen() {
         if (!serial_.isOwned()) {
-            if (serial_.open(baseSettings_.getSerialPortValue(), baseSettings_.getSerialBaudrateValue(), baseSettings_.getSerialDataBitsValue(), baseSettings_.getSerialStopBitsValue(), baseSettings_.getSerialParityValue(), baseSettings_.getSerialBufferLimitValue(), baseSettings_.getSerialDelayValue(), baseSettings_.isSerialCharacterCheck(), baseSettings_.isSerialObserveCTSCheck(), baseSettings_.isSerialObserveDSRCheck())) {
+            if (serial_.open(baseSettings_.getSerialPortValue(), baseSettings_.getSerialBaudrateValue(), baseSettings_.getSerialDataBitsValue(), baseSettings_.getSerialStopBitsValue(), baseSettings_.getSerialParityValue(), baseSettings_.getSerialBufferLimitValue(), baseSettings_.getSerialDelayValue(), baseSettings_.isSerialCharacterCheck(), baseSettings_.isSerialObserveCTSCheck(), baseSettings_.isSerialObserveDSRCheck(), baseSettings_.isSerialObserveDC2DC4Check())) {
                 if (Platform.isFxApplicationThread()) {
                     runSerial();
                 } else {

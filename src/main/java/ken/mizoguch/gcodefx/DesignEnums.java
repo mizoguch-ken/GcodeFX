@@ -73,6 +73,8 @@ public enum DesignEnums {
     SERIAL_OBSERVE_CTS_TIP("CTS Monitor the connection status", "CTS接続状態を監視"),
     SERIAL_OBSERVE_DSR("DSR Status Monitor", "DSR状態監視"),
     SERIAL_OBSERVE_DSR_TIP("DSR Monitor the connection status", "DSR接続状態を監視"),
+    SERIAL_OBSERVE_DC2DC4("DC2/DC4 Status Monitor", "DC2/DC4状態監視"),
+    SERIAL_OBSERVE_DC2DC4_TIP("DC2/DC4 Monitor the connection status", "DC2/DC4接続状態を監視"),
     SERIAL_BAUDRATE("Baudrate", "通信速度"),
     SERIAL_BAUDRATE_TIP("Serial baudrate", "シリアル通信速度"),
     SERIAL_DATA_BITS("Data Bits", "データビット"),

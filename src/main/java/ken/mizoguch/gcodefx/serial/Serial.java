@@ -48,7 +48,7 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
     private BlockingQueue<Integer> line_;
     private BlockingQueue<Character> cout_;
     private SerialPort port_;
-    private boolean owned_, onecharacter_, observects_, observedsr_, softflow_, printflow_, fileflow_, bufferflow_;
+    private boolean owned_, onecharacter_, observects_, observedsr_, observedc2dc4_, softflow_, printflow_, fileflow_, bufferflow_;
     private BlockingQueue<Integer> printdata_;
     private int bufferlimit_;
     private long delay_;
@@ -70,6 +70,7 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
         onecharacter_ = false;
         observects_ = false;
         observedsr_ = false;
+        observedc2dc4_ = false;
         softflow_ = false;
         printflow_ = false;
         fileflow_ = false;
@@ -172,9 +173,10 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
      * @param character
      * @param observects
      * @param observedsr
+     * @param observedc2dc4
      * @return
      */
-    public boolean open(String name, String baud, String databits, String stopbits, String parity, String bufferlimit, String delay, boolean character, boolean observects, boolean observedsr) {
+    public boolean open(String name, String baud, String databits, String stopbits, String parity, String bufferlimit, String delay, boolean character, boolean observects, boolean observedsr, boolean observedc2dc4) {
         if ((name != null) && (baud != null) && (databits != null) && (stopbits != null) && (parity != null) && (bufferlimit != null) && (delay != null)) {
             if (!owned_ && !name.isEmpty() && !baud.isEmpty() && !databits.isEmpty() && !stopbits.isEmpty() && !parity.isEmpty() && !bufferlimit.isEmpty() && !delay.isEmpty()) {
                 try {
@@ -276,6 +278,7 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
                     onecharacter_ = character;
                     observects_ = observects;
                     observedsr_ = observedsr;
+                    observedc2dc4_ = observedc2dc4;
                     owned_ = true;
                     return true;
                 } catch (NoSuchPortException ex) {
@@ -348,6 +351,7 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
         onecharacter_ = false;
         observects_ = false;
         observedsr_ = false;
+        observedc2dc4_ = false;
         owned_ = false;
     }
 
@@ -461,6 +465,14 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
      */
     public boolean isObserveDSR() {
         return observedsr_;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean isObserveDC2DC4() {
+        return observedc2dc4_;
     }
 
     /**
@@ -681,18 +693,26 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
                                     softflow_ = true;
                                     break;
                                 case 0x12:
-                                    printflow_ = true;
-                                    printdata_.clear();
-                                    fileflow_ = false;
+                                    if (observedc2dc4_) {
+                                        printflow_ = true;
+                                        printdata_.clear();
+                                        fileflow_ = false;
+                                    } else {
+                                        printdata_.offer(read);
+                                    }
                                     break;
                                 case 0x13:
                                     softflow_ = false;
                                     break;
                                 case 0x14:
-                                    printWrite();
+                                    if (observedc2dc4_) {
+                                        printWrite();
+                                    } else {
+                                        printdata_.offer(read);
+                                    }
                                     break;
                                 default:
-                                    if (printflow_) {
+                                    if (printflow_ || !observedc2dc4_) {
                                         printdata_.offer(read);
                                         if (read == '%') {
                                             if (fileflow_) {
@@ -788,7 +808,7 @@ public class Serial extends Service<Void> implements SerialPortEventListener {
             }
         }
 
-        if (printflow_) {
+        if (printflow_ || !observedc2dc4_) {
             if (!printdata_.isEmpty()) {
                 if (fileflow_) {
                     char c;
