@@ -4,7 +4,7 @@
 
     <groupId>ken.mizoguch</groupId>
     <artifactId>GcodeFX</artifactId>
-    <version>2018.02.13</version>
+    <version>2018.09.12</version>
     <packaging>jar</packaging>
 
     <name>GcodeFX</name>
