@@ -27,7 +27,8 @@ public class LadderIo {
     private boolean isDefaultLd_, isLd_, isLdRising_, isLdFalling_, isOldLd_;
 
     private Object scriptObject_;
-    private final StringBuffer script_;
+    private final StringBuilder script_;
+    private final Object lockScript_;
     private boolean isCycled_;
 
     private final String undefined_ = "undefined";
@@ -48,7 +49,8 @@ public class LadderIo {
         isLdRising_ = false;
         isLdFalling_ = false;
         isOldLd_ = false;
-        script_ = new StringBuffer();
+        script_ = new StringBuilder();
+        lockScript_ = new Object();
         isCycled_ = false;
     }
 
@@ -326,13 +328,21 @@ public class LadderIo {
         if (webEngine_ != null) {
             isDefaultLd_ = false;
             if (script != null) {
-                script_.append(script).append(";");
+                synchronized (lockScript_) {
+                    script_.append(script).append(";");
+                }
                 Platform.runLater(() -> {
-                    if (script_.length() > 0) {
+                    String executeScript;
+
+                    synchronized (lockScript_) {
+                        executeScript = script_.toString();
+                        script_.delete(0, script_.length());
+                    }
+                    if (executeScript.length() > 0) {
                         if (webEngine_ != null) {
                             if (state_ == Worker.State.SUCCEEDED) {
                                 try {
-                                    scriptObject_ = webEngine_.executeScript(script_.toString());
+                                    scriptObject_ = webEngine_.executeScript(executeScript);
                                     if (!undefined_.equals(scriptObject_)) {
                                         if (scriptObject_ instanceof Integer) {
                                             value_ = (Integer) scriptObject_;
@@ -348,7 +358,6 @@ public class LadderIo {
                             chehckEdge();
                             isOldLd_ = isLd_;
                         }
-                        script_.delete(0, script_.length());
                     }
                 });
                 return true;
