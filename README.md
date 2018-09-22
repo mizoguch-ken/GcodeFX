@@ -16,8 +16,8 @@
  * G-Code, Ladder Logic and WebView collaboration  
  G-Code,ラダーロジックとWebViewerの連携  
 ## Requirement 要件
- * Java 8 update 40 or later  
- Java 8 update 40 以上  
+ * Java 8 update 121 or later  
+ Java 8 update 121 以上  
 ## Dependency 依存
     <dependency>
       <groupId>com.googlecode.java-diff-utils</groupId>
