@@ -858,7 +858,7 @@ public class DesignLaddersController implements Initializable {
         });
 
         // ladder
-        tabLadder.setOnKeyPressed((KeyEvent event) -> {
+        tabLadder.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             event.consume();
 
             if (tabLadder.getSelectionModel().getSelectedItem() != null) {
