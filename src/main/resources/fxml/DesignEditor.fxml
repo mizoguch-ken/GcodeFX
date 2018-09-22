@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
-<VBox fx:id="paneRoot" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ken.mizoguch.gcodefx.DesignEditorController">
+<VBox fx:id="paneRoot" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ken.mizoguch.gcodefx.DesignEditorController">
     <children>
         <MenuBar fx:id="menuBar">
             <menus>
