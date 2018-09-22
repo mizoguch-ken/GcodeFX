@@ -562,7 +562,7 @@ public class LadderCommand {
         scrollPane.vvalueProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             scrollPane.requestLayout();
         });
-        scrollPane.setOnKeyPressed((KeyEvent event) -> {
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
             event.consume();
 
             if (ladders != null) {
