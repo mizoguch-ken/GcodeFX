@@ -2376,31 +2376,15 @@ var TextInput = function(parentNode, host) {
     };
     
     var handleClipboardData = function(e, data, forceIEMime) {
-        var clipboardData = e.clipboardData || window.clipboardData;
+        var clipboardData = window.clipboardData || e.clipboardData;
         if (!clipboardData || BROKEN_SETDATA)
             return;
         var mime = USE_IE_MIME_TYPE || forceIEMime ? "Text" : "text/plain";
         try {
             if (data) {
-                var eClipboardSetData = false;
-                var windowClipboardSetData = false;
-                if (e.clipboardData) {
-                    eClipboardSetData = e.clipboardData.setData(mime, data);
-                }
-                if (window.clipboardData) {
-                    windowClipboardSetData = window.clipboardData.setData(mime, data);
-                }
-                return (eClipboardSetData | windowClipboardSetData) !== false;
+                return clipboardData.setData(mime, data) !== false;
             } else {
-                var eClipboardGetData;
-                var windowClipboardGetData;
-                if (e.clipboardData) {
-                    eClipboardGetData = e.clipboardData.getData(mime);
-                }
-                if (window.clipboardData) {
-                    windowClipboardGetData = window.clipboardData.getData(mime);
-                }
-                return (eClipboardGetData || windowClipboardGetData);
+                return clipboardData.getData(mime);
             }
         } catch(e) {
             if (!forceIEMime)
@@ -2947,7 +2931,7 @@ var TextInput = function(parentNode, host) {
     };
     
     var handleClipboardData = function(e, data, forceIEMime) {
-        var clipboardData = e.clipboardData || window.clipboardData;
+        var clipboardData = window.clipboardData || e.clipboardData;
         if (!clipboardData || BROKEN_SETDATA)
             return;
         var mime = USE_IE_MIME_TYPE || forceIEMime ? "Text" : "text/plain";
