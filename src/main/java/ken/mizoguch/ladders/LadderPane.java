@@ -24,7 +24,6 @@ import javafx.scene.layout.GridPane;
 import static javafx.scene.layout.GridPane.setColumnIndex;
 import static javafx.scene.layout.GridPane.setRowIndex;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  *
@@ -1506,7 +1505,6 @@ public class LadderPane extends GridPane {
         TextInputDialog alert = new TextInputDialog(defaultValue);
 
         alert.initOwner(stage_);
-        alert.initStyle(StageStyle.UTILITY);
         if (!icons_.isEmpty()) {
             ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().addAll(icons_);
         }
