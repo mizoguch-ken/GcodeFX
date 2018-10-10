@@ -2376,15 +2376,30 @@ var TextInput = function(parentNode, host) {
     };
     
     var handleClipboardData = function(e, data, forceIEMime) {
-        var clipboardData = window.clipboardData || e.clipboardData;
-        if (!clipboardData || BROKEN_SETDATA)
+        if (!(e.clipboardData || window.clipboardData) || BROKEN_SETDATA)
             return;
         var mime = USE_IE_MIME_TYPE || forceIEMime ? "Text" : "text/plain";
         try {
             if (data) {
-                return clipboardData.setData(mime, data) !== false;
+                var eClipboardSetData = false;
+                var windowClipboardSetData = false;
+                if (e.clipboardData) {
+                    eClipboardSetData = e.clipboardData.setData(mime, data);
+                }
+                if (window.clipboardData) {
+                    windowClipboardSetData = window.clipboardData.setData(mime, data);
+                }
+                return (eClipboardSetData | windowClipboardSetData) !== false;
             } else {
-                return clipboardData.getData(mime);
+                var eClipboardGetData;
+                var windowClipboardGetData;
+                if (e.clipboardData) {
+                    eClipboardGetData = e.clipboardData.getData(mime);
+                }
+                if (window.clipboardData) {
+                    windowClipboardGetData = window.clipboardData.getData(mime);
+                }
+                return (eClipboardGetData || windowClipboardGetData);
             }
         } catch(e) {
             if (!forceIEMime)
@@ -2931,15 +2946,30 @@ var TextInput = function(parentNode, host) {
     };
     
     var handleClipboardData = function(e, data, forceIEMime) {
-        var clipboardData = window.clipboardData || e.clipboardData;
-        if (!clipboardData || BROKEN_SETDATA)
+        if (!(e.clipboardData || window.clipboardData) || BROKEN_SETDATA)
             return;
         var mime = USE_IE_MIME_TYPE || forceIEMime ? "Text" : "text/plain";
         try {
             if (data) {
-                return clipboardData.setData(mime, data) !== false;
+                var eClipboardSetData = false;
+                var windowClipboardSetData = false;
+                if (e.clipboardData) {
+                    eClipboardSetData = e.clipboardData.setData(mime, data);
+                }
+                if (window.clipboardData) {
+                    windowClipboardSetData = window.clipboardData.setData(mime, data);
+                }
+                return (eClipboardSetData | windowClipboardSetData) !== false;
             } else {
-                return clipboardData.getData(mime);
+                var eClipboardGetData;
+                var windowClipboardGetData;
+                if (e.clipboardData) {
+                    eClipboardGetData = e.clipboardData.getData(mime);
+                }
+                if (window.clipboardData) {
+                    windowClipboardGetData = window.clipboardData.getData(mime);
+                }
+                return (eClipboardGetData || windowClipboardGetData);
             }
         } catch(e) {
             if (!forceIEMime)
