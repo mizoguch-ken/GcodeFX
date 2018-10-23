@@ -66,6 +66,8 @@ public class DesignEditorController implements Initializable, WebEditorListener,
     @FXML
     private MenuItem menuFileSaveAs;
     @FXML
+    private MenuItem menuFileExportPdf;
+    @FXML
     private MenuItem menuFileRecentFile1;
     @FXML
     private MenuItem menuFileRecentFile2;
@@ -126,6 +128,9 @@ public class DesignEditorController implements Initializable, WebEditorListener,
         });
         menuFileSaveAs.setOnAction((ActionEvent event) -> {
             webEditor_.fileSaveAs();
+        });
+        menuFileExportPdf.setOnAction((ActionEvent event) -> {
+            webEditor_.exportPdf();
         });
         menuFileRecentFile1.setOnAction((ActionEvent event) -> {
             fileOpen(Paths.get(menuFileRecentFile1.getText()));
@@ -223,6 +228,7 @@ public class DesignEditorController implements Initializable, WebEditorListener,
         menuFileOpen.setText(DesignEnums.FILE_OPEN.toString());
         menuFileSave.setText(DesignEnums.FILE_SAVE.toString());
         menuFileSaveAs.setText(DesignEnums.FILE_SAVE_AS.toString());
+        menuFileExportPdf.setText(DesignEnums.FILE_EXPORT_PDF.toString());
     }
 
     private void addRecentFile(String filename) {

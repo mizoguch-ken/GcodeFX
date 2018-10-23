@@ -115,6 +115,8 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
     @FXML
     private MenuItem menuFileSaveAs;
     @FXML
+    private MenuItem menuFileExportPdf;
+    @FXML
     private MenuItem menuFileNextGenerationController;
     @FXML
     private MenuItem menuFileGcodeByteCode;
@@ -2185,6 +2187,9 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
         menuFileSaveAs.setOnAction((ActionEvent event) -> {
             webEditor_.fileSaveAs();
         });
+        menuFileExportPdf.setOnAction((ActionEvent event) -> {
+            webEditor_.exportPdf();
+        });
         menuFileNextGenerationController.setOnAction((ActionEvent event) -> {
             if (compile(false) < 0) {
                 virtualMachineSettings_.setRunning(false);
@@ -2437,6 +2442,7 @@ public class DesignController implements Initializable, GcodeVirtualMachinePlugi
         menuFileOpen.setText(DesignEnums.FILE_OPEN.toString());
         menuFileSave.setText(DesignEnums.FILE_SAVE.toString());
         menuFileSaveAs.setText(DesignEnums.FILE_SAVE_AS.toString());
+        menuFileExportPdf.setText(DesignEnums.FILE_EXPORT_PDF.toString());
         menuFileNextGenerationController.setText(DesignEnums.FILE_NEXT_GENERATION_CONTROLLER.toString());
         menuFileGcodeByteCode.setText(DesignEnums.FILE_GCODE_BYTE_CODE.toString());
 

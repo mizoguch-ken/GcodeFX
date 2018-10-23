@@ -42,6 +42,11 @@
                                 <KeyCodeCombination alt="DOWN" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
+                  <MenuItem fx:id="menuFileExportPdf" mnemonicParsing="false" text="Export as PDF">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator>
+                  </MenuItem>
                         <MenuItem fx:id="menuFileNextGenerationController" mnemonicParsing="false" text="ngc">
                             <accelerator>
                                 <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="UP" shortcut="DOWN" />

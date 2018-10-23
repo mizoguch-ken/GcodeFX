@@ -34,6 +34,11 @@
                                 <KeyCodeCombination alt="DOWN" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                             </accelerator>
                         </MenuItem>
+                  <MenuItem fx:id="menuFileExportPdf" mnemonicParsing="false" text="Export as PDF">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                     </accelerator>
+                  </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="menuFileRecentFile1" mnemonicParsing="false" text="RecentFile1" visible="false" />
                   <MenuItem fx:id="menuFileRecentFile2" mnemonicParsing="false" text="RecentFile2" visible="false" />

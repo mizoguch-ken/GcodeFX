@@ -47,6 +47,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import ken.mizoguch.console.Console;
 import ken.mizoguch.gcodefx.DesignController;
+import ken.mizoguch.gcodefx.JavaLibrary;
 import ken.mizoguch.gcodefx.gcodevirtualmachine.GcodeBytecode;
 import ken.mizoguch.gcodefx.gcodevirtualmachine.GcodeInterpreter;
 import ken.mizoguch.gcodefx.gcodevirtualmachine.GcodeVariable;
@@ -67,6 +68,13 @@ import ken.mizoguch.webviewer.WebViewer;
 import ken.mizoguch.webviewer.plugin.WebViewerPlugin;
 import netscape.javascript.JSException;
 import netscape.javascript.JSObject;
+import org.apache.fontbox.ttf.TrueTypeCollection;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 /**
  *
@@ -421,6 +429,142 @@ public class WebEditor implements GcodeFXWebViewerPlugin, WebEditorPlugin, Gcode
         if (fcfile != null) {
             filePath_ = fcfile.toPath();
             return fileSave(filePath_);
+        }
+        return null;
+    }
+
+    private PDPage pdfNewPage(PDDocument doc, PDRectangle rectangle) {
+        PDPage page = new PDPage(rectangle);
+        doc.addPage(page);
+        return page;
+    }
+
+    private PDPageContentStream pdfPageBeginText(PDDocument doc, PDPage page, PDFont font, float fontSize) throws IOException {
+        PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
+        contentStream.beginText();
+        contentStream.setFont(font, fontSize);
+        contentStream.setLeading(font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000f * fontSize);
+        return contentStream;
+    }
+
+    private void pdfPageEndText(PDPageContentStream contentStream) throws IOException {
+        contentStream.endText();
+        contentStream.close();
+    }
+
+    /**
+     *
+     * @param file
+     * @return
+     */
+    public Path exportPdf(Path file) {
+        if (file != null) {
+            try (BufferedReader bufferedReader = new BufferedReader(new StringReader(getValue_));
+                    PDDocument doc = new PDDocument();
+                    TrueTypeCollection ttc = new TrueTypeCollection(getClass().getClassLoader().getResourceAsStream("font/MyricaM.TTC"))) {
+                PDRectangle rectangle = PDRectangle.A4;
+                PDPage page;
+                PDPageContentStream contentStream;
+                PDFont font = PDType0Font.load(doc, ttc.getFontByName("MyricaMM"), true);
+                float margin = 20f * 25.4f / 72f;
+                float fontSize = 12f;
+                float textWidth, textHeight;
+                float fontWidth = font.getFontDescriptor().getFontBoundingBox().getWidth() / 1000f * fontSize;
+                float fontHeight = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000f * fontSize;
+                float pageShowMinWidth = margin;
+                float pageShowMaxWidth = rectangle.getWidth() - margin;
+                float pageShowMinHeight = margin;
+                float pageShowMaxHeight = rectangle.getHeight() - margin;
+                String line, c;
+                int index;
+
+                page = pdfNewPage(doc, rectangle);
+                textHeight = pageShowMinHeight;
+                if (getFileName() != null) {
+                    // page header title
+                    contentStream = pdfPageBeginText(doc, page, font, fontSize);
+                    contentStream.newLineAtOffset(((pageShowMaxWidth - (font.getStringWidth(getFileName()) / 1000 * fontSize)) / 2f) + pageShowMinWidth + fontWidth, pageShowMaxHeight - fontHeight);
+                    contentStream.showText(getFileName());
+                    pdfPageEndText(contentStream);
+                    textHeight += fontHeight;
+                }
+                contentStream = pdfPageBeginText(doc, page, font, fontSize);
+                contentStream.newLineAtOffset(pageShowMinWidth + fontWidth, pageShowMaxHeight - fontHeight - textHeight);
+                while ((line = bufferedReader.readLine()) != null) {
+                    textWidth = pageShowMinWidth + fontWidth;
+                    textHeight += fontHeight;
+
+                    if (textHeight > (pageShowMaxHeight - fontHeight)) {
+                        pdfPageEndText(contentStream);
+                        page = pdfNewPage(doc, rectangle);
+                        contentStream = pdfPageBeginText(doc, page, font, fontSize);
+                        contentStream.newLineAtOffset(pageShowMinWidth + fontWidth, pageShowMaxHeight - fontHeight);
+                        textHeight = pageShowMinHeight + fontHeight;
+                    }
+
+                    for (index = 0; index < line.length(); index++) {
+                        c = line.substring(index, index + 1);
+                        textWidth += font.getStringWidth(c) / 1000 * fontSize;
+                        if (textWidth > (pageShowMaxWidth - fontWidth)) {
+                            textHeight += fontHeight;
+                            if (textHeight > (pageShowMaxHeight - fontHeight)) {
+                                pdfPageEndText(contentStream);
+                                page = pdfNewPage(doc, rectangle);
+                                contentStream = pdfPageBeginText(doc, page, font, fontSize);
+                                contentStream.newLineAtOffset(pageShowMinWidth + fontWidth, pageShowMaxHeight - fontHeight);
+                                textHeight = pageShowMinHeight + fontHeight;
+                            }
+                            contentStream.newLine();
+                            textWidth = pageShowMinWidth + fontWidth;
+                        }
+                        contentStream.showText(c);
+                    }
+
+                    if (bufferedReader.ready()) {
+                        contentStream.newLine();
+                    }
+                }
+                pdfPageEndText(contentStream);
+
+                // page footer count
+                for (index = 0; index < doc.getNumberOfPages(); index++) {
+                    line = (index + 1) + " / " + doc.getNumberOfPages();
+                    contentStream = pdfPageBeginText(doc, doc.getPage(index), font, fontSize);
+                    contentStream.newLineAtOffset(((pageShowMaxWidth - (font.getStringWidth(line) / 1000 * fontSize)) / 2f) + pageShowMinWidth + fontWidth, pageShowMinHeight);
+                    contentStream.showText(line);
+                    pdfPageEndText(contentStream);
+                }
+
+                doc.save(file.toFile());
+                return file;
+            } catch (JSException | IOException ex) {
+                Console.writeStackTrace(WebEditorEnums.WEB_EDITOR.toString(), ex);
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Path exportPdf() {
+        FileChooser fileChooser = new FileChooser();
+
+        if (filePath_ != null) {
+            if (filePath_.getParent() != null) {
+                if (Files.exists(filePath_.getParent())) {
+                    fileChooser.setInitialDirectory(filePath_.getParent().toFile());
+                }
+            }
+            if (!Files.isDirectory(filePath_)) {
+                fileChooser.setInitialFileName(JavaLibrary.removeFileExtension(filePath_.getFileName()));
+            }
+        }
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
+        File fcfile = fileChooser.showSaveDialog(stage_);
+        if (fcfile != null) {
+            return exportPdf(fcfile.toPath());
         }
         return null;
     }

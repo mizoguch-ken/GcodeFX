@@ -22,6 +22,7 @@ public enum DesignEnums {
     FILE_OPEN("Open", "開く"),
     FILE_SAVE("Save", "上書き保存"),
     FILE_SAVE_AS("Save As..", "名前を付けて保存"),
+    FILE_EXPORT_PDF("Export as PDF","PDFエクスポート"),
     FILE_NEXT_GENERATION_CONTROLLER("ngc"),
     FILE_GCODE_BYTE_CODE("gbc"),
     VIEW("View", "表示"),
