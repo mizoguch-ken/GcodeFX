@@ -132,21 +132,25 @@ public class SoemEcatThread extends Service<Void> {
     public boolean init(String ifname, long cycletime, Pointer pIOmap) {
         if (ecatCheck_ == null) {
             try {
-                int index, size, chk;
+                int index, size;
 
                 exit_ = false;
                 if (soem_.ecx_init(context_, ifname) > 0) {
                     if (soem_.ecx_config_init(context_, SoemOsal.FALSE) > 0) {
+                        context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue());
+                        soem_.ecx_writestate(context_, 0);
+                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
                         if (context_.slavecount.get() > 0) {
                             for (index = 1, size = context_.slavecount.get(); index <= size; index++) {
                                 if (po2so_.containsKey(index)) {
                                     if ((context_.slavelist[index].eep_man.get() == po2so_.get(index).eep_man) && (context_.slavelist[index].eep_id.get() == po2so_.get(index).eep_id)) {
-                                        context_.slavelist[index].PO2SOconfig.PO2SOconfig = (int slave) -> {
+                                        context_.slavelist[index].PO2SOconfig.PO2SOconfig.set((int slave) -> {
                                             if (po2so_ != null) {
                                                 if (po2so_.containsKey(slave)) {
                                                     RunnableFuture<Integer> future = new FutureTask<>(po2so_.get(slave).func);
                                                     if (Platform.isFxApplicationThread()) {
                                                         try {
+                                                            future.run();
                                                             return future.get();
                                                         } catch (InterruptedException | ExecutionException ex) {
                                                             Console.writeStackTrace(SoemEnums.SOEM.toString(), ex);
@@ -162,9 +166,9 @@ public class SoemEcatThread extends Service<Void> {
                                                 }
                                             }
                                             return 0;
-                                        };
+                                        });
                                     } else {
-                                        writeLog("PO2SO: EEP_MAN & EEP_ID of Slave[" + index + "] are different", true);
+                                        writeLog("PO2SO: EEP_MAN[" + context_.slavelist[index].eep_man.get() + ":" + po2so_.get(index).eep_man + "] & EEP_ID[" + context_.slavelist[index].eep_id.get() + ":" + po2so_.get(index).eep_id + "] of Slave[" + index + "] are different ", true);
                                         return false;
                                     }
                                 }
@@ -172,17 +176,16 @@ public class SoemEcatThread extends Service<Void> {
                         }
                         soem_.ecx_config_map_group(context_, pIOmap, 0);
                         soem_.ecx_configdc(context_);
-                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE * 4);
+                        context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue());
+                        soem_.ecx_writestate(context_, 0);
+                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
                         ecatCheck_ = new SoemEcatCheck(eventListenerList_, soem_, parcel_, context_);
                         ecatCheck_.setExpectedWKC((context_.grouplist[0].outputsWKC.get() * 2) + context_.grouplist[0].inputsWKC.get());
                         context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue());
                         soem_.ecx_send_processdata(context_);
                         soem_.ecx_receive_processdata(context_, SoemEtherCATType.EC_TIMEOUTRET);
                         soem_.ecx_writestate(context_, 0);
-                        chk = 40;
-                        do {
-                            soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue(), 50000);
-                        } while ((chk-- > 0) && (context_.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue()));
+                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
                         if (context_.slavelist[0].state.get() == SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue()) {
                             ecatCheck_.init();
                             if (Platform.isFxApplicationThread()) {
@@ -216,8 +219,6 @@ public class SoemEcatThread extends Service<Void> {
      *
      */
     public void exit() {
-        int chk;
-
         exit_ = true;
         if (ecatCheck_ != null) {
             ecatCheck_.exit();
@@ -228,10 +229,7 @@ public class SoemEcatThread extends Service<Void> {
             init_ = false;
             context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue());
             soem_.ecx_writestate(context_, 0);
-            chk = 40;
-            do {
-                soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), 50000);
-            } while ((chk-- > 0) && (context_.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue()));
+            soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
         }
     }
 

@@ -426,12 +426,12 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public Integer sdoWrite(int slave, int index, int subIndex, int byteSize, byte[] value) {
+    public Integer sdoWrite(int slave, int index, int subIndex, byte[] value) {
         if (context_ != null) {
-            Pointer p = Memory.allocate(runtime_, byteSize);
+            Pointer p = Memory.allocate(runtime_, value.length);
 
             p.put(0, value, 0, value.length);
-            return soem_.ecx_SDOwrite(context_, slave, index, subIndex, SoemOsal.FALSE, byteSize, p, SoemEtherCATType.EC_TIMEOUTRXM);
+            return soem_.ecx_SDOwrite(context_, slave, index, subIndex, SoemOsal.FALSE, value.length, p, SoemEtherCATType.EC_TIMEOUTRXM);
         }
         return null;
     }
@@ -538,138 +538,105 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public String slaveinfo(String ifname, boolean printSDO, boolean printMAP) {
-        if (soem_ != null) {
-            SlaveInfo info = new SlaveInfo();
-            SlaveInfo.Slave slave;
-            SlaveInfo.SM sm;
-            SlaveInfo.FMMU fmmu;
-
+    public String slaveinfo(boolean printSDO, boolean printMAP) {
+        if (context_ != null) {
             try {
-                int wkc, ssigen, cnt, nSM, chk, i, j;
-                SoemEtherCATMain.ecx_contextt context = soem_.ec_malloc_context().register();
-                if (soem_.ecx_init(context, ifname) > 0) {
-                    info.InterfaceName = ifname;
-                    Pointer pIOmap = Memory.allocateDirect(runtime_, 4096);
-                    wkc = soem_.ecx_config_init(context, SoemOsal.FALSE);
-                    if (wkc > 0) {
-                        soem_.ecx_config_map_group(context, pIOmap, 0);
-                        soem_.ecx_configdc(context);
-                        if (context.ecaterror.get() > 0) {
-                            info.EcatError = soem_.ecx_elist2string(context);
-                        }
-                        info.SlaveCount = context.slavecount.get();
-                        info.ExpectedWKC = (context.grouplist[0].outputsWKC.get() * 2) + context.grouplist[0].inputsWKC.get();
-                        soem_.ecx_statecheck(context, 0, SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE * 3);
-                        if (context.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue()) {
-                            soem_.ecx_readstate(context);
-                            for (i = 1; i <= context.slavecount.get(); i++) {
-                                if (context.slavelist[i].state.get() != SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue()) {
-                                    slave = info.newSlave();
-                                    slave.Index = i;
-                                    slave.State = context.slavelist[i].state.get();
-                                    slave.ALStatusCode = context.slavelist[i].ALstatuscode.get();
-                                    slave.ALStatusCodeString = soem_.ec_ALstatuscode2string(context.slavelist[i].ALstatuscode.get());
-                                }
-                            }
-                        }
+                int ssigen, nSM, cnt, cnt2;
+                SlaveInfo info = new SlaveInfo();
+                SlaveInfo.Slave slave;
+                SlaveInfo.SM sm;
+                SlaveInfo.FMMU fmmu;
 
-                        soem_.ecx_readstate(context);
-                        for (cnt = 1; cnt <= context.slavecount.get(); cnt++) {
-                            slave = info.newSlave();
-                            slave.Index = cnt;
-                            slave.Name = context.slavelist[cnt].name.get();
-                            slave.OutputBits = context.slavelist[cnt].Obits.get();
-                            slave.InputBits = context.slavelist[cnt].Ibits.get();
-                            slave.State = context.slavelist[cnt].state.get();
-                            slave.PropagationDelay = context.slavelist[cnt].pdelay.get();
-                            slave.HasDC = context.slavelist[cnt].hasdc.get();
-                            if (context.slavelist[cnt].hasdc.get() > 0) {
-                                slave.ParentPort = context.slavelist[cnt].parentport.get();
-                            }
-                            slave.ActivePorts = context.slavelist[cnt].activeports.get();
-                            slave.ConfigAddress = context.slavelist[cnt].configadr.get();
-                            slave.EEP_MAN = context.slavelist[cnt].eep_man.get();
-                            slave.EEP_ID = context.slavelist[cnt].eep_id.get();
-                            slave.EEP_REV = context.slavelist[cnt].eep_rev.get();
-                            for (nSM = 0; nSM < SoemEtherCATMain.EC_MAXSM; nSM++) {
-                                if (context.slavelist[cnt].SM[nSM].StartAddr.get() > 0) {
-                                    sm = slave.newSM();
-                                    sm.Index = nSM;
-                                    sm.StartAddress = context.slavelist[cnt].SM[nSM].StartAddr.get();
-                                    sm.SMLength = context.slavelist[cnt].SM[nSM].SMlength.get();
-                                    sm.SMFlags = context.slavelist[cnt].SM[nSM].SMflags.get();
-                                    sm.SMType = context.slavelist[cnt].SMtype[nSM].get();
-                                }
-                            }
-                            for (j = 0; j < context.slavelist[cnt].FMMUunused.get(); j++) {
-                                fmmu = slave.newFMMU();
-                                fmmu.Index = j;
-                                fmmu.LogStart = context.slavelist[cnt].FMMU[j].LogStart.get();
-                                fmmu.LogLength = context.slavelist[cnt].FMMU[j].LogLength.get();
-                                fmmu.LogStartbit = context.slavelist[cnt].FMMU[j].LogStartbit.get();
-                                fmmu.LogEndbit = context.slavelist[cnt].FMMU[j].LogEndbit.get();
-                                fmmu.PhysStart = context.slavelist[cnt].FMMU[j].PhysStart.get();
-                                fmmu.PhysStartBit = context.slavelist[cnt].FMMU[j].PhysStartBit.get();
-                                fmmu.FMMUType = context.slavelist[cnt].FMMU[j].FMMUtype.get();
-                                fmmu.FMMUActive = context.slavelist[cnt].FMMU[j].FMMUactive.get();
-                            }
-                            slave.FMMU0Func = context.slavelist[cnt].FMMU0func.get();
-                            slave.FMMU1Func = context.slavelist[cnt].FMMU1func.get();
-                            slave.FMMU2Func = context.slavelist[cnt].FMMU2func.get();
-                            slave.FMMU3Func = context.slavelist[cnt].FMMU3func.get();
-                            slave.MailboxWriteLength = context.slavelist[cnt].mbx_l.get();
-                            slave.MailboxReadLength = context.slavelist[cnt].mbx_rl.get();
-                            slave.MailboxProtocols = context.slavelist[cnt].mbx_proto.get();
-                            ssigen = soem_.ecx_siifind(context, cnt, SoemEtherCATType.ECT_SII_GENERAL);
-                            if (ssigen > 0) {
-                                context.slavelist[cnt].CoEdetails.set(soem_.ecx_siigetbyte(context, cnt, ssigen + 0x07));
-                                context.slavelist[cnt].FoEdetails.set(soem_.ecx_siigetbyte(context, cnt, ssigen + 0x08));
-                                context.slavelist[cnt].EoEdetails.set(soem_.ecx_siigetbyte(context, cnt, ssigen + 0x09));
-                                context.slavelist[cnt].SoEdetails.set(soem_.ecx_siigetbyte(context, cnt, ssigen + 0x0a));
-                                if ((soem_.ecx_siigetbyte(context, cnt, ssigen + 0x0d) & 0x02) > 0) {
-                                    context.slavelist[cnt].blockLRW.set(1);
-                                    context.slavelist[0].blockLRW.set(context.slavelist[0].blockLRW.get() + 1);
-                                }
-                                context.slavelist[cnt].Ebuscurrent.set(soem_.ecx_siigetbyte(context, cnt, ssigen + 0x0e));
-                                context.slavelist[cnt].Ebuscurrent.set(context.slavelist[cnt].Ebuscurrent.get() + (soem_.ecx_siigetbyte(context, cnt, ssigen + 0x0f) << 8));
-                                context.slavelist[0].Ebuscurrent.set(context.slavelist[0].Ebuscurrent.get() + context.slavelist[cnt].Ebuscurrent.get());
-                                slave.CoEDetails = context.slavelist[cnt].CoEdetails.get();
-                                slave.FoEDetails = context.slavelist[cnt].FoEdetails.get();
-                                slave.EoEDetails = context.slavelist[cnt].EoEdetails.get();
-                                slave.SoEDetails = context.slavelist[cnt].SoEdetails.get();
-                                slave.EbusCurrent = context.slavelist[cnt].Ebuscurrent.get();
-                                slave.BlockLRW = context.slavelist[cnt].blockLRW.get();
-                                if (((context.slavelist[cnt].mbx_proto.get() & SoemEtherCATMain.ECT_MBXPROT_COE) > 0) && printSDO) {
-                                    si_sdo(context, cnt, slave.newSDO());
-                                }
-                                if (printMAP) {
-                                    if ((context.slavelist[cnt].mbx_proto.get() & SoemEtherCATMain.ECT_MBXPROT_COE) > 0) {
-                                        si_map_sdo(context, pIOmap, cnt, slave);
-                                    } else {
-                                        si_map_sii(context, pIOmap, cnt, slave);
-                                    }
-                                }
+                if (context_.ecaterror.get() > 0) {
+                    info.EcatError = soem_.ecx_elist2string(context_);
+                }
+                info.SlaveCount = context_.slavecount.get();
+                info.ExpectedWKC = (context_.grouplist[0].outputsWKC.get() * 2) + context_.grouplist[0].inputsWKC.get();
+
+                soem_.ecx_readstate(context_);
+                for (cnt = 1; cnt <= context_.slavecount.get(); cnt++) {
+                    slave = info.newSlave();
+                    slave.Index = cnt;
+                    slave.Name = context_.slavelist[cnt].name.get();
+                    slave.OutputBits = context_.slavelist[cnt].Obits.get();
+                    slave.InputBits = context_.slavelist[cnt].Ibits.get();
+                    slave.State = context_.slavelist[cnt].state.get();
+                    slave.ALStatusCode = context_.slavelist[cnt].ALstatuscode.get();
+                    slave.ALStatusCodeString = soem_.ec_ALstatuscode2string(context_.slavelist[cnt].ALstatuscode.get());
+                    slave.PropagationDelay = context_.slavelist[cnt].pdelay.get();
+                    slave.HasDC = context_.slavelist[cnt].hasdc.get();
+                    if (context_.slavelist[cnt].hasdc.get() > 0) {
+                        slave.ParentPort = context_.slavelist[cnt].parentport.get();
+                    }
+                    slave.ActivePorts = context_.slavelist[cnt].activeports.get();
+                    slave.ConfigAddress = context_.slavelist[cnt].configadr.get();
+                    slave.EEP_MAN = context_.slavelist[cnt].eep_man.get();
+                    slave.EEP_ID = context_.slavelist[cnt].eep_id.get();
+                    slave.EEP_REV = context_.slavelist[cnt].eep_rev.get();
+                    for (nSM = 0; nSM < SoemEtherCATMain.EC_MAXSM; nSM++) {
+                        if (context_.slavelist[cnt].SM[nSM].StartAddr.get() > 0) {
+                            sm = slave.newSM();
+                            sm.Index = nSM;
+                            sm.StartAddress = context_.slavelist[cnt].SM[nSM].StartAddr.get();
+                            sm.SMLength = context_.slavelist[cnt].SM[nSM].SMlength.get();
+                            sm.SMFlags = context_.slavelist[cnt].SM[nSM].SMflags.get();
+                            sm.SMType = context_.slavelist[cnt].SMtype[nSM].get();
+                        }
+                    }
+                    for (cnt2 = 0; cnt2 < context_.slavelist[cnt].FMMUunused.get(); cnt2++) {
+                        fmmu = slave.newFMMU();
+                        fmmu.Index = cnt2;
+                        fmmu.LogStart = context_.slavelist[cnt].FMMU[cnt2].LogStart.get();
+                        fmmu.LogLength = context_.slavelist[cnt].FMMU[cnt2].LogLength.get();
+                        fmmu.LogStartbit = context_.slavelist[cnt].FMMU[cnt2].LogStartbit.get();
+                        fmmu.LogEndbit = context_.slavelist[cnt].FMMU[cnt2].LogEndbit.get();
+                        fmmu.PhysStart = context_.slavelist[cnt].FMMU[cnt2].PhysStart.get();
+                        fmmu.PhysStartBit = context_.slavelist[cnt].FMMU[cnt2].PhysStartBit.get();
+                        fmmu.FMMUType = context_.slavelist[cnt].FMMU[cnt2].FMMUtype.get();
+                        fmmu.FMMUActive = context_.slavelist[cnt].FMMU[cnt2].FMMUactive.get();
+                    }
+                    slave.FMMU0Func = context_.slavelist[cnt].FMMU0func.get();
+                    slave.FMMU1Func = context_.slavelist[cnt].FMMU1func.get();
+                    slave.FMMU2Func = context_.slavelist[cnt].FMMU2func.get();
+                    slave.FMMU3Func = context_.slavelist[cnt].FMMU3func.get();
+                    slave.MailboxWriteLength = context_.slavelist[cnt].mbx_l.get();
+                    slave.MailboxReadLength = context_.slavelist[cnt].mbx_rl.get();
+                    slave.MailboxProtocols = context_.slavelist[cnt].mbx_proto.get();
+                    ssigen = soem_.ecx_siifind(context_, cnt, SoemEtherCATType.ECT_SII_GENERAL);
+                    if (ssigen > 0) {
+                        context_.slavelist[cnt].CoEdetails.set(soem_.ecx_siigetbyte(context_, cnt, ssigen + 0x07));
+                        context_.slavelist[cnt].FoEdetails.set(soem_.ecx_siigetbyte(context_, cnt, ssigen + 0x08));
+                        context_.slavelist[cnt].EoEdetails.set(soem_.ecx_siigetbyte(context_, cnt, ssigen + 0x09));
+                        context_.slavelist[cnt].SoEdetails.set(soem_.ecx_siigetbyte(context_, cnt, ssigen + 0x0a));
+                        if ((soem_.ecx_siigetbyte(context_, cnt, ssigen + 0x0d) & 0x02) > 0) {
+                            context_.slavelist[cnt].blockLRW.set(1);
+                            context_.slavelist[0].blockLRW.set(context_.slavelist[0].blockLRW.get() + 1);
+                        }
+                        context_.slavelist[cnt].Ebuscurrent.set(soem_.ecx_siigetbyte(context_, cnt, ssigen + 0x0e));
+                        context_.slavelist[cnt].Ebuscurrent.set(context_.slavelist[cnt].Ebuscurrent.get() + (soem_.ecx_siigetbyte(context_, cnt, ssigen + 0x0f) << 8));
+                        context_.slavelist[0].Ebuscurrent.set(context_.slavelist[0].Ebuscurrent.get() + context_.slavelist[cnt].Ebuscurrent.get());
+                        slave.CoEDetails = context_.slavelist[cnt].CoEdetails.get();
+                        slave.FoEDetails = context_.slavelist[cnt].FoEdetails.get();
+                        slave.EoEDetails = context_.slavelist[cnt].EoEdetails.get();
+                        slave.SoEDetails = context_.slavelist[cnt].SoEdetails.get();
+                        slave.EbusCurrent = context_.slavelist[cnt].Ebuscurrent.get();
+                        slave.BlockLRW = context_.slavelist[cnt].blockLRW.get();
+                        if (((context_.slavelist[cnt].mbx_proto.get() & SoemEtherCATMain.ECT_MBXPROT_COE) > 0) && printSDO) {
+                            si_sdo(context_, cnt, slave.newSDO());
+                        }
+                        if (printMAP) {
+                            if ((context_.slavelist[cnt].mbx_proto.get() & SoemEtherCATMain.ECT_MBXPROT_COE) > 0) {
+                                si_map_sdo(context_, pIOmap_, cnt, slave);
+                            } else {
+                                si_map_sii(context_, pIOmap_, cnt, slave);
                             }
                         }
-                        context.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue());
-                        soem_.ecx_writestate(context, 0);
-                        chk = 40;
-                        do {
-                            soem_.ecx_statecheck(context, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), 50000);
-                        } while ((chk-- > 0) && (context.slavelist[0].state.get() != SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue()));
-                    } else {
-                        info.EcatError = "No slaves found!";
                     }
-                    soem_.ecx_close(context);
-                    soem_.ec_free_context(context);
-                } else {
-                    info.EcatError = "No socket connection on " + ifname + " Excecute as root";
                 }
+                return gson_.toJson(info);
             } catch (ClassCastException | IllegalArgumentException | IndexOutOfBoundsException | NullPointerException | StackOverflowError | UnsatisfiedLinkError ex) {
                 Console.writeStackTrace(SoemEnums.SOEM.toString(), ex);
             }
-            return gson_.toJson(info);
         }
         return null;
     }
@@ -686,11 +653,11 @@ public class Soem implements SoemPlugin {
         int bitlen;
         int totalsize;
         SoemEtherCATMain.ec_eepromPDOt PDO = new SoemEtherCATMain.ec_eepromPDOt(runtime_);
-        Pointer pPDO = Memory.allocateDirect(runtime_, Struct.size(PDO));
+        Pointer pPDO = Memory.allocate(runtime_, Struct.size(PDO));
         PDO.useMemory(pPDO);
         int abs_offset, abs_bit;
         SoemLibrary.UTF8String str_name = new SoemLibrary.UTF8String(runtime_, SoemEtherCATMain.EC_MAXNAME + 1);
-        Pointer pStr_name = Memory.allocateDirect(runtime_, Struct.size(str_name));
+        Pointer pStr_name = Memory.allocate(runtime_, Struct.size(str_name));
         str_name.useMemory(pStr_name);
 
         eectl = context.slavelist[index].eep_pdi.get();
@@ -924,12 +891,12 @@ public class Soem implements SoemPlugin {
         rdl = new SoemLibrary.Int32(runtime_);
         rdat2 = new SoemLibrary.Int32(runtime_);
 
-        Pointer pRdat = Memory.allocateDirect(runtime_, Struct.size(rdat));
-        Pointer pSubcnt = Memory.allocateDirect(runtime_, Struct.size(subcnt));
-        Pointer pRdl = Memory.allocateDirect(runtime_, Struct.size(rdl));
-        Pointer pRdat2 = Memory.allocateDirect(runtime_, Struct.size(rdat2));
-        Pointer pODlist = Memory.allocateDirect(runtime_, Struct.size(ODlist));
-        Pointer pOElist = Memory.allocateDirect(runtime_, Struct.size(OElist));
+        Pointer pRdat = Memory.allocate(runtime_, Struct.size(rdat));
+        Pointer pSubcnt = Memory.allocate(runtime_, Struct.size(subcnt));
+        Pointer pRdl = Memory.allocate(runtime_, Struct.size(rdl));
+        Pointer pRdat2 = Memory.allocate(runtime_, Struct.size(rdat2));
+        Pointer pODlist = Memory.allocate(runtime_, Struct.size(ODlist));
+        Pointer pOElist = Memory.allocate(runtime_, Struct.size(OElist));
 
         rdat.useMemory(pRdat);
         subcnt.useMemory(pSubcnt);
@@ -1015,9 +982,9 @@ public class Soem implements SoemPlugin {
         nSM = new SoemLibrary.Uint8(runtime_);
         tSM = new SoemLibrary.Uint8(runtime_);
 
-        Pointer pRdl = Memory.allocateDirect(runtime_, Struct.size(rdl));
-        Pointer pNSM = Memory.allocateDirect(runtime_, Struct.size(nSM));
-        Pointer pTSM = Memory.allocateDirect(runtime_, Struct.size(tSM));
+        Pointer pRdl = Memory.allocate(runtime_, Struct.size(rdl));
+        Pointer pNSM = Memory.allocate(runtime_, Struct.size(nSM));
+        Pointer pTSM = Memory.allocate(runtime_, Struct.size(tSM));
 
         rdl.useMemory(pRdl);
         nSM.useMemory(pNSM);
@@ -1057,16 +1024,20 @@ public class Soem implements SoemPlugin {
                         /* read the assign RXPDO */
                         pdo = slave.newRxPDO();
                         pdo.Index = iSM;
-                        Tsize = si_PDOassign(context, index, SoemEtherCATType.ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].outputs.get().address() - pIOmap.address()), outputs_bo, pdo);
-                        outputs_bo += Tsize;
+                        if (context.slavelist[index].outputs.get() != null) {
+                            Tsize = si_PDOassign(context, index, SoemEtherCATType.ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].outputs.get().address() - pIOmap.address()), outputs_bo, pdo);
+                            outputs_bo += Tsize;
+                        }
                     }
                     if (tSM.get() == 4) // inputs
                     {
                         /* read the assign TXPDO */
                         pdo = slave.newTxPDO();
                         pdo.Index = iSM;
-                        Tsize = si_PDOassign(context, index, SoemEtherCATType.ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].inputs.get().address() - pIOmap.address()), inputs_bo, pdo);
-                        inputs_bo += Tsize;
+                        if (context.slavelist[index].inputs.get() != null) {
+                            Tsize = si_PDOassign(context, index, SoemEtherCATType.ECT_SDO_PDOASSIGN + iSM, (int) (context.slavelist[index].inputs.get().address() - pIOmap.address()), inputs_bo, pdo);
+                            inputs_bo += Tsize;
+                        }
                     }
                 }
             }
@@ -1083,8 +1054,8 @@ public class Soem implements SoemPlugin {
         StringBuilder hstr;
         SoemLibrary.UTF8String usdo = new SoemLibrary.UTF8String(runtime_, 128);
         SoemLibrary.Int32 l = new SoemLibrary.Int32(runtime_);
-        Pointer pUsdo = Memory.allocateDirect(runtime_, Struct.size(usdo));
-        Pointer pL = Memory.allocateDirect(runtime_, Struct.size(l));
+        Pointer pUsdo = Memory.allocate(runtime_, Struct.size(usdo));
+        Pointer pL = Memory.allocate(runtime_, Struct.size(l));
         usdo.useMemory(pUsdo);
         l.useMemory(pL);
         l.set(Struct.size(usdo));
@@ -1171,7 +1142,7 @@ public class Soem implements SoemPlugin {
         SoemEtherCATCoE.ec_OElistt OElist = new SoemEtherCATCoE.ec_OElistt(runtime_);
         int i, j;
 
-        Pointer pODlist = Memory.allocateDirect(runtime_, Struct.size(ODlist));
+        Pointer pODlist = Memory.allocate(runtime_, Struct.size(ODlist));
         ODlist.useMemory(pODlist);
         ODlist.Entries.set(0);
         if (soem_.ecx_readODlist(context, cnt, ODlist) > 0) {
@@ -1186,7 +1157,7 @@ public class Soem implements SoemPlugin {
                 od.DataType = ODlist.DataType[i].get();
                 od.ObjectCode = ODlist.ObjectCode[i].get();
                 od.Name = ODlist.Name[i].toString();
-                Pointer pOElist = Memory.allocateDirect(runtime_, Struct.size(OElist));
+                Pointer pOElist = Memory.allocate(runtime_, Struct.size(OElist));
                 OElist.useMemory(pOElist);
                 soem_.ecx_readOE(context, i, ODlist, OElist);
                 if (context.ecaterror.get() > 0) {

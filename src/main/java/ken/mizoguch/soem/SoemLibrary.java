@@ -22,29 +22,33 @@ import jnr.ffi.types.u_int8_t;
  */
 public interface SoemLibrary {
 
-    public class CallBack extends Struct {
+    public interface PO2SOconfig {
 
-        public interface PO2SOconfig {
+        @Delegate
+        int call(int slave);
+    }
 
-            @Delegate
-            int call(int slave);
-        }
+    public interface FOEhook {
 
-        public interface FOEhook {
+        @Delegate
+        public int call(int slave, int packetnumber, int datasize);
+    }
 
-            @Delegate
-            public int call(int slave, int packetnumber, int datasize);
-        }
+    public class CallBackPO2SOconfig extends Struct {
 
-        Pointer callback;
+        public Struct.Function<PO2SOconfig> PO2SOconfig = function(PO2SOconfig.class);
 
-        PO2SOconfig PO2SOconfig;
-        FOEhook FOEhook;
-
-        public CallBack(jnr.ffi.Runtime runtime) {
+        public CallBackPO2SOconfig(jnr.ffi.Runtime runtime) {
             super(runtime);
+        }
+    }
 
-            callback = new Pointer();
+    public class CallBackFOEhook extends Struct {
+
+        public Struct.Function<FOEhook> FOEhook = function(FOEhook.class);
+
+        public CallBackFOEhook(jnr.ffi.Runtime runtime) {
+            super(runtime);
         }
     }
 
@@ -452,7 +456,7 @@ public interface SoemLibrary {
     public int ecx_readOE(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Item, SoemEtherCATCoE.ec_ODlistt pODlist, SoemEtherCATCoE.ec_OElistt pOElist);
 
     // SoemEthercatFoE
-    public int ecx_FOEdefinehook(SoemEtherCATMain.ecx_contextt context, CallBack.FOEhook hook);
+    public int ecx_FOEdefinehook(SoemEtherCATMain.ecx_contextt context, CallBackFOEhook hook);
 
     public int ecx_FOEread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, Pointer filename, @u_int32_t long password, Pointer psize, Pointer p, int timeout);
 

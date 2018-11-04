@@ -419,7 +419,7 @@ public interface SoemEtherCATMain {
         /**
          * registered configuration function PO->SO
          */
-        public final SoemLibrary.CallBack PO2SOconfig;
+        public final SoemLibrary.CallBackPO2SOconfig PO2SOconfig;
         /**
          * readable name
          */
@@ -489,7 +489,7 @@ public interface SoemEtherCATMain {
             group = new Unsigned8();
             FMMUunused = new Unsigned8();
             islost = new Unsigned8();
-            PO2SOconfig = inner(new SoemLibrary.CallBack(runtime));
+            PO2SOconfig = inner(new SoemLibrary.CallBackPO2SOconfig(runtime));
             name = new UTF8String(EC_MAXNAME + 1);
         }
     }
@@ -904,7 +904,7 @@ public interface SoemEtherCATMain {
         /**
          * registered FoE hook
          */
-        public final SoemLibrary.CallBack FOEhook;
+        public final SoemLibrary.CallBackFOEhook FOEhook;
 
         public ecx_contextt(jnr.ffi.Runtime runtime) {
             super(runtime);
@@ -965,7 +965,7 @@ public interface SoemEtherCATMain {
             eepSM = new ec_eepromSMt(getRuntime());
             _eepFMMU = new Pointer();
             eepFMMU = new ec_eepromFMMUt(getRuntime());
-            FOEhook = inner(new SoemLibrary.CallBack(runtime));
+            FOEhook = inner(new SoemLibrary.CallBackFOEhook(runtime));
         }
 
         public ecx_contextt register() {

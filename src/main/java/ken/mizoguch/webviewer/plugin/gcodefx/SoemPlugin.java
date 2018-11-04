@@ -36,7 +36,7 @@ public interface SoemPlugin {
 
     public Byte[] sdoRead(int slave, int index, int subIndex, int byteSize);
 
-    public Integer sdoWrite(int slave, int index, int subIndex, int byteSize, byte[] value);
+    public Integer sdoWrite(int slave, int index, int subIndex, byte[] value);
 
     public Long in(int slave, long bitsOffset, long bitsMask);
 
@@ -46,5 +46,5 @@ public interface SoemPlugin {
 
     public String find_adapters();
 
-    public String slaveinfo(String ifname, boolean printSDO, boolean printMAP);
+    public String slaveinfo(boolean printSDO, boolean printMAP);
 }
