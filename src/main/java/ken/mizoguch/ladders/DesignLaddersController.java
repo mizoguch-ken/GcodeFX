@@ -76,6 +76,8 @@ public class DesignLaddersController implements Initializable {
     @FXML
     private MenuItem menuFileSaveAs;
     @FXML
+    private MenuItem menuFileExportPdf;
+    @FXML
     private MenuItem menuFileDifference;
     @FXML
     private MenuItem menuFileRecentFile1;
@@ -493,6 +495,9 @@ public class DesignLaddersController implements Initializable {
                 addRecentFile(ladders_.getFilePath().toString());
             }
         });
+        menuFileExportPdf.setOnAction((ActionEvent event) -> {
+            ladders_.exportPdf();
+        });
         menuFileDifference.setOnAction((ActionEvent event) -> {
             // ladder
             try {
@@ -886,6 +891,7 @@ public class DesignLaddersController implements Initializable {
         menuFileOpen.setText(LadderEnums.FILE_OPEN.toString());
         menuFileSave.setText(LadderEnums.FILE_SAVE.toString());
         menuFileSaveAs.setText(LadderEnums.FILE_SAVE_AS.toString());
+        menuFileExportPdf.setText(LadderEnums.FILE_EXPORT_PDF.toString());
         menuFileDifference.setText(LadderEnums.FILE_DIFFERENCE.toString());
 
         // menu edit

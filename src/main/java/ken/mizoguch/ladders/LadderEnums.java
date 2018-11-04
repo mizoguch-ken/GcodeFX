@@ -17,6 +17,7 @@ public enum LadderEnums {
     FILE_OPEN("Open", "開く"),
     FILE_SAVE("Save", "上書き保存"),
     FILE_SAVE_AS("Save As..", "名前を付けて保存"),
+    FILE_EXPORT_PDF("Export as PDF","PDFエクスポート"),
     FILE_DIFFERENCE("Difference", "差分"),
     EDIT("Edit", "編集"),
     EDIT_UNDO("Undo", "元に戻す"),
