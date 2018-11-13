@@ -432,6 +432,17 @@ public class LadderGridPane extends AnchorPane {
                 changeBlockHeight(getHeight());
                 changeContents();
                 break;
+            case BLOCK_COMMENT:
+                label = new Label();
+                label.setAlignment(Pos.TOP_LEFT);
+                label.setTextAlignment(TextAlignment.LEFT);
+                label.setWrapText(true);
+                grpBlock_.getChildren().add(label); // comment
+
+                changeBlockWidth(getWidth());
+                changeBlockHeight(getHeight());
+                changeComment();
+                break;
             case CONNECT_LINE:
                 // -
                 line = new Line();
@@ -2691,6 +2702,10 @@ public class LadderGridPane extends AnchorPane {
             case CONTENTS:
                 ((Label) grpBlock_.getChildren().get(0)).setPrefWidth(width);
                 break;
+            case BLOCK_COMMENT:
+                ((Label) grpBlock_.getChildren().get(0)).setLayoutX(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(0)).setPrefWidth(width - (baseStrokeWidth_ * 2.0));
+                break;
             case CONNECT_LINE:
                 ((Line) grpBlock_.getChildren().get(0)).setEndX(width);
                 break;
@@ -3083,6 +3098,11 @@ public class LadderGridPane extends AnchorPane {
         switch (ladderGrid_.getBlock()) {
             case CONTENTS:
                 ((Label) grpBlock_.getChildren().get(0)).setPrefHeight(height);
+                break;
+            case BLOCK_COMMENT:
+                ((Label) grpBlock_.getChildren().get(0)).setFont(Font.font(height6));
+                ((Label) grpBlock_.getChildren().get(0)).setLayoutY(baseStrokeWidth_);
+                ((Label) grpBlock_.getChildren().get(0)).setPrefHeight(height - (baseStrokeWidth_ * 2.0));
                 break;
             case CONNECT_LINE:
                 ((Line) grpBlock_.getChildren().get(0)).setStartY(height2);
@@ -3649,6 +3669,9 @@ public class LadderGridPane extends AnchorPane {
      */
     public void changeComment() {
         switch (ladderGrid_.getBlock()) {
+            case BLOCK_COMMENT:
+                ((Label) grpBlock_.getChildren().get(0)).setText(ladderGrid_.getComment());
+                break;
             case LOAD:
             case LOAD_NOT:
             case LOAD_RISING:

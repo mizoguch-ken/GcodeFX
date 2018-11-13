@@ -39,6 +39,7 @@ public class LadderJsonBlock {
     private final Boolean vertical;
     private final Boolean verticalOr;
     private final String address;
+    private final String comment;
     private List<JsonBlockFunction> blockFunctions;
     private final String blockScript;
 
@@ -54,6 +55,7 @@ public class LadderJsonBlock {
         this.vertical = LadderGrid.LADDER_GRID_INITIAL_VERTICAL;
         this.verticalOr = LadderGrid.LADDER_GRID_INITIAL_VERTICAL_OR;
         this.address = LadderGrid.LADDER_GRID_INITIAL_ADDRESS;
+        this.comment = null;
         this.blockFunctions = null;
         this.blockScript = LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT;
     }
@@ -66,16 +68,18 @@ public class LadderJsonBlock {
      * @param vertical
      * @param verticalOr
      * @param address
+     * @param comment
      * @param blockFunctions
      * @param blockScript
      */
-    public LadderJsonBlock(Integer columnIndex, Integer rowIndex, String block, Boolean vertical, Boolean verticalOr, String address, List<LadderGrid.BlockFunction> blockFunctions, String blockScript) {
+    public LadderJsonBlock(Integer columnIndex, Integer rowIndex, String block, Boolean vertical, Boolean verticalOr, String address, String comment, List<LadderGrid.BlockFunction> blockFunctions, String blockScript) {
         this.columnIndex = columnIndex;
         this.rowIndex = rowIndex;
         this.block = block;
         this.vertical = vertical;
         this.verticalOr = verticalOr;
         this.address = address;
+        this.comment = comment;
         if (blockFunctions != null) {
             this.blockFunctions = new ArrayList<>();
             for (int i = 0, size = blockFunctions.size(); i < size; i++) {
@@ -137,6 +141,14 @@ public class LadderJsonBlock {
      */
     public String getAddress() {
         return address;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getComment() {
+        return comment;
     }
 
     /**

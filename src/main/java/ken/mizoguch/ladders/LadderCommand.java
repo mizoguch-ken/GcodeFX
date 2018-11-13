@@ -1132,6 +1132,7 @@ public class LadderCommand {
                                 blockChangeOriginal(ladder, grid);
                             }
                             break;
+                        case BLOCK_COMMENT:
                         case CONNECT_LINE:
                         case LOAD:
                         case LOAD_NOT:
@@ -1215,6 +1216,31 @@ public class LadderCommand {
                                 gridPane.changeComment();
                                 gridPane.changeBlockFunction();
                                 gridPane.changeBlockScript();
+                                gridPane.setEditing(true);
+
+                                blockChangeRevised(ladder, grid);
+                            }
+                            break;
+                        case BLOCK_COMMENT:
+                            if ((grid.getColumnIndex() > 0) && (grid.getColumnIndex() < ladder.getColumn())) {
+                                grid.setBlock(copyGrid.getBlock());
+                                grid.setBlockFunctions(copyGrid.getBlockFunctions());
+                                if ((grid.getColumnIndex() > 1) && (grid.getRowIndex() > 1)) {
+                                    if (grid.isVertical() != copyGrid.isVertical()) {
+                                        grid.setVertical(copyGrid.isVertical());
+                                        gridPane.changeStrokeVertical();
+                                    }
+                                    if (grid.getUpLadderGrid().isVerticalOr() != copyGrid.isVertical()) {
+                                        grid.getUpLadderGrid().setVerticalOr(copyGrid.isVertical());
+                                        gridPaneBuf = pane.findGridPane(grid.getUpLadderGrid());
+                                        gridPaneBuf.changeStrokeVerticalOr();
+                                        gridPaneBuf.setEditing(true);
+                                    }
+                                }
+                                grid.setAddress(copyGrid.getAddress());
+                                gridPane.changeBlock();
+                                grid.setComment(copyGrid.getComment());
+                                gridPane.changeComment();
                                 gridPane.setEditing(true);
 
                                 blockChangeRevised(ladder, grid);
@@ -2400,6 +2426,18 @@ public class LadderCommand {
                             grid.isVertical(), grid.isVerticalOr(),
                             null,
                             null,
+                            null,
+                            null);
+                }
+                break;
+            case BLOCK_COMMENT:
+                if (grid.getComment() != null) {
+                    return new LadderJsonBlock(grid.getColumnIndex(), grid.getRowIndex(),
+                            grid.getBlock().toString(),
+                            grid.isVertical(), grid.isVerticalOr(),
+                            null,
+                            grid.getComment(),
+                            null,
                             null);
                 }
                 break;
@@ -2407,6 +2445,7 @@ public class LadderCommand {
                 return new LadderJsonBlock(grid.getColumnIndex(), grid.getRowIndex(),
                         grid.getBlock().toString(),
                         grid.isVertical(), grid.isVerticalOr(),
+                        null,
                         null,
                         null,
                         null);
@@ -2429,6 +2468,7 @@ public class LadderCommand {
                         grid.getBlock().toString(),
                         grid.isVertical(), grid.isVerticalOr(),
                         grid.getAddress(),
+                        null,
                         null,
                         null);
             case COMPARISON_EQUAL:
@@ -2461,6 +2501,7 @@ public class LadderCommand {
                         grid.getBlock().toString(),
                         grid.isVertical(), grid.isVerticalOr(),
                         grid.getAddress(),
+                        null,
                         Arrays.asList(grid.getBlockFunctions()),
                         null);
             case SCRIPT:
@@ -2468,6 +2509,7 @@ public class LadderCommand {
                         grid.getBlock().toString(),
                         grid.isVertical(), grid.isVerticalOr(),
                         grid.getAddress(),
+                        null,
                         null,
                         grid.getBlockScript());
         }
@@ -2705,6 +2747,20 @@ public class LadderCommand {
         switch (grid.getBlock()) {
             case EMPTY:
             case CONNECT_LINE:
+                grid.setAddress(LadderGrid.LADDER_GRID_INITIAL_ADDRESS);
+                grid.setBlockValue(LadderGrid.LADDER_GRID_INITIAL_BLOCK_VALUE);
+                for (i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {
+                    grid.getBlockFunctions()[i].clear();
+                }
+                grid.setBlockScript(LadderGrid.LADDER_GRID_INITIAL_BLOCK_SCRIPT);
+                break;
+            case BLOCK_COMMENT:
+                if (jsonBlock.getComment() == null) {
+                    writeLog(LadderEnums.DATA_FORMAT_UNEXPECTED_ERROR.toString() + " [comment]", true);
+                    return false;
+                }
+                blockChangeComment(pane.getLadder(), grid, gridPane, jsonBlock.getComment());
+
                 grid.setAddress(LadderGrid.LADDER_GRID_INITIAL_ADDRESS);
                 grid.setBlockValue(LadderGrid.LADDER_GRID_INITIAL_BLOCK_VALUE);
                 for (i = 0; i < LadderGrid.LADDER_BLOCK_FUNCTIONS; i++) {

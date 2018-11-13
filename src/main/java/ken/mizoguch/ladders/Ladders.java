@@ -83,6 +83,8 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
         CONTENTS(""),
         // Empty
         EMPTY(""),
+        // Comment
+        BLOCK_COMMENT(";"),
         // Connect
         CONNECT_LINE(""),
         // Load
@@ -685,6 +687,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
     private PDPageContentStream pdfPageBeginGrid(PDDocument doc, PDPage page, PDFont font, float fontSize, float lineWidth, float marginTop, float marginLeft) throws IOException {
         PDPageContentStream contentStream = new PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true, true);
         contentStream.setFont(font, fontSize);
+        contentStream.setLeading(font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000f * fontSize);
         contentStream.setLineWidth(lineWidth);
         return contentStream;
     }
@@ -703,6 +706,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 PDFont font = PDType0Font.load(doc, ttc.getFontByName("MyricaMM"), true);
                 float margin = 20f * 25.4f / 72f;
                 float fontSize = 7.54f;
+                float textWidth, textHeight;
                 float gridWidth, gridHeight;
                 float fontWidth = font.getFontDescriptor().getFontBoundingBox().getWidth() / 1000f * fontSize;
                 float fontHeight = font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000f * fontSize;
@@ -722,7 +726,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                 LadderJson ladderJson = ladderJsonSave(tabLadder_);
                 List<LadderJsonLadder> jsonLadders = ladderJson.getLadders();
 
-                String name, address, comment, line, content;
+                String name, address, comment, line, content, c;
                 int index, size, index2, size2, column, row, i;
 
                 size = jsonLadders.size();
@@ -803,7 +807,7 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
 
                         address = jsonBlock.getAddress();
                         if (address == null) {
-                            comment = null;
+                            comment = jsonBlock.getComment();
                         } else {
                             if (address.startsWith(LADDER_LOCAL_ADDRESS_PREFIX)) {
                                 comment = getComment(index + 1, jsonBlock.getAddress());
@@ -822,6 +826,27 @@ public class Ladders extends Service<Void> implements LaddersPlugin {
                         contentStream.stroke();
 
                         switch (Ladders.LADDER_BLOCK.valueOf(jsonBlock.getBlock())) {
+                            case BLOCK_COMMENT:
+                                textWidth = gridWidth;
+                                textHeight = gridHeight;
+
+                                contentStream.beginText();
+                                contentStream.newLineAtOffset(gridWidth, gridHeight - gridSize6);
+                                for (i = 0; i < comment.length(); i++) {
+                                    c = comment.substring(i, i + 1);
+                                    textWidth += font.getStringWidth(c) / 1000 * fontSize;
+                                    if (textWidth > (gridWidth + gridSize - fontWidth)) {
+                                        textHeight += fontHeight;
+                                        if (textHeight > (gridHeight + gridSize - fontHeight)) {
+                                            break;
+                                        }
+                                        contentStream.newLine();
+                                        textWidth = gridWidth;
+                                    }
+                                    contentStream.showText(c);
+                                }
+                                contentStream.endText();
+                                break;
                             case CONNECT_LINE:
                                 // -
                                 contentStream.moveTo(gridWidth, gridHeight - gridSize2);
