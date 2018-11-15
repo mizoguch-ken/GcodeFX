@@ -257,3 +257,7 @@ ladders.registerWeb();
 |Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional.)<br>書き方<br>([]はオプション)|
 |:-|:-|:-|:-|
 |SCRIPT| addr<br>-\|SCR script\|| |scr addr;script[;comment]|
+### Comment コメント
+|Name<br>名前|Block<br>ブロック| |Writing<br>([] Is optional.)<br>書き方<br>([]はオプション)|
+|:-|:-|:-|:-|
+|BLOCK_COMMENT| comment | |;comment|
