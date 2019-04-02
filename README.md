@@ -46,6 +46,18 @@
  ## Download ダウンロード
  Please download zip file from release  
  リリースからzipファイルをダウンロードしてください  
+ ## Java11.0.2(Windows)
+1. Download JDK 11.0.2 and extract it to the GcodeFX folder  
+JDK 11をダウンロードしてGcodeFXフォルダに解凍します  
+2. Download JavaFX SDK 11.0.2 and extract it to the GcodeFX folder  
+JavaFX SDK 11をダウンロードしてGcodeFXフォルダに解凍します  
+3. Create GcodeFX.bat in the GcodeFX folder and write the contents as follows  
+GcodeFXフォルダにGcodeFX.batを作成し、内容を次のように書きます  
+```
+%~dp0jdk-11.0.2\bin\java.exe -jar --module-path=%~dp0javafx-sdk-11.0.2\lib --add-modules=javafx.fxml,javafx.web GcodeFX.jar
+```
+4. Run GcodeFX.bat  
+GcodeFX.batを実行します  
  ## Configuration(minimum) 設定(最小)
 1. Select menu bar [Settings] -> [Virtual Machine]  
 メニューバー [設定]->[仮想マシン] を選択  
