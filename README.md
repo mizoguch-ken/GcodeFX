@@ -43,6 +43,10 @@
       <groupId>com.neuronrobotics</groupId>
       <artifactId>nrjavaserial</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+    </dependency>
  ## Download ダウンロード
  Please download zip file from release  
  リリースからzipファイルをダウンロードしてください  
