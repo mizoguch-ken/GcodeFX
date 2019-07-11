@@ -16,10 +16,6 @@ import jnr.ffi.util.EnumMapper;
 public interface SoemEtherCATType {
 
     /**
-     * return value general error
-     */
-    public static final int EC_ERROR = -3;
-    /**
      * return value no frame returned
      */
     public static final int EC_NOFRAME = -1;
@@ -27,6 +23,18 @@ public interface SoemEtherCATType {
      * return value unknown frame received
      */
     public static final int EC_OTHERFRAME = -2;
+    /**
+     * return value general error
+     */
+    public static final int EC_ERROR = -3;
+    /**
+     * return value too many slaves
+     */
+    public static final int EC_SLAVECOUNTEXCEEDED = -4;
+    /**
+     * return value request timeout
+     */
+    public static final int EC_TIMEOUT = -5;
     /**
      * maximum EtherCAT frame length in bytes
      */
@@ -92,6 +100,10 @@ public interface SoemEtherCATType {
      * default number of retries if wkc <= 0
      */
     public static final int EC_DEFAULTRETRIES = 3;
+    /**
+     * default group size in 2^x
+     */
+    public static final int EC_LOGGROUPOFFSET = 16;
 
     /**
      * definition for frame buffers

@@ -34,6 +34,12 @@ public interface SoemLibrary {
         public int call(int slave, int packetnumber, int datasize);
     }
 
+    public interface EOEhook {
+
+        @Delegate
+        public int call(SoemEtherCATMain.ecx_contextt context, int slave, Pointer eoembx);
+    }
+
     public class CallBackPO2SOconfig extends Struct {
 
         public Struct.Function<PO2SOconfig> PO2SOconfig = function(PO2SOconfig.class);
@@ -48,6 +54,15 @@ public interface SoemLibrary {
         public Struct.Function<FOEhook> FOEhook = function(FOEhook.class);
 
         public CallBackFOEhook(jnr.ffi.Runtime runtime) {
+            super(runtime);
+        }
+    }
+
+    public class CallBackEOEhook extends Struct {
+
+        public Struct.Function<EOEhook> FOEhook = function(EOEhook.class);
+
+        public CallBackEOEhook(jnr.ffi.Runtime runtime) {
             super(runtime);
         }
     }
@@ -486,6 +501,10 @@ public interface SoemLibrary {
     String ec_ALstatuscode2string(@u_int16_t int ALstatuscode);
 
     String ec_soeerror2string(@u_int16_t int errorcode);
+
+    String ec_mbxerror2string(@u_int16_t int errorcode);
+
+    String ecx_err2string(SoemEtherCATType.ec_errort Ec);
 
     String ecx_elist2string(SoemEtherCATMain.ecx_contextt context);
 }

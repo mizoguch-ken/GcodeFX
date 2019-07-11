@@ -905,6 +905,14 @@ public interface SoemEtherCATMain {
          * registered FoE hook
          */
         public final SoemLibrary.CallBackFOEhook FOEhook;
+        /**
+         * registered EoE hook
+         */
+        public final SoemLibrary.CallBackEOEhook EOEhook;
+        /**
+         * flag to control legacy automatic state change or manual state change
+         */
+        public final Signed32 manualstatechange;
 
         public ecx_contextt(jnr.ffi.Runtime runtime) {
             super(runtime);
@@ -966,6 +974,8 @@ public interface SoemEtherCATMain {
             _eepFMMU = new Pointer();
             eepFMMU = new ec_eepromFMMUt(getRuntime());
             FOEhook = inner(new SoemLibrary.CallBackFOEhook(runtime));
+            EOEhook = inner(new SoemLibrary.CallBackEOEhook(runtime));
+            manualstatechange = new Signed32();
         }
 
         public ecx_contextt register() {
