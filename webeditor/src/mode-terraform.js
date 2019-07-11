@@ -52,12 +52,12 @@ var TerraformHighlightRules = function () {
                 regex: "^\\s*(locals|terraform)\\s*{"
             },
             {
-                token: "paren.lpar",
+                token: "paren.lparen",
                 regex: "[[({]"
             },
 
             {
-                token: "paren.rpar",
+                token: "paren.rparen",
                 regex: "[\\])}]"
             },
             {include: "constants"},
@@ -164,11 +164,11 @@ var TerraformHighlightRules = function () {
         ],
         "parenthesis": [
             {
-                token: "paren.lpar",
+                token: "paren.lparen",
                 regex: "\\["
             },
             {
-                token: "paren.rpar",
+                token: "paren.rparen",
                 regex: "\\]"
             }
         ]
@@ -387,8 +387,7 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
-                (function() {
+});                (function() {
                     window.require(["ace/mode/terraform"], function(m) {
                         if (typeof module == "object" && typeof exports == "object" && module) {
                             module.exports = m;

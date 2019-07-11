@@ -31,7 +31,7 @@ var FSharpHighlightRules = function () {
             },
             {
                 token: "comment.start",
-                regex: /\(\*/,
+                regex: /\(\*(?!\))/,
                 push: "blockComment"
             },
             {
@@ -105,19 +105,22 @@ var FSharpHighlightRules = function () {
             },
             {
                 token: "keyword.operator",
-                regex: "\\+\\.|\\-\\.|\\*\\.|\\/\\.|#|;;|\\+|\\-|\\*|\\*\\*\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|<-|="
+                regex: "\\+\\.|\\-\\.|\\*\\.|\\/\\.|#|;;|\\+|\\-|\\*|\\*\\*\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|<-|=|\\(\\*\\)"
             },
             {
-                token: "paren.lpar",
+                token: "paren.lparen",
                 regex: "[[({]"
             },
             {
-                token: "paren.rpar",
+                token: "paren.rparen",
                 regex: "[\\])}]"
             }
         ],
         blockComment: [{
-            regex: /\(\*/,
+            regex: /\(\*\)/,
+            token: "comment"
+        }, {
+            regex: /\(\*(?!\))/,
             token: "comment.start",
             push: "blockComment"
         }, {
@@ -303,8 +306,7 @@ define("ace/mode/fsharp",["require","exports","module","ace/lib/oop","ace/mode/t
     }).call(Mode.prototype);
 
     exports.Mode = Mode;
-});
-                (function() {
+});                (function() {
                     window.require(["ace/mode/fsharp"], function(m) {
                         if (typeof module == "object" && typeof exports == "object" && module) {
                             module.exports = m;

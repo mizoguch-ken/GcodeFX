@@ -145,6 +145,7 @@ var oop = require("../lib/oop");
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
 var TclHighlightRules = function() {
+
     this.$rules = {
         "start" : [
            {
@@ -228,6 +229,9 @@ var TclHighlightRules = function() {
             }, {
                 token : "paren.rparen",
                 regex : "[\\])}]"
+            }, {
+                token : "paren.lparen",
+                regex : "[[({]"
             }, {
                 token : "support.function",
                 regex : "!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=|{\\*}|;|::"
@@ -372,8 +376,7 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
-                (function() {
+});                (function() {
                     window.require(["ace/mode/tcl"], function(m) {
                         if (typeof module == "object" && typeof exports == "object" && module) {
                             module.exports = m;
