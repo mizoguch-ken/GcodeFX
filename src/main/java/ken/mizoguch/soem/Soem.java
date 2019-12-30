@@ -305,11 +305,11 @@ public class Soem implements SoemPlugin {
     }
 
     @Override
-    public Boolean start(String ifname, long cycletime, SoemPluginListener listener) {
+    public Boolean start(String ifname, String ifname2, long cycletime, SoemPluginListener listener) {
         if (soem_ != null) {
             if (ecatThread_ != null) {
                 ecatThread_.addSoemEcatListener(listener);
-                if (ecatThread_.init(ifname, cycletime, pIOmap_)) {
+                if (ecatThread_.init(ifname, ifname2, cycletime, pIOmap_)) {
                     parcel_.wkc.set(0);
                     parcel_.cycletime.set(cycletime);
                     parcel_.dorun.set(SoemOsal.TRUE);

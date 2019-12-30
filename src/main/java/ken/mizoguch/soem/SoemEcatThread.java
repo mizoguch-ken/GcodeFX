@@ -125,79 +125,88 @@ public class SoemEcatThread extends Service<Void> {
     /**
      *
      * @param ifname
+     * @param ifname2
      * @param cycletime
      * @param pIOmap
      * @return
      */
-    public boolean init(String ifname, long cycletime, Pointer pIOmap) {
+    public boolean init(String ifname, String ifname2, long cycletime, Pointer pIOmap) {
         if (ecatCheck_ == null) {
             try {
                 int index, size;
 
                 exit_ = false;
-                if (soem_.ecx_init(context_, ifname) > 0) {
-                    if (soem_.ecx_config_init(context_, SoemOsal.FALSE) > 0) {
-                        context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue());
-                        soem_.ecx_writestate(context_, 0);
-                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
-                        if (context_.slavecount.get() > 0) {
-                            for (index = 1, size = context_.slavecount.get(); index <= size; index++) {
-                                if (po2so_.containsKey(index)) {
-                                    if ((context_.slavelist[index].eep_man.get() == po2so_.get(index).eep_man) && (context_.slavelist[index].eep_id.get() == po2so_.get(index).eep_id)) {
-                                        context_.slavelist[index].PO2SOconfig.PO2SOconfig.set((int slave) -> {
-                                            if (po2so_ != null) {
-                                                if (po2so_.containsKey(slave)) {
-                                                    RunnableFuture<Integer> future = new FutureTask<>(po2so_.get(slave).func);
-                                                    if (Platform.isFxApplicationThread()) {
-                                                        try {
-                                                            future.run();
-                                                            return future.get();
-                                                        } catch (InterruptedException | ExecutionException ex) {
-                                                            Console.writeStackTrace(SoemEnums.SOEM.toString(), ex);
-                                                        }
-                                                    } else {
-                                                        try {
-                                                            Platform.runLater(future);
-                                                            return future.get();
-                                                        } catch (InterruptedException | ExecutionException ex) {
-                                                            Console.writeStackTrace(SoemEnums.SOEM.toString(), ex);
-                                                        }
+                if (ifname2 == null) {
+                    if (soem_.ecx_init(context_, ifname) <= 0) {
+                        return false;
+                    }
+                } else {
+                    if (soem_.ecx_init_redundant(context_, soem_.ec_redport(context_), ifname, ifname2) <= 0) {
+                        return false;
+                    }
+                }
+
+                if (soem_.ecx_config_init(context_, SoemOsal.FALSE) > 0) {
+                    context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue());
+                    soem_.ecx_writestate(context_, 0);
+                    soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_PRE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
+                    if (context_.slavecount.get() > 0) {
+                        for (index = 1, size = context_.slavecount.get(); index <= size; index++) {
+                            if (po2so_.containsKey(index)) {
+                                if ((context_.slavelist[index].eep_man.get() == po2so_.get(index).eep_man) && (context_.slavelist[index].eep_id.get() == po2so_.get(index).eep_id)) {
+                                    context_.slavelist[index].PO2SOconfig.PO2SOconfig.set((int slave) -> {
+                                        if (po2so_ != null) {
+                                            if (po2so_.containsKey(slave)) {
+                                                RunnableFuture<Integer> future = new FutureTask<>(po2so_.get(slave).func);
+                                                if (Platform.isFxApplicationThread()) {
+                                                    try {
+                                                        future.run();
+                                                        return future.get();
+                                                    } catch (InterruptedException | ExecutionException ex) {
+                                                        Console.writeStackTrace(SoemEnums.SOEM.toString(), ex);
+                                                    }
+                                                } else {
+                                                    try {
+                                                        Platform.runLater(future);
+                                                        return future.get();
+                                                    } catch (InterruptedException | ExecutionException ex) {
+                                                        Console.writeStackTrace(SoemEnums.SOEM.toString(), ex);
                                                     }
                                                 }
                                             }
-                                            return 0;
-                                        });
-                                    } else {
-                                        writeLog("PO2SO: EEP_MAN[" + context_.slavelist[index].eep_man.get() + ":" + po2so_.get(index).eep_man + "] & EEP_ID[" + context_.slavelist[index].eep_id.get() + ":" + po2so_.get(index).eep_id + "] of Slave[" + index + "] are different ", true);
-                                        return false;
-                                    }
+                                        }
+                                        return 0;
+                                    });
+                                } else {
+                                    writeLog("PO2SO: EEP_MAN[" + context_.slavelist[index].eep_man.get() + ":" + po2so_.get(index).eep_man + "] & EEP_ID[" + context_.slavelist[index].eep_id.get() + ":" + po2so_.get(index).eep_id + "] of Slave[" + index + "] are different ", true);
+                                    return false;
                                 }
                             }
                         }
-                        soem_.ecx_config_map_group(context_, pIOmap, 0);
-                        soem_.ecx_configdc(context_);
-                        context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue());
-                        soem_.ecx_writestate(context_, 0);
-                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
-                        ecatCheck_ = new SoemEcatCheck(eventListenerList_, soem_, parcel_, context_);
-                        ecatCheck_.setExpectedWKC((context_.grouplist[0].outputsWKC.get() * 2) + context_.grouplist[0].inputsWKC.get());
-                        context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue());
-                        soem_.ecx_send_processdata(context_);
-                        soem_.ecx_receive_processdata(context_, SoemEtherCATType.EC_TIMEOUTRET);
-                        soem_.ecx_writestate(context_, 0);
-                        soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
-                        if (context_.slavelist[0].state.get() == SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue()) {
-                            ecatCheck_.init();
-                            if (Platform.isFxApplicationThread()) {
+                    }
+                    soem_.ecx_config_map_group(context_, pIOmap, 0);
+                    soem_.ecx_configdc(context_);
+                    context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue());
+                    soem_.ecx_writestate(context_, 0);
+                    soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_SAFE_OP.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
+                    ecatCheck_ = new SoemEcatCheck(eventListenerList_, soem_, parcel_, context_);
+                    ecatCheck_.setExpectedWKC((context_.grouplist[0].outputsWKC.get() * 2) + context_.grouplist[0].inputsWKC.get());
+                    context_.slavelist[0].state.set(SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue());
+                    soem_.ecx_send_processdata(context_);
+                    soem_.ecx_receive_processdata(context_, SoemEtherCATType.EC_TIMEOUTRET);
+                    soem_.ecx_writestate(context_, 0);
+                    soem_.ecx_statecheck(context_, 0, SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue(), SoemEtherCATType.EC_TIMEOUTSTATE);
+                    if (context_.slavelist[0].state.get() == SoemEtherCATType.ec_state.EC_STATE_OPERATIONAL.intValue()) {
+                        ecatCheck_.init();
+                        if (Platform.isFxApplicationThread()) {
+                            runEcatCheck();
+                        } else {
+                            Platform.runLater(() -> {
                                 runEcatCheck();
-                            } else {
-                                Platform.runLater(() -> {
-                                    runEcatCheck();
-                                });
-                            }
-                            init_ = true;
-                            return true;
+                            });
                         }
+                        init_ = true;
+                        return true;
                     }
                 }
             } catch (Exception ex) {
