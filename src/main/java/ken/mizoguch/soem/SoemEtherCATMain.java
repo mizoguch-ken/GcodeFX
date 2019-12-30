@@ -421,6 +421,10 @@ public interface SoemEtherCATMain {
          */
         public final SoemLibrary.CallBackPO2SOconfig PO2SOconfig;
         /**
+         * registered configuration function PO->SO
+         */
+        public final SoemLibrary.CallBackPO2SOconfigx PO2SOconfigx;
+        /**
          * readable name
          */
         public String name;
@@ -490,6 +494,7 @@ public interface SoemEtherCATMain {
             FMMUunused = new Unsigned8();
             islost = new Unsigned8();
             PO2SOconfig = inner(new SoemLibrary.CallBackPO2SOconfig(runtime));
+            PO2SOconfigx = inner(new SoemLibrary.CallBackPO2SOconfigx(runtime));
             name = new UTF8String(EC_MAXNAME + 1);
         }
     }
@@ -669,7 +674,7 @@ public interface SoemEtherCATMain {
     /**
      * mailbox buffer array
      */
-//    typedef uint8 ec_mbxbuft[EC_MAXMBX + 1];
+//    public final SoemLibrary.Uint8[] ec_mbxbuft = new SoemLibrary.Uint8[EC_MAXMBX + 1];
     /**
      * standard ethercat mailbox header
      */
@@ -718,6 +723,7 @@ public interface SoemEtherCATMain {
         public final Unsigned8[] idx;
         public final Pointer[] data;
         public final Unsigned16[] length;
+        public final Unsigned16[] dcoffset;
 
         public ec_idxstackT(jnr.ffi.Runtime runtime) {
             super(runtime);
@@ -727,6 +733,7 @@ public interface SoemEtherCATMain {
             idx = super.array(new Unsigned8[SoemEtherCATType.EC_MAXBUF]);
             data = super.array(new Pointer[SoemEtherCATType.EC_MAXBUF]);
             length = super.array(new Unsigned16[SoemEtherCATType.EC_MAXBUF]);
+            dcoffset = super.array(new Unsigned16[SoemEtherCATType.EC_MAXBUF]);
         }
     }
 
@@ -864,14 +871,6 @@ public interface SoemEtherCATMain {
         private final Pointer _ecaterror;
         public final SoemLibrary.Bool ecaterror;
         /**
-         * internal, position of DC datagram in process data packet
-         */
-        public final Unsigned16 DCtO;
-        /**
-         * internal, length of DC datagram
-         */
-        public final Unsigned16 DCl;
-        /**
          * reference to last DC time from slaves
          */
         private final Pointer _DCtime;
@@ -950,8 +949,6 @@ public interface SoemEtherCATMain {
             idxstack = new ec_idxstackT(getRuntime());
             _ecaterror = new Pointer();
             ecaterror = new SoemLibrary.Bool(getRuntime());
-            DCtO = new Unsigned16();
-            DCl = new Unsigned16();
             _DCtime = new Pointer();
             DCtime = new SoemLibrary.Int64(getRuntime());
             _SMcommtype = new Pointer();

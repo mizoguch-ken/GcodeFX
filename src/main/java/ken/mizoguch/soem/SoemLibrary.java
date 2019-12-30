@@ -28,6 +28,12 @@ public interface SoemLibrary {
         int call(int slave);
     }
 
+    public interface PO2SOconfigx {
+
+        @Delegate
+        int call(SoemEtherCATMain.ecx_contextt context, int slave);
+    }
+
     public interface FOEhook {
 
         @Delegate
@@ -45,6 +51,15 @@ public interface SoemLibrary {
         public Struct.Function<PO2SOconfig> PO2SOconfig = function(PO2SOconfig.class);
 
         public CallBackPO2SOconfig(jnr.ffi.Runtime runtime) {
+            super(runtime);
+        }
+    }
+
+    public class CallBackPO2SOconfigx extends Struct {
+
+        public Struct.Function<PO2SOconfigx> PO2SOconfig = function(PO2SOconfigx.class);
+
+        public CallBackPO2SOconfigx(jnr.ffi.Runtime runtime) {
             super(runtime);
         }
     }
@@ -293,7 +308,7 @@ public interface SoemLibrary {
         }
     }
 
-    // SoemEthercat
+    // SoemEtherCAT
     public SoemEtherCATMain.ecx_contextt ec_malloc_context();
 
     public void ec_free_context(SoemEtherCATMain.ecx_contextt context);
@@ -306,7 +321,7 @@ public interface SoemLibrary {
 
     public int ec_run(SoemEtherCAT.ecx_parcelt parcel);
 
-    // SoemEthercatBase
+    // SoemEtherCATBase
     public int ecx_setupdatagram(Pointer port, Pointer frame, @u_int8_t int com, @u_int8_t int idx, @u_int16_t int ADP, @u_int16_t int ADO, @u_int16_t int length, Pointer data);
 
     public int ecx_adddatagram(Pointer port, Pointer frame, @u_int8_t int com, @u_int8_t int idx, @u_int8_t int more, @u_int16_t int ADP, @u_int16_t int ADO, @u_int16_t int length, Pointer data);
@@ -439,7 +454,9 @@ public interface SoemLibrary {
 
     public int ecx_receive_processdata(SoemEtherCATMain.ecx_contextt context, int timeout);
 
-    // SoemEthercatDC
+    public int ecx_send_processdata_group(SoemEtherCATMain.ecx_contextt context, @u_int8_t int group);
+
+    // SoemEtherCATDC
     public @u_int8_t
     int ecx_configdc(SoemEtherCATMain.ecx_contextt context);
 
@@ -447,7 +464,7 @@ public interface SoemLibrary {
 
     public void ecx_dcsync01(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int act, @u_int32_t long CyclTime0, @u_int32_t long CyclTime1, @int32_t int CyclShift);
 
-    // SoemEthercatCoE
+    // SoemEtherCATCoE
     public void ecx_SDOerror(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIdx, @int32_t int AbortCode);
 
     public int ecx_SDOread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int index, @u_int8_t int subindex, @u_int8_t int CA, Pointer psize, Pointer p, int timeout);
@@ -470,21 +487,31 @@ public interface SoemLibrary {
 
     public int ecx_readOE(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Item, SoemEtherCATCoE.ec_ODlistt pODlist, SoemEtherCATCoE.ec_OElistt pOElist);
 
-    // SoemEthercatFoE
+    // SoemEtherCATEoE
+    public int ecx_EOEdefinehook(SoemEtherCATMain.ecx_contextt context, CallBackEOEhook hook);
+
+//    public int ecx_EOEsetIp(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int port, SoemEtherCATEoE.eoe_param_t ipparam, int timeout);
+//    public int ecx_EOEgetIp(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int port, SoemEtherCATEoE.eoe_param_t ipparam, int timeout);
+    public int ecx_EOEsend(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int port, int psize, Pointer p, int timeout);
+
+    public int ecx_EOErecv(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int port, Pointer psize, Pointer p, int timeout);
+
+//    public int ecx_EOEreadfragment(SoemEtherCATMain.ec_mbxbuft MbxIn, Pointer rxfragmentno, Pointer rxframesize, Pointer rxframeoffset, Pointer rxframeno, Pointer psize, Pointer p);
+    // SoemEtherCATFoE
     public int ecx_FOEdefinehook(SoemEtherCATMain.ecx_contextt context, CallBackFOEhook hook);
 
     public int ecx_FOEread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, Pointer filename, @u_int32_t long password, Pointer psize, Pointer p, int timeout);
 
     public int ecx_FOEwrite(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, Pointer filename, @u_int32_t long password, int psize, Pointer p, int timeout);
 
-    // SoemEthercatSoE
+    // SoemEtherCATSoE
     public int ecx_SoEread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int driveNo, @u_int8_t int elementflags, @u_int16_t int idn, Pointer psize, Pointer p, int timeout);
 
     public int ecx_SoEwrite(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int8_t int driveNo, @u_int8_t int elementflags, @u_int16_t int idn, int psize, Pointer p, int timeout);
 
     public int ecx_readIDNmap(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, Pointer Osize, Pointer Isize);
 
-    // SoemEthercatConfig
+    // SoemEtherCATConfig
     public int ecx_config_init(SoemEtherCATMain.ecx_contextt context, @u_int8_t int usetable);
 
     public int ecx_config_map_group(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
@@ -495,7 +522,7 @@ public interface SoemLibrary {
 
     public int ecx_reconfig_slave(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, int timeout);
 
-    // SoemEthercatPrint
+    // SoemEtherCATPrint
     String ec_sdoerror2string(@u_int32_t long sdoerrorcode);
 
     String ec_ALstatuscode2string(@u_int16_t int ALstatuscode);
