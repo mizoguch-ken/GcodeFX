@@ -58,7 +58,7 @@ JavaFX SDK 11をダウンロードしてGcodeFXフォルダに解凍します
 3. Create GcodeFX.bat in the GcodeFX folder and write the contents as follows  
 GcodeFXフォルダにGcodeFX.batを作成し、内容を次のように書きます  
 ```
-%~dp0jdk-11.0.2\bin\java.exe -jar --module-path=%~dp0javafx-sdk-11.0.2\lib --add-modules=javafx.fxml,javafx.web GcodeFX.jar
+%~dp0jdk-11.0.2\bin\java.exe -jar --module-path=%~dp0javafx-sdk-11.0.2\lib --add-modules=javafx.fxml,javafx.web,javafx.swing GcodeFX.jar
 ```
 4. Run GcodeFX.bat  
 GcodeFX.batを実行します  
