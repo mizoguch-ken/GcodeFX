@@ -16,7 +16,7 @@
 +                if (window.clipboardData) {
 +                    windowClipboardSetData = window.clipboardData.setData(mime, data);
 +                }
-+                return (eClipboardSetData | windowClipboardSetData) !== false;
++                return (eClipboardSetData || windowClipboardSetData) !== false;
             } else {
 -                return clipboardData.getData(mime);
 +                var eClipboardGetData;

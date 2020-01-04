@@ -5,8 +5,13 @@
  */
 package ken.mizoguch.gcodefx.webeditor;
 
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 
 /**
  *
@@ -14,29 +19,34 @@ import javafx.scene.input.ClipboardContent;
  */
 public class WebEditorClipboardData {
 
-    private final ClipboardContent clipboardContent_;
+    private final Clipboard clipboard_;
+    private Transferable clipboardContent_;
 
     /**
      *
      */
     public WebEditorClipboardData() {
-        clipboardContent_ = new ClipboardContent();
+        clipboard_ = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboardContent_ = null;
     }
 
     /**
      *
      * @param format
      * @return
+     * @throws java.awt.datatransfer.UnsupportedFlavorException
+     * @throws java.io.IOException
      */
-    public String getData(String format) {
+    public String getData(String format) throws UnsupportedFlavorException, IOException {
         String ret = null;
+
         switch (format) {
             case "Text":
             case "text/plain":
-                if (Clipboard.getSystemClipboard().hasString()) {
-                    clipboardContent_.putString(Clipboard.getSystemClipboard().getString());
+                if (clipboard_.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
+                    clipboardContent_ = new StringSelection((String) clipboard_.getData(DataFlavor.stringFlavor));
                 }
-                ret = clipboardContent_.getString();
+                ret = (String) clipboardContent_.getTransferData(DataFlavor.stringFlavor);
                 break;
             default:
                 break;
@@ -52,11 +62,12 @@ public class WebEditorClipboardData {
      */
     public boolean setData(String format, String data) {
         boolean ret = false;
+
         switch (format) {
             case "Text":
             case "text/plain":
-                clipboardContent_.putString(data);
-                ret = Clipboard.getSystemClipboard().setContent(clipboardContent_);
+                clipboardContent_ = new StringSelection(data);
+                clipboard_.setContents(clipboardContent_, null);
                 break;
             default:
                 break;

@@ -2497,7 +2497,7 @@ var TextInput = function(parentNode, host) {
                 if (window.clipboardData) {
                     windowClipboardSetData = window.clipboardData.setData(mime, data);
                 }
-                return (eClipboardSetData | windowClipboardSetData) !== false;
+                return (eClipboardSetData || windowClipboardSetData) !== false;
             } else {
                 var eClipboardGetData;
                 var windowClipboardGetData;
