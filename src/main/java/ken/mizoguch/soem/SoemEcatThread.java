@@ -126,11 +126,10 @@ public class SoemEcatThread extends Service<Void> {
      *
      * @param ifname
      * @param ifname2
-     * @param cycletime
      * @param pIOmap
      * @return
      */
-    public boolean init(String ifname, String ifname2, long cycletime, Pointer pIOmap) {
+    public boolean init(String ifname, String ifname2, Pointer pIOmap) {
         if (ecatCheck_ == null) {
             try {
                 int index, size;

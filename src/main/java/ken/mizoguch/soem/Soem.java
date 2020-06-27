@@ -309,7 +309,7 @@ public class Soem implements SoemPlugin {
         if (soem_ != null) {
             if (ecatThread_ != null) {
                 ecatThread_.addSoemEcatListener(listener);
-                if (ecatThread_.init(ifname, ifname2, cycletime, pIOmap_)) {
+                if (ecatThread_.init(ifname, ifname2, pIOmap_)) {
                     parcel_.wkc.set(0);
                     parcel_.cycletime.set(cycletime);
                     parcel_.dorun.set(SoemOsal.TRUE);
