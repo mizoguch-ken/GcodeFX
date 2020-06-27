@@ -65,8 +65,7 @@ GcodeFX.batを実行します
 
 ## <u>Configuration 設定</u>
 
-[Gcode](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode)
-
-[Ladders](https://github.com/mizoguch-ken/GcodeFX/wiki/Ladders)
-
-[EtherCAT](https://github.com/mizoguch-ken/GcodeFX/wiki/EtherCAT)
+- [Gcode](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode)
+- [Ladders](https://github.com/mizoguch-ken/GcodeFX/wiki/Ladders)
+- [EtherCAT](https://github.com/mizoguch-ken/GcodeFX/wiki/EtherCAT)
+  - [Example](https://github.com/mizoguch-ken/GcodeFX/wiki/EtherCAT#example)
