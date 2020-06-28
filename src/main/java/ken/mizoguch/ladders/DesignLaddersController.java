@@ -835,14 +835,16 @@ public class DesignLaddersController implements Initializable {
             switch (event.getClickCount()) {
                 case 1:
                     tblIo = tableIo.getSelectionModel().getSelectedItem();
-                    for (int index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
-                        scrollPane = (ScrollPane) tabLadder.getTabs().get(index).getContent();
-                        pane = (LadderPane) scrollPane.getContent();
-                        if (pane.getLadder().getName().equals(tblIo.getName())) {
-                            gridPane = pane.findGridPane(tblIo.getColumn(), tblIo.getRow());
-                            if (gridPane != null) {
-                                tabLadder.getSelectionModel().select(index);
-                                ladders_.getLadderCommand().blockChangeSelect(scrollPane, pane, gridPane.getLadderGrid(), false);
+                    if (tblIo != null) {
+                        for (int index = 0, size = tabLadder.getTabs().size(); index < size; index++) {
+                            scrollPane = (ScrollPane) tabLadder.getTabs().get(index).getContent();
+                            pane = (LadderPane) scrollPane.getContent();
+                            if (pane.getLadder().getName().equals(tblIo.getName())) {
+                                gridPane = pane.findGridPane(tblIo.getColumn(), tblIo.getRow());
+                                if (gridPane != null) {
+                                    tabLadder.getSelectionModel().select(index);
+                                    ladders_.getLadderCommand().blockChangeSelect(scrollPane, pane, gridPane.getLadderGrid(), false);
+                                }
                             }
                         }
                     }
