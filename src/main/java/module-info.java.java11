@@ -1,0 +1,24 @@
+module ken.mizoguch.gcodefx {
+    requires java.logging;
+    requires jdk.jsobject;
+    requires javafx.fxml;
+    requires javafx.web;
+    requires javafx.swing;
+
+    requires diffutils;
+    requires com.google.gson;
+    requires jnr.ffi;
+    requires nrjavaserial;
+    requires org.apache.fontbox;
+    requires org.apache.pdfbox;
+
+    opens ken.mizoguch.gcodefx to javafx.fxml;
+    opens ken.mizoguch.webviewer to javafx.fxml;
+    opens ken.mizoguch.ladders to javafx.fxml;
+    opens ken.mizoguch.gcodefx.webeditor to javafx.web;
+
+    exports ken.mizoguch.gcodefx;
+    exports ken.mizoguch.soem;
+    exports ken.mizoguch.webviewer.plugin;
+    exports ken.mizoguch.webviewer.plugin.gcodefx;
+}
