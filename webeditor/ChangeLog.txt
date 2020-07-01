@@ -1,3 +1,18 @@
+2020.04.15 Version 1.4.10
+* added workaround for chrome bug causing memory leak after calling editor.destroy
+* added code folding support for vbscript mode
+
+2020.04.01 Version 1.4.9
+* added option to disable autoindent 
+* added new language modes
+* fixed backspace not working with some mobile keyboards
+
+2020.01.14 Version 1.4.8
+* highlight both matched braces, and highlight unmatched brace in red
+* improve snippet manager
+* compatibility with webpack file-loader v5
+* improve vim mode
+
 2019.10.17 Version 1.4.7
 * add placeholder option
 
