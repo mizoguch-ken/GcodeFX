@@ -299,12 +299,15 @@ public class JavaLibrary {
             });
 
             try {
-                System.setProperty("java.library.path", pathString.toString());
-                Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
-                fieldSysPath.setAccessible(true);
-                fieldSysPath.set(null, null);
+                try {
+                    System.setProperty("java.library.path", pathString.toString());
+                    Field fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
+                    fieldSysPath.setAccessible(true);
+                    fieldSysPath.set(null, null);
+                } catch (NoSuchFieldException ex) {
+                }
                 return loadLibrary(libraryName, systemLoad);
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+            } catch (SecurityException | IllegalArgumentException | IllegalAccessException ex) {
                 Console.writeStackTrace(DesignEnums.JAVA_LIBRARY.toString(), ex);
             }
         }
