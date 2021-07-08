@@ -73,8 +73,8 @@
 	</style>
 	<link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="./js/jstree/themes/default/style.min.css" />
-	<script type="text/javascript" src="./js/jquery/jquery-3.5.1.min.js"></script>
-	<script type="text/javascript" src="./js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./js/jquery/jquery-3.6.0.min.js"></script>
+	<script type="text/javascript" src="./js/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<script type="text/javascript" src="./js/splitjs/split.min.js"></script>
 	<script type="text/javascript" src="./js/jstree/jstree.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
@@ -377,79 +377,81 @@
 	</script>
 </head>
 <body>
-	<nav class="navbar navbar-expand-sm navbar-dark bg-dark py-0">
-		<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#edit_menu" aria-controls="edit_menu" aria-label="Menu">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div id="edit_menu" class="collapse navbar-collapse">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item dropdown">
-					<a id="menu_edit" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Edit<span class="caret"></span></a>
-					<div class="dropdown-menu" aria-labelledby="menu_edit">
-						<a id="menu_edit_undo" class="dropdown-item" href="javascript:env.editor.execCommand('undo');">Undo</a>
-						<a id="menu_edit_redo" class="dropdown-item" href="javascript:env.editor.execCommand('redo');">Redo</a>
-						<a id="menu_edit_select_all" class="dropdown-item" href="javascript:env.editor.execCommand('selectall');">Select All</a>
-						<a id="menu_edit_remove_line" class="dropdown-item" href="javascript:env.editor.execCommand('removeline');">Remove Line</a>
-						<a id="menu_edit_toggle_comment" class="dropdown-item" href="javascript:env.editor.execCommand('togglecomment');">Toggle Comment</a>
-						<a id="menu_edit_remove_word_left" class="dropdown-item" href="javascript:env.editor.execCommand('removewordleft');">Remove Word Left</a>
-						<a id="menu_edit_remove_word_right" class="dropdown-item" href="javascript:env.editor.execCommand('removewordright');">Remove Word Right</a>
-						<a id="menu_edit_transpose_letters" class="dropdown-item" href="javascript:env.editor.execCommand('transposeletters');">Transpose Letters</a>
-						<a id="menu_edit_to_upper_case" class="dropdown-item" href="javascript:env.editor.execCommand('touppercase');">To Upper Case</a>
-						<a id="menu_edit_to_lower_case" class="dropdown-item" href="javascript:env.editor.execCommand('tolowercase');">To Lower Case</a>
-						<a id="menu_edit_move_lines_up" class="dropdown-item" href="javascript:env.editor.execCommand('movelinesup');">Move Lines Up</a>
-						<a id="menu_edit_move_lines_down" class="dropdown-item" href="javascript:env.editor.execCommand('movelinesdown');">Move Lines Down</a>
-						<a id="menu_edit_remove_to_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('removetolinestart');">Remove To Line Start</a>
-						<a id="menu_edit_remove_to_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('removetolineend');">Remove To Line End</a>
-						<a id="menu_edit_select_to_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('selecttolinestart');">Select To Line Start</a>
-						<a id="menu_edit_select_to_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('selecttolineend');">Select To Line End</a>
-						<a id="menu_edit_copy_lines_up" class="dropdown-item" href="javascript:env.editor.execCommand('copylinesup');">Copy Lines Up</a>
-						<a id="menu_edit_copy_lines_down" class="dropdown-item" href="javascript:env.editor.execCommand('copylinesdown');">Copy Lines Down</a>
-						<a id="menu_edit_modify_number_up" class="dropdown-item" href="javascript:env.editor.execCommand('modifyNumberUp');">Modify Number Up</a>
-						<a id="menu_edit_modify_number_down" class="dropdown-item" href="javascript:env.editor.execCommand('modifyNumberDown');">Modify Number Down</a>
-					</div>
-				</li>
-				<li class="nav-item dropdown">
-					<a id="menu_view" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">View<span class="caret"></span></a>
-					<div class="dropdown-menu" aria-labelledby="menu_view">
-						<a id="menu_view_inline_editor" class="dropdown-item" href="javascript:env.editor.execCommand('openInlineEditor');">Inline Editor</a>
-						<a id="menu_view_autocomplete" class="dropdown-item" href="javascript:env.editor.execCommand('startAutocomplete');">Autocomplete</a>
-						<a id="menu_view_scroll_up" class="dropdown-item" href="javascript:env.editor.execCommand('scrollup');">Scroll Up</a>
-						<a id="menu_view_scroll_down" class="dropdown-item" href="javascript:env.editor.execCommand('scrolldown');">Scroll Down</a>
-						<a id="menu_view_fold" class="dropdown-item" href="javascript:env.editor.execCommand('fold');">Fold</a>
-						<a id="menu_view_toggle_parent_fold_widget" class="dropdown-item" href="javascript:env.editor.execCommand('toggleParentFoldWidget');">Toggle Parent Fold Widget</a>
-						<a id="menu_view_fold_other" class="dropdown-item" href="javascript:env.editor.execCommand('foldOther');">Fold Other</a>
-						<a id="menu_view_un_fold_all" class="dropdown-item" href="javascript:env.editor.execCommand('unfoldall');">Un Fold All</a>
-						<a id="menu_view_goto_start" class="dropdown-item" href="javascript:env.editor.execCommand('gotostart');">Goto Start</a>
-						<a id="menu_view_goto_end" class="dropdown-item" href="javascript:env.editor.execCommand('gotoend');">Goto End</a>
-						<a id="menu_view_goto_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('gotolinestart');">Goto Line Start</a>
-						<a id="menu_view_goto_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('gotolineend');">Goto Line End</a>
-						<a id="menu_view_jump_to_matching" class="dropdown-item" href="javascript:env.editor.execCommand('jumptomatching');">Jump To Matching</a>
-						<a id="menu_view_goto_word_left" class="dropdown-item" href="javascript:env.editor.execCommand('gotowordleft');">Goto Word Left</a>
-						<a id="menu_view_goto_word_right" class="dropdown-item" href="javascript:env.editor.execCommand('gotowordright');">Goto Word Right</a>
-					</div>
-				</li>
-				<li class="dropdown">
-					<a id="menu_search" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Search<span class="caret"></span></a>
-					<div class="dropdown-menu" aria-labelledby="menu_search">
-						<a id="menu_search_find" class="dropdown-item" href="javascript:env.editor.execCommand('find');">Find</a>
-						<a id="menu_search_find_all" class="dropdown-item" href="javascript:env.editor.execCommand('findAll');">Find All</a>
-						<a id="menu_search_replace" class="dropdown-item" href="javascript:env.editor.execCommand('findnext');">Replace</a>
-						<a id="menu_search_find_next" class="dropdown-item" href="javascript:env.editor.execCommand('replace');">Find Next</a>
-						<a id="menu_search_find_previous" class="dropdown-item" href="javascript:env.editor.execCommand('findprevious');">Find Previous</a>
-						<a id="menu_search_select_or_find_next" class="dropdown-item" href="javascript:env.editor.execCommand('selectOrFindNext');">Select Or Find Next</a>
-						<a id="menu_search_select_or_find_previous" class="dropdown-item" href="javascript:env.editor.execCommand('selectOrFindPrevious');">Select Or Find Previous</a>
-						<a id="menu_search_goto_line" class="dropdown-item" href="javascript:env.editor.execCommand('gotoline');">Goto Line</a>
-					</div>
-				</li>
-				<li class="dropdown">
-					<a id="menu_help" href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Help<span class="caret"></span></a>
-					<div class="dropdown-menu" aria-labelledby="menu_help">
-						<a id="menu_help_show_settings_menu" class="dropdown-item" href="javascript:env.editor.execCommand('showSettingsMenu');">Settings Menu</a>
-						<a id="menu_help_show_keyboard_shortcuts" class="dropdown-item" href="javascript:env.editor.execCommand('showKeyboardShortcuts');">Keyboard Shortcuts</a>
-					</div>
-				</li>
-			</ul>
-		</div>
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+    <div class="container-fluid">
+      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#edit_menu" aria-controls="edit_menu" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="edit_menu" class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a id="menu_edit" href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Edit</a>
+            <ul class="dropdown-menu" aria-labelledby="menu_edit">
+              <li><a id="menu_edit_undo" class="dropdown-item" href="javascript:env.editor.execCommand('undo');">Undo</a></li>
+              <li><a id="menu_edit_redo" class="dropdown-item" href="javascript:env.editor.execCommand('redo');">Redo</a></li>
+              <li><a id="menu_edit_select_all" class="dropdown-item" href="javascript:env.editor.execCommand('selectall');">Select All</a></li>
+              <li><a id="menu_edit_remove_line" class="dropdown-item" href="javascript:env.editor.execCommand('removeline');">Remove Line</a></li>
+              <li><a id="menu_edit_toggle_comment" class="dropdown-item" href="javascript:env.editor.execCommand('togglecomment');">Toggle Comment</a></li>
+              <li><a id="menu_edit_remove_word_left" class="dropdown-item" href="javascript:env.editor.execCommand('removewordleft');">Remove Word Left</a></li>
+              <li><a id="menu_edit_remove_word_right" class="dropdown-item" href="javascript:env.editor.execCommand('removewordright');">Remove Word Right</a></li>
+              <li><a id="menu_edit_transpose_letters" class="dropdown-item" href="javascript:env.editor.execCommand('transposeletters');">Transpose Letters</a></li>
+              <li><a id="menu_edit_to_upper_case" class="dropdown-item" href="javascript:env.editor.execCommand('touppercase');">To Upper Case</a></li>
+              <li><a id="menu_edit_to_lower_case" class="dropdown-item" href="javascript:env.editor.execCommand('tolowercase');">To Lower Case</a></li>
+              <li><a id="menu_edit_move_lines_up" class="dropdown-item" href="javascript:env.editor.execCommand('movelinesup');">Move Lines Up</a></li>
+              <li><a id="menu_edit_move_lines_down" class="dropdown-item" href="javascript:env.editor.execCommand('movelinesdown');">Move Lines Down</a></li>
+              <li><a id="menu_edit_remove_to_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('removetolinestart');">Remove To Line Start</a></li>
+              <li><a id="menu_edit_remove_to_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('removetolineend');">Remove To Line End</a></li>
+              <li><a id="menu_edit_select_to_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('selecttolinestart');">Select To Line Start</a></li>
+              <li><a id="menu_edit_select_to_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('selecttolineend');">Select To Line End</a></li>
+              <li><a id="menu_edit_copy_lines_up" class="dropdown-item" href="javascript:env.editor.execCommand('copylinesup');">Copy Lines Up</a></li>
+              <li><a id="menu_edit_copy_lines_down" class="dropdown-item" href="javascript:env.editor.execCommand('copylinesdown');">Copy Lines Down</a></li>
+              <li><a id="menu_edit_modify_number_up" class="dropdown-item" href="javascript:env.editor.execCommand('modifyNumberUp');">Modify Number Up</a></li>
+              <li><a id="menu_edit_modify_number_down" class="dropdown-item" href="javascript:env.editor.execCommand('modifyNumberDown');">Modify Number Down</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a id="menu_view" href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">View</a>
+            <ul class="dropdown-menu" aria-labelledby="menu_view">
+              <li><a id="menu_view_inline_editor" class="dropdown-item" href="javascript:env.editor.execCommand('openInlineEditor');">Inline Editor</a></li>
+              <li><a id="menu_view_autocomplete" class="dropdown-item" href="javascript:env.editor.execCommand('startAutocomplete');">Autocomplete</a></li>
+              <li><a id="menu_view_scroll_up" class="dropdown-item" href="javascript:env.editor.execCommand('scrollup');">Scroll Up</a></li>
+              <li><a id="menu_view_scroll_down" class="dropdown-item" href="javascript:env.editor.execCommand('scrolldown');">Scroll Down</a></li>
+              <li><a id="menu_view_fold" class="dropdown-item" href="javascript:env.editor.execCommand('fold');">Fold</a></li>
+              <li><a id="menu_view_toggle_parent_fold_widget" class="dropdown-item" href="javascript:env.editor.execCommand('toggleParentFoldWidget');">Toggle Parent Fold Widget</a></li>
+              <li><a id="menu_view_fold_other" class="dropdown-item" href="javascript:env.editor.execCommand('foldOther');">Fold Other</a></li>
+              <li><a id="menu_view_un_fold_all" class="dropdown-item" href="javascript:env.editor.execCommand('unfoldall');">Un Fold All</a></li>
+              <li><a id="menu_view_goto_start" class="dropdown-item" href="javascript:env.editor.execCommand('gotostart');">Goto Start</a></li>
+              <li><a id="menu_view_goto_end" class="dropdown-item" href="javascript:env.editor.execCommand('gotoend');">Goto End</a></li>
+              <li><a id="menu_view_goto_line_start" class="dropdown-item" href="javascript:env.editor.execCommand('gotolinestart');">Goto Line Start</a></li>
+              <li><a id="menu_view_goto_line_end" class="dropdown-item" href="javascript:env.editor.execCommand('gotolineend');">Goto Line End</a></li>
+              <li><a id="menu_view_jump_to_matching" class="dropdown-item" href="javascript:env.editor.execCommand('jumptomatching');">Jump To Matching</a></li>
+              <li><a id="menu_view_goto_word_left" class="dropdown-item" href="javascript:env.editor.execCommand('gotowordleft');">Goto Word Left</a></li>
+              <li><a id="menu_view_goto_word_right" class="dropdown-item" href="javascript:env.editor.execCommand('gotowordright');">Goto Word Right</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a id="menu_search" href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">Search</a>
+            <ul class="dropdown-menu" aria-labelledby="menu_search">
+              <li><a id="menu_search_find" class="dropdown-item" href="javascript:env.editor.execCommand('find');">Find</a></li>
+              <li><a id="menu_search_find_all" class="dropdown-item" href="javascript:env.editor.execCommand('findAll');">Find All</a></li>
+              <li><a id="menu_search_replace" class="dropdown-item" href="javascript:env.editor.execCommand('findnext');">Replace</a></li>
+              <li><a id="menu_search_find_next" class="dropdown-item" href="javascript:env.editor.execCommand('replace');">Find Next</a></li>
+              <li><a id="menu_search_find_previous" class="dropdown-item" href="javascript:env.editor.execCommand('findprevious');">Find Previous</a></li>
+              <li><a id="menu_search_select_or_find_next" class="dropdown-item" href="javascript:env.editor.execCommand('selectOrFindNext');">Select Or Find Next</a></li>
+              <li><a id="menu_search_select_or_find_previous" class="dropdown-item" href="javascript:env.editor.execCommand('selectOrFindPrevious');">Select Or Find Previous</a></li>
+              <li><a id="menu_search_goto_line" class="dropdown-item" href="javascript:env.editor.execCommand('gotoline');">Goto Line</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a id="menu_help" href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button"aria-expanded="false">Help</a>
+            <ul class="dropdown-menu" aria-labelledby="menu_help">
+              <li><a id="menu_help_show_settings_menu" class="dropdown-item" href="javascript:env.editor.execCommand('showSettingsMenu');">Settings Menu</a></li>
+              <li><a id="menu_help_show_keyboard_shortcuts" class="dropdown-item" href="javascript:env.editor.execCommand('showKeyboardShortcuts');">Keyboard Shortcuts</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
 	</nav>
 	<div id="treeProgram" class="programs split split-horizontal">
 		<div id="jstree"></div>
