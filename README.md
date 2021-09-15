@@ -67,13 +67,13 @@ GcodeFX.batを実行します
 
 - [Gcode](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode)
 
-  - [Main Window](Gcode-MainWindow)
+  - [Main Window](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-MainWindow)
 
     [Virtual Machine Settings]
 
-    - [Base](Gcode-VirtualMachineSettings-Base)
-    - [Gcode Group](Gcode-VirtualMachineSettings-GcodeGroup)
-    - [Code Change](Gcode-VirtualMachineSettings-CodeChange)
+    - [Base](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-Base)
+    - [Gcode Group](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-GcodeGroup)
+    - [Code Change](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-CodeChange)
 
 - [Ladders](https://github.com/mizoguch-ken/GcodeFX/wiki/Ladders)
 
