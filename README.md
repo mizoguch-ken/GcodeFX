@@ -66,6 +66,17 @@ GcodeFX.batを実行します
 ## <u>Configuration 設定</u>
 
 - [Gcode](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode)
+
+  - [Main Window](Gcode-MainWindow)
+
+    [Virtual Machine Settings]
+
+    - [Base](Gcode-VirtualMachineSettings-Base)
+    - [Gcode Group](Gcode-VirtualMachineSettings-GcodeGroup)
+    - [Code Change](Gcode-VirtualMachineSettings-CodeChange)
+
 - [Ladders](https://github.com/mizoguch-ken/GcodeFX/wiki/Ladders)
+
 - [EtherCAT](https://github.com/mizoguch-ken/GcodeFX/wiki/EtherCAT)
   - [Example](https://github.com/mizoguch-ken/GcodeFX/wiki/EtherCAT#example)
+
