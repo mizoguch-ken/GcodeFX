@@ -74,6 +74,10 @@ GcodeFX.batを実行します
     - [Base](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-Base)
     - [Gcode Group](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-GcodeGroup)
     - [Code Change](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-CodeChange)
+    - [Macro Call](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-MacroCall)
+    - [Coordinate](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-Coordinate)
+    - [Tool Offset](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-ToolOffset)
+    - [Variables](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-Variables)
 
 - [Ladders](https://github.com/mizoguch-ken/GcodeFX/wiki/Ladders)
 
