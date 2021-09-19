@@ -78,6 +78,9 @@ GcodeFX.batを実行します
     - [Coordinate](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-Coordinate)
     - [Tool Offset](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-ToolOffset)
     - [Variables](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-Variables)
+    - [Tool Change](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-ToolChange)
+    - [Skip Function](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-SkipFunction)
+    - [Option](https://github.com/mizoguch-ken/GcodeFX/wiki/Gcode-VirtualMachineSettings-Option)
 
 - [Ladders](https://github.com/mizoguch-ken/GcodeFX/wiki/Ladders)
 
