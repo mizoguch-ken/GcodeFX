@@ -469,9 +469,9 @@ public interface SoemLibrary {
 
     public int ecx_SDOread(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int index, @u_int8_t int subindex, @u_int8_t int CA, Pointer psize, Pointer p, int timeout);
 
-    public int ecx_SDOwrite(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIndex, @u_int8_t int CA, int psize, Pointer p, int Timeout);
+    public int ecx_SDOwrite(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int Index, @u_int8_t int SubIndex, @u_int8_t int CA, int psize, final Pointer p, int Timeout);
 
-    public int ecx_RxPDO(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int RxPDOnumber, int psize, Pointer p);
+    public int ecx_RxPDO(SoemEtherCATMain.ecx_contextt context, @u_int16_t int Slave, @u_int16_t int RxPDOnumber, int psize, final Pointer p);
 
     public int ecx_TxPDO(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, @u_int16_t int TxPDOnumber, Pointer psize, Pointer p, int timeout);
 
@@ -517,6 +517,8 @@ public interface SoemLibrary {
     public int ecx_config_map_group(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
 
     public int ecx_config_overlap_map_group(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
+
+    public int ecx_config_map_group_aligned(SoemEtherCATMain.ecx_contextt context, Pointer pIOmap, @u_int8_t int group);
 
     public int ecx_recover_slave(SoemEtherCATMain.ecx_contextt context, @u_int16_t int slave, int timeout);
 
