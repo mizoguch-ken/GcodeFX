@@ -912,6 +912,12 @@ public interface SoemEtherCATMain {
          * flag to control legacy automatic state change or manual state change
          */
         public final Signed32 manualstatechange;
+        /**
+         * userdata, promotes application configuration esp. in EC_VER2 with
+         * multiple ec_context instances. Note: userdata memory is managed by
+         * application, not SOEM
+         */
+        public final Pointer userdata;
 
         public ecx_contextt(jnr.ffi.Runtime runtime) {
             super(runtime);
@@ -973,6 +979,7 @@ public interface SoemEtherCATMain {
             FOEhook = inner(new SoemLibrary.CallBackFOEhook(runtime));
             EOEhook = inner(new SoemLibrary.CallBackEOEhook(runtime));
             manualstatechange = new Signed32();
+            userdata = new Pointer();
         }
 
         public ecx_contextt register() {
